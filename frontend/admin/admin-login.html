@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>NDR - Admin Login</title>
+  <link rel="stylesheet" href="../assets/css/base.css" />
+  <link rel="stylesheet" href="../assets/css/auth.css" />
+</head>
+<body>
+  <div class="auth-wrapper">
+    <div class="auth-card">
+      <h1 class="auth-title">Admin Login</h1>
+      <p class="auth-subtitle">Access NDR admin control panel</p>
+
+      <form id="adminLoginForm" class="auth-form" autocomplete="on">
+        <div class="auth-field">
+          <label for="adminLoginEmail">Email</label>
+          <input type="email" id="adminLoginEmail" name="email" required placeholder="admin@ndr.com" autocomplete="username" />
+        </div>
+
+        <div id="adminOtpRow" class="auth-field" style="display:none">
+          <label for="adminLoginOtp">One-time code</label>
+          <input type="text" id="adminLoginOtp" name="otp" placeholder="Enter code" maxlength="8" />
+          <div style="display:flex;gap:0.6rem;margin-top:0.6rem;justify-content:center">
+            <button id="adminVerifyOtpBtn" type="button" class="auth-button">Verify code</button>
+            <button id="adminResendOtpBtn" type="button" class="auth-button auth-outline">Resend</button>
+          </div>
+          <p class="auth-error" id="adminOtpError" style="margin-top:0.4rem"></p>
+        </div>
+
+        <p class="auth-error" id="adminLoginError"></p>
+
+        <div style="display:flex;gap:.6rem;justify-content:center;margin-top:10px;">
+          <button id="adminSendOtpBtn" type="button" class="auth-button">Send code</button>
+        </div>
+      </form>
+
+      <p class="auth-footer">Go back to student login? <a href="../login.html">Student Login</a></p>
+    </div>
+  </div>
+
+  <script src="../assets/js/storage.js"></script>
+  <script src="../assets/js/api.js"></script>
+  <script src="../admin/js/admin-auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+/* =========================
+   Page-level tweaks for
+   courses / topics / tests
+   ========================= */
+
+.courses-page-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.8rem;
+}
+
+.courses-page-header .section-title {
+  margin-bottom: 0;
+}
+
+.courses-page-caption {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* optional pill filter bar if you add filters later */
+
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.6rem;
+}
+
+.filter-pill {
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  background: rgba(15, 23, 42, 0.9);
+  cursor: pointer;
+  transition: 0.12s ease-out;
+}
+
+.filter-pill.active,
+.filter-pill:hover {
+  border-color: var(--accent-2);
+  color: #f9fafb;
+  background: radial-gradient(circle at top, rgba(37, 99, 235, 0.35), #020617);
+}
+
+/* make announcements / queries lists re-use .list styles from base.css */

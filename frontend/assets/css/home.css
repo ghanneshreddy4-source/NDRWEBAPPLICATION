@@ -1,0 +1,93 @@
+/* =========================
+   Dashboard-specific styles
+   ========================= */
+
+.dashboard-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.6rem;
+}
+
+.dashboard-subtitle {
+  font-size: 0.86rem;
+  color: var(--text-muted);
+  margin: 0.2rem 0 0;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.9rem;
+  margin: 0.8rem 0 1.2rem;
+}
+
+.stat-card {
+  background: radial-gradient(circle at top, rgba(37, 99, 235, 0.16), #020617);
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  padding: 0.95rem 1.1rem;
+  box-shadow: var(--shadow-soft);
+}
+
+.stat-card .muted-small {
+  margin-top: 0.4rem;
+}
+
+/* Simple progress bar */
+
+.progress-bar {
+  width: 100%;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(31, 41, 55, 0.9);
+  margin-top: 0.55rem;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #2563eb, #22c55e);
+}
+
+/* bottom row: announcements + next steps */
+
+.dashboard-row {
+  display: grid;
+  grid-template-columns: minmax(0, 2.1fr) minmax(0, 1.3fr);
+  gap: 1rem;
+}
+
+@media (max-width: 900px) {
+  .dashboard-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* small text helpers */
+
+.muted-small {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.muted-tiny {
+  font-size: 0.72rem;
+  color: var(--text-soft);
+  margin-top: 0.25rem;
+}
+
+/* Next steps list */
+
+.next-steps-list {
+  margin: 0.7rem 0 0;
+  padding-left: 1.2rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.next-steps-list li + li {
+  margin-top: 0.25rem;
+}

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>NDR EDU-TECH</title>
+  <link rel="stylesheet" href="assets/css/base.css" />
+  <link rel="stylesheet" href="assets/css/splash.css" />
+</head>
+<body class="splash-body">
+  <!-- Background gradient layer -->
+  <div class="splash-bg-layer"></div>
+
+  <!-- 🔺 TOP-CENTER LOGO (appears AFTER splash) -->
+  <img src="assets/images/logo.png" class="top-logo" alt="NDR Logo" />
+
+  <div class="splash-wrapper">
+    <!-- PHASE 1: NDR EDU-TECH wordmark (splash 3.5s) -->
+    <div class="splash-card intro-phase" id="splashIntro">
+      <div class="intro-logo-glow"></div>
+      <h1 class="intro-logo-text">NDR EDU-TECH</h1>
+    </div>
+
+    <!-- PHASE 2: Main Netflix-style splash -->
+    <div class="splash-card main-phase" id="splashMain">
+      <div class="main-header">
+        <h1 class="main-title">NDR LEARNING PORTAL</h1>
+      </div>
+
+      <p class="main-subtitle">
+        Adaptive tests, data-driven insights, and clean dashboards<br />
+        to power modern learning for students and trainers.
+      </p>
+
+      <div class="main-tags">
+        <span>x</span>
+        <span>y</span>
+        <span>z</span>
+      </div>
+
+      <div class="main-actions">
+        <button class="btn btn-primary" onclick="window.location.href='login.html'">
+          I’M A STUDENT
+        </button>
+        <button class="btn btn-outline" onclick="window.location.href='admin/admin-login.html'">
+          I’M AN ADMIN
+        </button>
+      </div>
+
+      <p class="main-footer">
+        © <span id="yearSpan"></span> NDR EDU-TECH • Designed for performance-driven learning
+      </p>
+    </div>
+  </div>
+
+  <script>
+    // Handle phase transition: intro -> main splash
+    window.addEventListener("load", () => {
+      const intro = document.getElementById("splashIntro");
+      const main = document.getElementById("splashMain");
+      const yearSpan = document.getElementById("yearSpan");
+      const topLogo = document.querySelector(".top-logo");
+
+      if (yearSpan) {
+        yearSpan.textContent = new Date().getFullYear();
+      }
+
+      // Show intro immediately, then switch to main after ~3.5s
+      setTimeout(() => {
+        if (intro) intro.classList.add("phase-hide");
+        if (main) main.classList.add("phase-show");
+        if (topLogo) topLogo.classList.add("show-logo");
+      }, 3500);
+    });
+  </script>
+</body>
+</html>
