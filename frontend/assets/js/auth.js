@@ -19,11 +19,11 @@ let currentEmailForOtp = null;
 
 // ---- API Helpers ----
 async function sendOtp(email) {
-  return apiRequest("/auth/request-otp", "POST", { email });
+  return apiRequest("https://ndrwebapplication-1.onrender.com/auth/request-otp", "POST", { email });
 }
 
 async function verifyOtp(email, otp) {
-  return apiRequest("/auth/verify-otp", "POST", { email, otp });
+  return apiRequest("https://ndrwebapplication-1.onrender.com/auth/verify-otp", "POST", { email, otp });
 }
 
 // ---- UI Helpers ----
@@ -216,7 +216,7 @@ if (registerForm) {
     }
 
     try {
-      const res = await apiRequest("/auth/register", "POST", {
+      const res = await apiRequest("https://ndrwebapplication-1.onrender.com/auth/register", "POST", {
         name,
         email,
         password,
