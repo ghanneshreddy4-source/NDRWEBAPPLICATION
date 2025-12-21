@@ -2,22 +2,201 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>NDR - Topic Tests</title>
+  <title>NDR EdTech — Topic Test</title>
 
-  <!-- GLOBAL THEME + sidebar + shared UI -->
   <link rel="stylesheet" href="assets/css/base.css" />
   <link rel="stylesheet" href="assets/css/sidebar.css" />
-  <link rel="stylesheet" href="assets/css/home.css" />
-  <!-- optional extra tweaks for course/test pages -->
-  <link rel="stylesheet" href="assets/css/courses.css" />
+
+  <style>
+    body {
+      background: #0b0f1a;
+      color: #fff;
+      font-family: "Poppins", sans-serif;
+      margin: 0;
+      padding: 2rem;
+    }
+    .test-container {
+      max-width: 800px;
+      margin: auto;
+      background: #121826;
+      border-radius: 10px;
+      padding: 2rem;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    }
+    .question-box {
+      background: #1a2035;
+      padding: 1rem;
+      border-radius: 10px;
+      margin-bottom: 1.2rem;
+    }
+    .question-box h4 {
+      color: #5fd8ff;
+      margin-bottom: 0.5rem;
+    }
+    .option {
+      background: #222b45;
+      padding: 10px 14px;
+      border-radius: 6px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .option:hover {
+      background: #2e3b63;
+    }
+    .option.selected {
+      border: 2px solid #5fd8ff;
+      background: #2a3460;
+    }
+    .submit-btn {
+      background: linear-gradient(90deg, #3245ff, #d91d42);
+      color: #fff;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 1rem;
+      transition: 0.2s;
+    }
+  </style>
 </head>
+
 <body>
-  <!-- global scripts -->
   <script src="assets/js/storage.js"></script>
   <script src="assets/js/api.js"></script>
   <script src="assets/js/sidebar.js"></script>
 
-  <!-- page-specific logic -->
-  <script src="assets/js/tests.js"></script>
+  <script>
+  (async function initTestPage() {
+    requireAuthStudent();
+    renderStudentLayout("Topic Test");
+    setSidebarActive("nav-courses");
+
+    const user = JSON.parse(localStorage.getItem("ndr_logged_user") || "{}");
+    const selectedCourse = parseInt(localStorage.getItem("ndr_selected_course"), 10);
+
+    // ✅ Fix: normalize allowedCourses to numbers before checking access
+    const allowed = (user.allowedCourses || []).map(c => parseInt(c, 10));
+    if (!allowed.includes(selectedCourse)) {
+      alert("🔒 Access denied. You are not enrolled in this course.");
+      window.location.href = "courses.html";
+      return;
+    }
+
+    // Wait until pageContent is available (layout rendered)
+    const waitForContent = async () => {
+      for (let i = 0; i < 20; i++) {
+        const el = document.getElementById("pageContent");
+        if (el) return el;
+        await new Promise(r => setTimeout(r, 100));
+      }
+      return null;
+    };
+
+    const pageContent = await waitForContent();
+    if (!pageContent) return;
+
+    pageContent.innerHTML = `
+      <div class="test-container">
+        <h2 id="testTitle" style="text-align:center; color:#5fd8ff;">Loading test...</h2>
+        <div id="testArea"></div>
+      </div>
+    `;
+
+    const topicId = localStorage.getItem("ndr_current_topic_id");
+    const topicName = localStorage.getItem("ndr_current_topic_name");
+
+    if (!topicId) {
+      pageContent.innerHTML = `<p style="color:red;">No topic selected.</p>`;
+      setTimeout(() => (window.location.href = "topics.html"), 2000);
+      return;
+    }
+
+    const testTitle = document.getElementById("testTitle");
+    const testArea = document.getElementById("testArea");
+    testTitle.textContent = `Test for: ${topicName}`;
+    testArea.innerHTML = `<p>Loading test...</p>`;
+
+    try {
+      const tests = await apiRequest(`/tests/by-topic/${topicId}`, "GET", null, true);
+      const test = tests[0];
+      if (!test?.questions?.length) {
+        testArea.innerHTML = `<p>No questions found for this topic.</p>`;
+        return;
+      }
+
+      // Render all questions
+      testArea.innerHTML =
+        test.questions
+          .map(
+            (q, i) => `
+          <div class="question-box" data-index="${i}">
+            <h4>Q${i + 1}. ${q.questionText}</h4>
+            ${q.options
+              .map(
+                (o, j) =>
+                  `<div class="option" data-value="${j}">${o.optionText}</div>`
+              )
+              .join("")}
+          </div>`
+          )
+          .join("") +
+        `<button id="submitTestBtn" class="submit-btn">Submit Test</button><p id="msg"></p>`;
+
+      // Option select logic
+      document.querySelectorAll(".option").forEach((opt) =>
+        opt.addEventListener("click", (e) => {
+          const parent = e.target.closest(".question-box");
+          parent.querySelectorAll(".option").forEach((o) =>
+            o.classList.remove("selected")
+          );
+          e.target.classList.add("selected");
+        })
+      );
+
+      // Submit test
+      document.getElementById("submitTestBtn").onclick = async () => {
+        const answers = [];
+        test.questions.forEach((q, i) => {
+          const sel = document.querySelector(
+            `.question-box[data-index="${i}"] .option.selected`
+          );
+          if (sel)
+            answers.push({
+              questionId: q.id,
+              selectedOptionIndex: parseInt(sel.dataset.value),
+            });
+        });
+
+        if (!answers.length) {
+          alert("Select at least one answer before submitting.");
+          return;
+        }
+
+        const msg = document.getElementById("msg");
+        msg.style.color = "#9ca3af";
+        msg.textContent = "Submitting...";
+
+        try {
+          const result = await apiRequest(
+            `/tests/${test.id}/submit`,
+            "POST",
+            { answers },
+            true
+          );
+
+          msg.style.color = "#5fd8ff";
+          msg.textContent = `✅ Score: ${result.score} / ${result.totalMarks}`;
+        } catch (err) {
+          msg.style.color = "#f87171";
+          msg.textContent = err.message || "Failed to submit test.";
+        }
+      };
+    } catch (err) {
+      testArea.innerHTML = `<p style="color:red;">${err.message}</p>`;
+    }
+  })();
+  </script>
 </body>
 </html>
