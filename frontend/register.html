@@ -3,8 +3,6 @@
 <head>
   <meta charset="UTF-8" />
   <title>NDR - Register</title>
-
-  <!-- CSS Files -->
   <link rel="stylesheet" href="assets/css/base.css" />
   <link rel="stylesheet" href="assets/css/auth.css" />
 </head>
@@ -12,64 +10,104 @@
 <body>
   <div class="auth-wrapper">
     <div class="auth-card">
-      
       <h1 class="auth-title">Create Student Account</h1>
-      <p class="auth-subtitle">
-        Register for the NDR portal. Admin approval is required.
-      </p>
+      <p class="auth-subtitle">Register for the NDR portal. Admin approval is required.</p>
 
-      <!-- REGISTER FORM -->
       <form id="registerForm" class="auth-form">
-
         <div class="auth-field">
           <label>Full Name</label>
-          <input 
-            type="text" 
-            id="regName" 
-            required 
-            placeholder="Your full name" 
-          />
+          <input type="text" id="regName" required placeholder="Your full name" />
         </div>
 
         <div class="auth-field">
           <label>Email</label>
-          <input 
-            type="email" 
-            id="regEmail" 
-            required 
-            placeholder="you@example.com" 
-          />
+          <input type="email" id="regEmail" required placeholder="you@example.com" />
         </div>
 
         <div class="auth-field">
           <label>Password</label>
-          <input 
-            type="password" 
-            id="regPassword" 
-            required 
-            minlength="6" 
-            placeholder="Minimum 6 characters" 
-          />
+          <input type="password" id="regPassword" required minlength="6" placeholder="Minimum 6 characters" />
         </div>
 
-        <!-- Error / Success Messages -->
+        <div class="auth-field">
+          <label>Select Course</label>
+          <select id="regCourse" required>
+            <option value="">Loading courses...</option>
+          </select>
+        </div>
+
         <p class="auth-error" id="regError"></p>
         <p class="auth-success" id="regSuccess"></p>
-
         <button type="submit" class="auth-button">Register</button>
       </form>
 
       <p class="auth-footer">
-        Already have an account?
-        <a href="login.html">Login</a>
+        Already have an account? <a href="login.html">Login</a>
       </p>
     </div>
   </div>
 
-  <!-- JS Files -->
-  <script src="assets/js/storage.js"></script>
   <script src="assets/js/api.js"></script>
-  <script src="assets/js/auth.js"></script>
+  <script src="assets/js/storage.js"></script>
 
+  <script>
+    // Load courses dynamically
+    async function loadCourses() {
+      const dropdown = document.getElementById("regCourse");
+      try {
+        const res = await apiRequest("/courses", "GET", null, false);
+        console.log("📘 Available courses:", res);
+        dropdown.innerHTML = `<option value="">-- Choose a Course --</option>`;
+        res.forEach((c) => {
+          const opt = document.createElement("option");
+          opt.value = c.id; // numeric ID
+          opt.textContent = `${c.name}`;
+          dropdown.appendChild(opt);
+        });
+      } catch (err) {
+        console.error("❌ Error loading courses:", err);
+        dropdown.innerHTML = `<option value="">Error loading courses</option>`;
+      }
+    }
+
+    // Register student
+    async function handleRegister(e) {
+      e.preventDefault();
+
+      const name = document.getElementById("regName").value.trim();
+      const email = document.getElementById("regEmail").value.trim();
+      const password = document.getElementById("regPassword").value.trim();
+      const selectedCourse = parseInt(document.getElementById("regCourse").value, 10);
+      const regError = document.getElementById("regError");
+      const regSuccess = document.getElementById("regSuccess");
+
+      regError.textContent = "";
+      regSuccess.textContent = "";
+
+      if (!name || !email || !password || !selectedCourse) {
+        regError.textContent = "All fields including course are required.";
+        return;
+      }
+
+      const payload = { name, email, password, selectedCourse };
+      console.log("📤 Sending payload:", payload);
+
+      try {
+        const res = await apiRequest("/auth/register", "POST", payload);
+        console.log("✅ Registration Response:", res);
+        regSuccess.textContent =
+          res.message || "Registered successfully. Wait for admin approval.";
+        regError.textContent = "";
+        document.getElementById("registerForm").reset();
+        setTimeout(() => (window.location.href = "login.html"), 2000);
+      } catch (err) {
+        console.error("❌ Registration error:", err);
+        regError.textContent = err.message || "Registration failed.";
+      }
+    }
+
+    document.getElementById("registerForm").addEventListener("submit", handleRegister);
+    loadCourses();
+  </script>
 </body>
 </html>
