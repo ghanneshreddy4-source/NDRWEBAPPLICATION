@@ -69,14 +69,14 @@ app.get("/", (req, res) => {
 /* =====================================================
    📦 API ROUTES
 ===================================================== */
-app.use("https://ndrwebapplication-1.onrender.com/api/auth", authRoutes);
-app.use("https://ndrwebapplication-1.onrender.com/api/users", userRoutes);
-app.use("https://ndrwebapplication-1.onrender.com/api/admin", adminRoutes);
-app.use("https://ndrwebapplication-1.onrender.com/api/courses", courseRoutes);
-app.use("https://ndrwebapplication-1.onrender.com/api/tests", testRoutes);
-app.use("https://ndrwebapplication-1.onrender.com/api/queries", queryRoutes);
-app.use("https://ndrwebapplication-1.onrender.com/api/announcements", announcementRoutes);
-app.use("https://ndrwebapplication-1.onrender.com/api/dashboard", dashboardRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/admin", adminRoutes);
+app.use("/api/courses", courseRoutes);
+app.use("/api/tests", testRoutes);
+app.use("/api/queries", queryRoutes);
+app.use("/api/announcements", announcementRoutes);
+app.use("/api/dashboard", dashboardRoutes);
 
 // Google Drive / Video proxy routes
 app.use("/", videoRoutes);
