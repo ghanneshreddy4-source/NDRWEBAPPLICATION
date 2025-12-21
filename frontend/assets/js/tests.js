@@ -1,72 +1,71 @@
 // assets/js/tests.js
-
-let currentTest = null;
-
 (async function init() {
   requireAuthStudent();
-  renderStudentLayout("Topic Tests");
+  renderStudentLayout("Topic Test");
   setSidebarActive("nav-courses");
 
-  const topicId = localStorage.getItem("ndr_selected_topic");
-  const topicName = localStorage.getItem("ndr_selected_topic_name");
-  const content = document.getElementById("pageContent");
+  const topicId = localStorage.getItem("ndr_current_topic_id");
+  const topicName = localStorage.getItem("ndr_current_topic_name");
+  const nextIndex = localStorage.getItem("ndr_resume_topic_index");
+
+  const content = document.getElementById("pageContent") || document.body;
 
   if (!topicId) {
-    window.location.href = "topics.html";
+    content.innerHTML = `<p style="padding:2rem;color:red;">No topic selected for test.</p>`;
+    setTimeout(() => (window.location.href = "topics.html"), 2000);
     return;
   }
 
   content.innerHTML = `
-    <h2 class="section-title">Tests for: ${topicName || ""}</h2>
-    <div id="testsList" class="list" style="margin-bottom:1.5rem;">
-      <p style="font-size:0.85rem; color:#6b7280;">Loading tests...</p>
+    <div style="padding:2rem; max-width:900px; margin:auto;">
+      <h2 style="color:#5fd8ff; margin-bottom:1rem;">Test for: ${topicName}</h2>
+      <div id="testArea" style="text-align:center;">
+        <p>Loading test...</p>
+      </div>
     </div>
-    <div id="testArea"></div>
   `;
 
-  const testsList = document.getElementById("testsList");
   const testArea = document.getElementById("testArea");
 
-  function renderTest(test) {
-    currentTest = test;
+  try {
+    let tests = [];
+    try {
+      tests = await apiRequest(`/tests/by-topic/${topicId}`, "GET", null, true);
+    } catch {
+      tests = await apiRequest(`/topics/${topicId}/tests`, "GET", null, true);
+    }
+
+    console.log("Loaded tests:", tests);
+
+    if (!tests || !tests.length) {
+      testArea.innerHTML = `<p style="color:#ccc;">No test found for this topic.</p>`;
+      return;
+    }
+
+    const test = tests[0];
     if (!test.questions || !test.questions.length) {
-      testArea.innerHTML =
-        '<p style="font-size:0.85rem; color:#6b7280;">No questions in this test.</p>';
+      testArea.innerHTML = `<p style="color:#ccc;">This test has no questions yet.</p>`;
       return;
     }
 
     let html = `
-      <div class="card">
-        <div class="card-title">Taking test</div>
-        <div class="card-value" style="font-size:1rem;">${test.title}</div>
-        <div style="font-size:0.8rem; color:#9ca3af; margin-top:0.4rem;">
-          Duration: ${test.durationMinutes} minutes • Questions: ${test.questions.length}
-        </div>
-      </div>
-      <form id="testForm" class="list" style="margin-top:1rem;">
+      <form id="testForm" style="text-align:left;">
+        <h3 style="color:#fff;">${test.title}</h3>
+        <p style="color:#9ca3af;">${test.questions.length} questions</p>
     `;
 
     test.questions.forEach((q, idx) => {
-      const qId = q._id ?? idx;
       html += `
-        <div class="list-item">
-          <div class="list-item-title">
-            Q${idx + 1}. ${q.questionText}
-          </div>
-          <div style="margin-top:0.4rem;">
+        <div style="background:#1a2035; padding:1rem; margin-top:1rem; border-radius:8px;">
+          <strong>Q${idx + 1}.</strong> ${q.questionText}
+          <div style="margin-top:0.5rem;">
             ${q.options
               .map(
-                (opt, optIdx) => `
-                <label style="display:block; font-size:0.85rem; margin-bottom:0.2rem; cursor:pointer;">
-                  <input
-                    type="radio"
-                    name="question_${qId}"
-                    value="${optIdx}"
-                    style="margin-right:0.35rem;"
-                  />
+                (opt, i) => `
+                <label style="display:block; margin-bottom:4px;">
+                  <input type="radio" name="q${idx}" value="${i}" style="margin-right:6px;" />
                   ${opt.optionText}
-                </label>
-              `
+                </label>`
               )
               .join("")}
           </div>
@@ -75,98 +74,57 @@ let currentTest = null;
     });
 
     html += `
-        <button type="submit"
-          style="margin-top:0.7rem; align-self:flex-start; font-size:0.85rem; padding:0.4rem 0.9rem; border-radius:999px; border:none; background:#22c55e; color:#020617;">
+        <button type="submit" style="margin-top:1.5rem;
+          background:linear-gradient(90deg,#3245ff,#d91d42);
+          color:#fff;border:none;padding:12px 24px;border-radius:8px;cursor:pointer;">
           Submit Test
         </button>
-        <p id="testMessage" style="font-size:0.85rem; margin-top:0.5rem;"></p>
+        <p id="msg" style="margin-top:1rem;"></p>
       </form>
     `;
 
     testArea.innerHTML = html;
 
     const form = document.getElementById("testForm");
-    const msgEl = document.getElementById("testMessage");
+    const msg = document.getElementById("msg");
 
-    form.addEventListener("submit", async (e) => {
+    form.onsubmit = async (e) => {
       e.preventDefault();
-      msgEl.style.color = "#9ca3af";
-      msgEl.textContent = "Submitting...";
+      const answers = [];
+      test.questions.forEach((q, idx) => {
+        const selected = form.querySelector(`input[name="q${idx}"]:checked`);
+        if (selected)
+          answers.push({
+            questionId: q._id,
+            selectedOptionIndex: parseInt(selected.value),
+          });
+      });
+
+      msg.textContent = "Submitting test...";
+      msg.style.color = "#9ca3af";
 
       try {
-        const answers = currentTest.questions
-          .map((q, idx) => {
-            const qId = q._id ?? idx;
-            const selected = document.querySelector(
-              `input[name="question_${qId}"]:checked`
-            );
-            if (!selected) return null;
-            return {
-              questionId: qId,
-              selectedOptionIndex: Number(selected.value),
-            };
-          })
-          .filter(Boolean);
-
         const data = await apiRequest(
-          `/tests/${currentTest.id}/submit`,
+          `/tests/${test._id}/submit`,
           "POST",
           { answers },
           true
         );
+        msg.textContent = `✅ Submitted! Score: ${data.score} / ${data.totalMarks}`;
+        msg.style.color = "#4ade80";
 
-        msgEl.style.color = "#4ade80";
-        msgEl.textContent = `Submitted! Score: ${data.score} / ${data.totalMarks}`;
+        setTimeout(() => {
+          localStorage.removeItem("ndr_current_topic_id");
+          localStorage.removeItem("ndr_current_topic_name");
+          window.location.href = "topics.html";
+        }, 2500);
       } catch (err) {
-        msgEl.style.color = "#fda4af";
-        msgEl.textContent = err.message;
+        msg.textContent = err.message;
+        msg.style.color = "#f87171";
       }
-    });
-  }
-
-  async function loadAndRenderTest(testId) {
-    testArea.innerHTML =
-      '<p style="font-size:0.85rem; color:#6b7280;">Loading test...</p>';
-    try {
-      const test = await apiRequest(`/tests/${testId}`, "GET", null, true);
-      renderTest(test);
-    } catch (err) {
-      testArea.innerHTML = `<p style="color:#fda4af; font-size:0.85rem;">${err.message}</p>`;
-    }
-  }
-
-  try {
-    const tests = await apiRequest(
-      `/tests/by-topic/${topicId}`,
-      "GET",
-      null,
-      true
-    );
-    if (!tests.length) {
-      testsList.innerHTML =
-        '<p style="font-size:0.85rem; color:#6b7280;">No tests available for this topic.</p>';
-      return;
-    }
-
-    testsList.innerHTML = "";
-    tests.forEach((t) => {
-      const item = document.createElement("div");
-      item.className = "list-item";
-      item.innerHTML = `
-        <div class="list-item-title">${t.title}</div>
-        <div class="list-item-sub">
-          Duration: ${t.durationMinutes} minutes • Questions: ${t.questions.length}
-        </div>
-        <button style="margin-top:0.4rem; font-size:0.8rem; padding:0.3rem 0.7rem; border-radius:999px; border:none; background:#22c55e; color:#020617;">
-          Start Test
-        </button>
-      `;
-      item
-        .querySelector("button")
-        .addEventListener("click", () => loadAndRenderTest(t.id));
-      testsList.appendChild(item);
-    });
+    };
   } catch (err) {
-    testsList.innerHTML = `<p style="color:#fda4af; font-size:0.85rem;">${err.message}</p>`;
+    console.error("Error loading test:", err);
+    testArea.innerHTML = `<p style="color:red;">${err.message}</p>`;
   }
 })();
