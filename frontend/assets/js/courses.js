@@ -19,7 +19,7 @@
   const container = document.getElementById("coursesContainer");
 
   try {
-    const courses = await apiRequest("/courses", "GET", null, false);
+    const courses = await apiRequest("https://ndrwebapplication-1.onrender.com/courses", "GET", null, false);
     if (!courses.length) {
       container.innerHTML =
         '<p style="font-size:0.85rem; color:#6b7280;">No courses available.</p>';
