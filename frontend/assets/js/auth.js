@@ -16,11 +16,11 @@ const otpError = document.getElementById("otpError");
 let currentEmailForOtp = null;
 
 async function sendOtp(email) {
-  return apiRequest("/auth/request-otp", "POST", { email });
+  return apiRequest("https://ndrwebapplication-1.onrender.com/auth/request-otp", "POST", { email });
 }
 
 async function verifyOtp(email, otp) {
-  return apiRequest("/auth/verify-otp", "POST", { email, otp });
+  return apiRequest("https://ndrwebapplication-1.onrender.com/auth/verify-otp", "POST", { email, otp });
 }
 
 function showOtpUI(email) {
