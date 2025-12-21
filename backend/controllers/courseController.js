@@ -2,13 +2,15 @@
 const Course = require("../models/Course");
 const Topic = require("../models/Topic");
 
-// Create course (Admin)
+// ------------------------------------
+// Create course
+// ------------------------------------
 exports.createCourse = async (req, res) => {
   try {
     const { name, code, description, resources } = req.body;
 
-    const existing = await Course.findOne({ where: { code } });
-    if (existing) {
+    const exists = await Course.findOne({ where: { code } });
+    if (exists) {
       return res.status(400).json({ message: "Course code already exists" });
     }
 
@@ -26,13 +28,16 @@ exports.createCourse = async (req, res) => {
   }
 };
 
-// Get all active courses
+// ------------------------------------
+// Get all courses
+// ------------------------------------
 exports.getCourses = async (req, res) => {
   try {
     const courses = await Course.findAll({
       where: { isActive: true },
       order: [["name", "ASC"]],
     });
+
     res.json(courses);
   } catch (err) {
     console.error("Get courses error:", err.message);
@@ -40,11 +45,15 @@ exports.getCourses = async (req, res) => {
   }
 };
 
-// Get single course
+// ------------------------------------
+// Get single course  <-- MISSING EARLIER
+// ------------------------------------
 exports.getCourseById = async (req, res) => {
   try {
     const course = await Course.findByPk(req.params.id);
-    if (!course) return res.status(404).json({ message: "Course not found" });
+    if (!course) {
+      return res.status(404).json({ message: "Course not found" });
+    }
     res.json(course);
   } catch (err) {
     console.error("Get course by id error:", err.message);
@@ -52,13 +61,17 @@ exports.getCourseById = async (req, res) => {
   }
 };
 
-// Update course (Admin)
+// ------------------------------------
+// Update course
+// ------------------------------------
 exports.updateCourse = async (req, res) => {
   try {
     const { name, code, description, resources, isActive } = req.body;
 
     const course = await Course.findByPk(req.params.id);
-    if (!course) return res.status(404).json({ message: "Course not found" });
+    if (!course) {
+      return res.status(404).json({ message: "Course not found" });
+    }
 
     if (name !== undefined) course.name = name;
     if (code !== undefined) course.code = code;
@@ -74,13 +87,16 @@ exports.updateCourse = async (req, res) => {
   }
 };
 
-// Delete course (Admin)
+// ------------------------------------
+// Delete course (and topics)
+// ------------------------------------
 exports.deleteCourse = async (req, res) => {
   try {
     const course = await Course.findByPk(req.params.id);
-    if (!course) return res.status(404).json({ message: "Course not found" });
+    if (!course) {
+      return res.status(404).json({ message: "Course not found" });
+    }
 
-    // delete topics of this course too
     await Topic.destroy({ where: { courseId: course.id } });
     await course.destroy();
 
@@ -91,20 +107,21 @@ exports.deleteCourse = async (req, res) => {
   }
 };
 
-// Add topic to course (Admin)
+// ------------------------------------
+// Create topic
+// ------------------------------------
 exports.createTopic = async (req, res) => {
   try {
-    const { name, description, order, resources } = req.body;
+    const { name, description, order, resources, primaryVideoUrl } = req.body;
 
-    if (!name) {
-      return res.status(400).json({ message: "Topic title is required" });
-    }
+    if (!name) return res.status(400).json({ message: "Topic name required" });
 
     const topic = await Topic.create({
       courseId: req.params.courseId,
       name,
       description,
       order,
+      primaryVideoUrl: primaryVideoUrl || null,
       resources: resources || [],
     });
 
@@ -115,27 +132,29 @@ exports.createTopic = async (req, res) => {
   }
 };
 
-// Get topics for a course
+// ------------------------------------
+// Get topics for course
+// ------------------------------------
 exports.getTopicsByCourse = async (req, res) => {
   try {
     const topics = await Topic.findAll({
       where: { courseId: req.params.courseId },
-      order: [
-        ["order", "ASC"],
-        ["createdAt", "ASC"],
-      ],
+      order: [["order", "ASC"], ["createdAt", "ASC"]],
     });
+
     res.json(topics);
   } catch (err) {
-    console.error("Get topics by course error:", err.message);
+    console.error("Get topics error:", err.message);
     res.status(500).json({ message: "Server error" });
   }
 };
 
-// Update topic (Admin)
+// ------------------------------------
+// Update topic
+// ------------------------------------
 exports.updateTopic = async (req, res) => {
   try {
-    const { name, description, order, resources } = req.body;
+    const { name, description, order, resources, primaryVideoUrl } = req.body;
 
     const topic = await Topic.findByPk(req.params.topicId);
     if (!topic) return res.status(404).json({ message: "Topic not found" });
@@ -144,6 +163,7 @@ exports.updateTopic = async (req, res) => {
     if (description !== undefined) topic.description = description;
     if (order !== undefined) topic.order = order;
     if (resources !== undefined) topic.resources = resources;
+    if (primaryVideoUrl !== undefined) topic.primaryVideoUrl = primaryVideoUrl;
 
     await topic.save();
     res.json(topic);
@@ -153,7 +173,9 @@ exports.updateTopic = async (req, res) => {
   }
 };
 
-// Delete topic (Admin)
+// ------------------------------------
+// Delete topic
+// ------------------------------------
 exports.deleteTopic = async (req, res) => {
   try {
     const topic = await Topic.findByPk(req.params.topicId);
@@ -163,6 +185,37 @@ exports.deleteTopic = async (req, res) => {
     res.json({ message: "Topic deleted" });
   } catch (err) {
     console.error("Delete topic error:", err.message);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+// ------------------------------------
+// Get Major Tests by Course
+// ------------------------------------
+const MajorTest = require("../models/MajorTest");
+
+exports.getMajorTests = async (req, res) => {
+  try {
+    // Read ?courseId=2 from query
+    const { courseId } = req.query;
+
+    let whereClause = {};
+    if (courseId) {
+      const parsedId = parseInt(courseId, 10);
+      if (isNaN(parsedId)) {
+        return res.status(400).json({ message: "Invalid course ID" });
+      }
+      whereClause.courseId = parsedId;
+    }
+
+    // Fetch all or by courseId
+    const tests = await MajorTest.findAll({
+      where: whereClause,
+      order: [["createdAt", "DESC"]],
+    });
+
+    res.json(tests);
+  } catch (err) {
+    console.error("❌ getMajorTests error:", err);
     res.status(500).json({ message: "Server error" });
   }
 };
