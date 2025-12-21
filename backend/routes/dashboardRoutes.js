@@ -3,6 +3,7 @@ const router = express.Router();
 const dashboardController = require("../controllers/dashboardController");
 const auth = require("../middleware/auth");
 
-router.get("/stats", auth, dashboardController.getStudentDashboardStats);
+router.get("https://ndrwebapplication-1.onrender.com/stats", auth, dashboardController.getStudentDashboardStats);
 
 module.exports = router;
+
