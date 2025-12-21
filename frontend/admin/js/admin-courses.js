@@ -37,9 +37,21 @@
   const msgEl = document.getElementById("courseMsg");
   const courseList = document.getElementById("courseList");
 
+  async function deleteCourse(id) {
+    if (!confirm("Delete this course and all its topics?")) return;
+
+    try {
+      await apiRequest(`/courses/${id}`, "DELETE", null, true);
+      loadCourses();
+    } catch (err) {
+      alert(err.message);
+    }
+  }
+
   async function loadCourses() {
     courseList.innerHTML =
       '<p style="font-size:0.85rem; color:#6b7280;">Loading...</p>';
+
     try {
       const courses = await apiRequest("/courses", "GET", null, false);
       if (!courses.length) {
@@ -47,17 +59,31 @@
           '<p style="font-size:0.85rem; color:#6b7280;">No courses yet.</p>';
         return;
       }
+
       courseList.innerHTML = "";
+
       courses.forEach((c) => {
         const card = document.createElement("div");
         card.className = "course-card";
+
         card.innerHTML = `
           <div class="course-code">${c.code}</div>
           <div class="course-name">${c.name}</div>
-          <div class="course-desc">${
-            c.description || "No description provided."
-          }</div>
+          <div class="course-desc">${c.description || "No description provided."}</div>
+
+          <button class="admin-btn-sm" onclick="window.location.href='add-topic.html?courseId=${c.id}&courseName=${encodeURIComponent(c.name)}'">
+            Manage Topics
+          </button>
+
+          <button class="admin-btn-sm admin-btn-danger" data-id="${c.id}">
+            Delete Course
+          </button>
         `;
+
+        card.querySelector(".admin-btn-danger").addEventListener("click", () => {
+          deleteCourse(c.id);
+        });
+
         courseList.appendChild(card);
       });
     } catch (err) {
@@ -81,6 +107,7 @@
         { name, code, description },
         true
       );
+
       msgEl.style.color = "#4ade80";
       msgEl.textContent = "Course created.";
       form.reset();
