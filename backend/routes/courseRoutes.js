@@ -14,7 +14,7 @@ router.delete("/courses/:courseId/topics/:id", deleteTopic);
 // ===============================
 
 // ✅ 1️⃣ — Get all courses (before dynamic routes)
-router.get/", courseController.getCourses);
+router.get("/", courseController.getCourses);
 
 // ✅ 2️⃣ — Get all major tests (must come BEFORE :id route)
 router.get("/major-tests", courseController.getMajorTests);
