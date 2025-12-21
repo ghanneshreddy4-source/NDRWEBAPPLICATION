@@ -214,6 +214,31 @@ header {
     aspect-ratio: 3 / 4;
   }
 }
+  /* =====================================================
+   FIX DESKTOP IMAGE CUTTING (SAFE & TARGETED)
+===================================================== */
+
+/* Default: DESKTOP & LARGE SCREENS */
+.slide-media {
+  object-fit: cover;
+  object-position: center right; /* keeps face visible */
+}
+
+/* Tablets */
+@media (max-width: 1024px) {
+  .slide-media {
+    object-position: center;
+  }
+}
+
+/* Mobile only – prevent cropping */
+@media (max-width: 768px) {
+  .slide-media {
+    object-fit: contain;
+    background: #000; /* fill empty space cleanly */
+  }
+}
+
 
 .alumni-slider {
   background: #f5f6f8;
