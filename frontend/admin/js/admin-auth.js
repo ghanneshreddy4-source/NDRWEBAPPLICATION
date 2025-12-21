@@ -49,13 +49,16 @@ function renderAdminLayout(pageTitle) {
       <aside class="sidebar">
         <div class="sidebar-header">
           <div class="sidebar-logo">
-            <div class="sidebar-logo-pill">N</div>
-            <div class="sidebar-logo-text">
-              <span class="logo-main">NDR</span>
-              <span class="logo-sub">Admin Console</span>
-            </div>
-          </div>
-        </div>
+    <img src="../assets/images/logo.png"
+         alt="NDR Logo"
+         style="width:40px;height:40px;border-radius:8px;object-fit:cover;" />
+
+    <div class="sidebar-logo-text">
+        <span class="logo-main">NDR</span>
+        <span class="logo-sub">Admin Console</span>
+    </div>
+</div>
+
 
         <nav class="sidebar-nav">
           <div class="sidebar-section-label">Overview</div>
