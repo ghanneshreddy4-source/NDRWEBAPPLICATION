@@ -7,7 +7,7 @@ const router = express.Router();
  * ✅ Google Drive Public Video Streaming Proxy
  * Decodes Base64 fileId from URL, handles large files & Range streaming.
  */
-router.get("/api/drive-video/:encodedId", async (req, res) => {
+router.get("https://ndrwebapplication-1.onrender.com/api/drive-video/:encodedId", async (req, res) => {
   try {
     // --- Step 1: Decode Base64 File ID ---
     const fileId = Buffer.from(req.params.encodedId, "base64").toString("utf-8").trim();
@@ -70,3 +70,4 @@ router.get("/api/drive-video/:encodedId", async (req, res) => {
 });
 
 module.exports = router;
+
