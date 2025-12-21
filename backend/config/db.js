@@ -1,32 +1,30 @@
-// config/db.js
+// backend/config/db.js
 const { Sequelize } = require("sequelize");
-const dotenv = require("dotenv");
+require("dotenv").config();
 
-dotenv.config();
-
-
+// Initialize Sequelize using DATABASE_URL (for hosted DBs like Render, Railway, etc.)
 const sequelize = new Sequelize(process.env.DATABASE_URL, {
   dialect: "postgres",
-  protocol: "postgres",
   logging: false,
   dialectOptions: {
     ssl: {
       require: true,
-      rejectUnauthorized: false
-    }
-  }
+      rejectUnauthorized: false,
+    },
+  },
 });
 
-
+// Function to connect and sync all models
 const connectDB = async () => {
   try {
     await sequelize.authenticate();
     console.log("PostgreSQL connected successfully");
 
-    // Load all models AFTER sequelize is ready
+    // Load all models (index.js in models folder)
     require("../models");
 
-    await sequelize.sync({ alter: true });
+    // Sync tables with database
+    await sequelize.sync();
     console.log("Tables synchronized with PostgreSQL");
   } catch (err) {
     console.error("PostgreSQL connection error:", err);
@@ -34,4 +32,9 @@ const connectDB = async () => {
   }
 };
 
-module.exports = { sequelize, connectDB };
+// ✅ Export both the instance and the connect function
+// This ensures model files can safely do:
+// const sequelize = require("../config/db"); OR const { sequelize } = require("../config/db");
+module.exports = sequelize;
+module.exports.sequelize = sequelize;
+module.exports.connectDB = connectDB;
