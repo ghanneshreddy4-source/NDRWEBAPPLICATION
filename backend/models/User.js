@@ -33,8 +33,16 @@ const User = sequelize.define(
     isApproved: { type: DataTypes.BOOLEAN, defaultValue: false },
 
     // OTP fields
-    otp: { type: DataTypes.STRING, allowNull: true },
-    otpExpires: { type: DataTypes.DATE, allowNull: true },
+    otp: {
+  type: DataTypes.STRING,
+  allowNull: true,
+},
+
+otpExpires: {
+  type: DataTypes.DATE,   // ✅ Sequelize DATE maps to TIMESTAMP WITH TIME ZONE
+  allowNull: true,
+},
+
 
     // ✅ ADD THESE TWO FIELDS
     selectedCourse: {
