@@ -2,22 +2,248 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>NDR - Topics</title>
+  <title>NDR EdTech — Course Topics</title>
 
-  <!-- GLOBAL THEME + sidebar + shared components -->
   <link rel="stylesheet" href="assets/css/base.css" />
   <link rel="stylesheet" href="assets/css/sidebar.css" />
-  <link rel="stylesheet" href="assets/css/home.css" />
-  <!-- optional extra tweaks for course/topic pages -->
-  <link rel="stylesheet" href="assets/css/courses.css" />
+
+  <style>
+    body {
+      margin: 0;
+      background: #0b0f1a;
+      color: #fff;
+      font-family: "Poppins", sans-serif;
+    }
+    .course-layout {
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .main-player {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      padding: 2rem;
+      background: #0c101b;
+    }
+    .video-box {
+      background: #121826;
+      border-radius: 10px;
+      padding: 1rem;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    }
+    .video-box iframe {
+      width: 100%;
+      height: 500px;
+      border-radius: 8px;
+      border: none;
+    }
+    .resources {
+      margin-top: 2rem;
+      background: #121826;
+      padding: 1rem;
+      border-radius: 10px;
+    }
+    .sidebar {
+      width: 360px;
+      background: #141a2b;
+      border-left: 2px solid #1f2337;
+      overflow-y: auto;
+      padding: 1rem;
+    }
+    .sidebar h3 {
+      text-align: center;
+      color: #5fd8ff;
+      margin-bottom: 1rem;
+    }
+    .topic-item {
+      background: #1a2035;
+      border-radius: 8px;
+      padding: 0.8rem 1rem;
+      margin-bottom: 0.6rem;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .topic-item:hover,
+    .topic-item.active {
+      background: linear-gradient(90deg, #d91d42, #3245ff);
+    }
+    .take-test-btn {
+      display: inline-block;
+      margin-top: 20px;
+      background: linear-gradient(90deg, #3245ff, #d91d42);
+      color: #fff;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: transform 0.2s;
+    }
+    .take-test-btn:hover {
+      transform: scale(1.05);
+    }
+  </style>
 </head>
-<body>
-  <!-- global scripts -->
+
+<body oncontextmenu="return false;">
+  <div id="pageContent"></div>
+
   <script src="assets/js/storage.js"></script>
   <script src="assets/js/api.js"></script>
   <script src="assets/js/sidebar.js"></script>
 
-  <!-- page-specific logic -->
-  <script src="assets/js/topics.js"></script>
+  <script>
+(async function initCourseContent() {
+  requireAuthStudent();
+  renderStudentLayout("Course Content");
+  setSidebarActive("nav-courses");
+
+  const content = document.getElementById("pageContent");
+  const courseId = parseInt(localStorage.getItem("ndr_selected_course"), 10);
+  const courseName = localStorage.getItem("ndr_selected_course_name");
+  const user = JSON.parse(localStorage.getItem("ndr_logged_user") || "{}");
+
+  // 🚫 Redirect if user manually opens without selecting a course
+  if (!courseId || !courseName) {
+    alert("⚠️ Please select a course first.");
+    window.location.href = "courses.html";
+    return;
+  }
+
+  // ✅ FIXED: Normalize course ID types so "Access denied" won't trigger incorrectly
+  const allowed = (user.allowedCourses || []).map(c => parseInt(c, 10));
+  if (!allowed.includes(courseId)) {
+    alert("🔒 Access denied: You are not enrolled in this course.");
+    window.location.href = "courses.html";
+    return;
+  }
+
+  // ---------- PAGE STRUCTURE ----------
+  content.innerHTML = `
+    <div class="course-layout">
+      <div class="main-player">
+        <div class="video-box">
+          <h2 id="topicTitle" style="margin-bottom:0.5rem; color:#5fd8ff;">${courseName}</h2>
+          <div id="videoContainer"></div>
+          <p id="topicDescription" style="margin-top:1rem; color:#cfd8e8;"></p>
+        </div>
+
+        <div class="resources">
+          <h3 style="color:#5fd8ff;">Resources</h3>
+          <div id="topicResources"></div>
+          <button id="takeTestBtn" class="take-test-btn">Take Test →</button>
+        </div>
+      </div>
+
+      <div class="sidebar">
+        <h3>Course Content</h3>
+        <div id="topicsList">Loading topics...</div>
+      </div>
+    </div>
+  `;
+
+  const listEl = document.getElementById("topicsList");
+  const videoEl = document.getElementById("videoContainer");
+  const descEl = document.getElementById("topicDescription");
+  const titleEl = document.getElementById("topicTitle");
+  const resEl = document.getElementById("topicResources");
+  const takeTestBtn = document.getElementById("takeTestBtn");
+
+  let topics = [];
+  let currentIndex = 0;
+
+  // ---------- LOAD TOPICS ----------
+  async function loadTopics() {
+    try {
+      const response = await apiRequest(`/courses/${courseId}/topics`, "GET", null, true);
+      topics = (response || []).filter(t => t && t.isActive);
+      if (!topics.length) {
+        listEl.innerHTML = `<p>No topics available.</p>`;
+        return;
+      }
+
+      listEl.innerHTML = "";
+      topics.forEach((topic, i) => {
+        const div = document.createElement("div");
+        div.className = "topic-item";
+        div.innerHTML = `<h4>${i + 1}. ${topic.name}</h4>`;
+        div.onclick = () => openTopic(i);
+        listEl.appendChild(div);
+      });
+      openTopic(0);
+    } catch (err) {
+      listEl.innerHTML = `<p style="color:red;">${err.message}</p>`;
+    }
+  }
+
+  // ---------- OPEN TOPIC ----------
+  function openTopic(index) {
+    const topic = topics[index];
+    if (!topic) return;
+
+    document.querySelectorAll(".topic-item").forEach((e, i) =>
+      e.classList.toggle("active", i === index)
+    );
+
+    titleEl.textContent = topic.name;
+    descEl.textContent = topic.description || "";
+
+    // ✅ Use Google Drive embed (the one that worked before)
+    if (topic.primaryVideoUrl) {
+      const match = topic.primaryVideoUrl.match(/[-\w]{25,}/);
+      const fileId = match ? match[0] : null;
+      if (fileId) {
+        videoEl.innerHTML = `
+          <iframe 
+            src="https://drive.google.com/file/d/${fileId}/preview" 
+            allow="autoplay; fullscreen"
+            allowfullscreen
+            sandbox="allow-same-origin allow-scripts allow-popups"
+            referrerpolicy="no-referrer">
+          </iframe>`;
+      } else {
+        videoEl.innerHTML = `<p>No valid video link found.</p>`;
+      }
+    } else {
+      videoEl.innerHTML = `<p>No video available.</p>`;
+    }
+
+    // Render resources
+    if (Array.isArray(topic.resources) && topic.resources.length) {
+      resEl.innerHTML = topic.resources
+        .map(
+          (r) => `
+        <p><a href="${r.url}" target="_blank" style="color:#5fd8ff;">
+          ${r.label || "Resource"}
+        </a></p>`
+        )
+        .join("");
+    } else {
+      resEl.innerHTML = `<p>No additional resources.</p>`;
+    }
+
+    // ✅ Navigate to topic test
+    takeTestBtn.onclick = () => {
+      // Only allow redirect if video fully loaded (user engaged)
+      if (!fileId) {
+        alert("⚠️ Please watch the topic video first.");
+        return;
+      }
+      localStorage.setItem("ndr_current_topic_id", topic.id);
+      localStorage.setItem("ndr_current_topic_name", topic.name);
+      window.location.href = "tests.html";
+    };
+  }
+
+  // 🚫 Block popup windows or navigation keys
+  document.addEventListener("keydown", (e) => {
+    if (e.ctrlKey && ["s", "p", "u"].includes(e.key.toLowerCase())) e.preventDefault();
+  });
+
+  loadTopics();
+})();
+  </script>
 </body>
 </html>
