@@ -94,7 +94,7 @@ const PORT = process.env.PORT || 5000;
 
 (async function startServer() {
   try {
-    await sequelize.sync();
+    await sequelize.sync({ alter: true });
     console.log("✅ PostgreSQL tables synchronized");
 
     app.listen(PORT, () => {
