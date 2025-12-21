@@ -1,19 +1,32 @@
 // backend/routes/authRoutes.js
 const express = require("express");
 const router = express.Router();
-const { registerStudent, requestOtp, verifyOtp } = require("../controllers/authController");
+
+const {
+  registerStudent,
+  requestOtp,
+  verifyOtp,
+} = require("../controllers/authController");
+
 const User = require("../models/User");
 
 console.log("Auth routes loaded");
 
-router.post("https://ndrwebapplication-1.onrender.com/register", registerStudent);
+/* =====================================================
+   AUTH ROUTES
+===================================================== */
 
-// OTP endpoints
-router.post("https://ndrwebapplication-1.onrender.com/request-otp", requestOtp);
-router.post("https://ndrwebapplication-1.onrender.com/verify-otp", verifyOtp);
+// Register student
+router.post("/register", registerStudent);
 
-// debug listing
-router.get("https://ndrwebapplication-1.onrender.com/debug/users", async (req, res) => {
+// OTP routes
+router.post("/request-otp", requestOtp);
+router.post("/verify-otp", verifyOtp);
+
+/* =====================================================
+   DEBUG ROUTE (OPTIONAL)
+===================================================== */
+router.get("/debug/users", async (req, res) => {
   try {
     const users = await User.findAll({
       attributes: ["id", "name", "email", "role", "isApproved", "createdAt"],
