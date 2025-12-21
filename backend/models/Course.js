@@ -9,19 +9,23 @@ const Course = sequelize.define(
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
+      field: "id",
     },
     name: {
       type: DataTypes.STRING,
       allowNull: false, // Course name (e.g. ABAP, SAP)
+      field: "name",
     },
     code: {
       type: DataTypes.STRING,
       allowNull: false,
       unique: true, // Course code (e.g. ABAP101)
+      field: "code",
     },
     description: {
       type: DataTypes.TEXT, // Course description
       allowNull: true,
+      field: "description",
     },
     // Optional extra resources (not required yet)
     // array of { type, label, url }
@@ -29,10 +33,14 @@ const Course = sequelize.define(
       // If you use MySQL, change JSONB -> JSON
       type: DataTypes.JSONB,
       defaultValue: [],
+      allowNull: false,
+      field: "resources",
     },
     isActive: {
       type: DataTypes.BOOLEAN,
       defaultValue: true,
+      allowNull: false,
+      field: "isActive",
     },
   },
   {
