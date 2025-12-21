@@ -20,15 +20,15 @@ const {
 const Test = require("../models/Test");
 
 // -------- Normal Tests --------
-router.post("https://ndrwebapplication-1.onrender.com/", protect, adminAuth, createTest);
-router.get("https://ndrwebapplication-1.onrender.com/by-topic/:topicId", protect, getTestsByTopic);
-router.get("https://ndrwebapplication-1.onrender.com/:id", protect, getTestById);
-router.put("https://ndrwebapplication-1.onrender.com/:id", protect, adminAuth, updateTest);
-router.delete("https://ndrwebapplication-1.onrender.com/:id", protect, adminAuth, deleteTest);
-router.post("https://ndrwebapplication-1.onrender.com/:id/submit", protect, submitTest);
+router.post("/", protect, adminAuth, createTest);
+router.get("/by-topic/:topicId", protect, getTestsByTopic);
+router.get("/:id", protect, getTestById);
+router.put("/:id", protect, adminAuth, updateTest);
+router.delete("/:id", protect, adminAuth, deleteTest);
+router.post("/:id/submit", protect, submitTest);
 
 // ✅ Remove a single question from a test
-router.delete("https://ndrwebapplication-1.onrender.com/:testId/questions/:index", protect, adminAuth, async (req, res) => {
+router.delete("/:testId/questions/:index", protect, adminAuth, async (req, res) => {
   try {
     const { testId, index } = req.params;
     const test = await Test.findByPk(testId);
@@ -51,7 +51,7 @@ router.delete("https://ndrwebapplication-1.onrender.com/:testId/questions/:index
 });
 
 // ✅ Delete entire test (alias of existing delete route)
-router.delete("https://ndrwebapplication-1.onrender.com/:testId/full", protect, adminAuth, async (req, res) => {
+router.delete("/:testId/full", protect, adminAuth, async (req, res) => {
   try {
     const { testId } = req.params;
     const deleted = await Test.destroy({ where: { id: testId } });
@@ -64,11 +64,11 @@ router.delete("https://ndrwebapplication-1.onrender.com/:testId/full", protect, 
 });
 
 // -------- Major Tests --------
-router.post("https://ndrwebapplication-1.onrender.com/major", protect, adminAuth, createMajorTest);
-router.get("https://ndrwebapplication-1.onrender.com/major/by-course/:courseId", protect, getMajorTestsByCourse);
-router.get("https://ndrwebapplication-1.onrender.com/major/:id", protect, getMajorTestById);
-router.put("https://ndrwebapplication-1.onrender.com/major/:id", protect, adminAuth, updateMajorTest);
-router.delete("https://ndrwebapplication-1.onrender.com/major/:id", protect, adminAuth, deleteMajorTest);
-router.post("https://ndrwebapplication-1.onrender.com/major/:id/submit", protect, submitMajorTest);
+router.post("/major", protect, adminAuth, createMajorTest);
+router.get("/major/by-course/:courseId", protect, getMajorTestsByCourse);
+router.get("/major/:id", protect, getMajorTestById);
+router.put("/major/:id", protect, adminAuth, updateMajorTest);
+router.delete("/major/:id", protect, adminAuth, deleteMajorTest);
+router.post("/major/:id/submit", protect, submitMajorTest);
 
 module.exports = router;
