@@ -182,6 +182,38 @@ header {
     padding: 0.8rem 1.5rem;
   }
 }
+  .hero-slider {
+  height: auto;                /* override vh rigidity */
+  min-height: 360px;
+  aspect-ratio: 16 / 9;
+}
+
+@media (max-width: 1024px) {
+  .hero-slider {
+    aspect-ratio: 3 / 2;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-slider {
+    aspect-ratio: 4 / 5;       /* phones */
+  }
+
+  .slide-media {
+    object-fit: contain;       /* no cropping on mobile */
+    background: #000;
+  }
+
+  .hero-btn-container {
+    bottom: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-slider {
+    aspect-ratio: 3 / 4;
+  }
+}
 
 .alumni-slider {
   background: #f5f6f8;
@@ -337,6 +369,17 @@ header {
   position: relative;
   width: 160px;
   z-index: 1;
+}
+@media (max-width: 900px) {
+  .training-wrapper {
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .training-left,
+  .training-right {
+    align-items: center;
+  }
 }
 
 
