@@ -1,59 +1,107 @@
-// server.js
+// backend/server.js
 const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
-const { connectDB } = require("./config/db");
+
+const { sequelize, connectDB } = require("./config/db");
 const { notFound, errorHandler } = require("./utils/errorHandler");
+
+// Routes
+const authRoutes = require("./routes/authRoutes");
+const userRoutes = require("./routes/userRoutes");
+const adminRoutes = require("./routes/adminRoutes");
+const courseRoutes = require("./routes/courseRoutes");
+const testRoutes = require("./routes/testRoutes");
+const queryRoutes = require("./routes/queryRoutes");
+const announcementRoutes = require("./routes/announcementRoutes");
+const dashboardRoutes = require("./routes/dashboardRoutes");
+const videoRoutes = require("./routes/videoRoutes");
 
 dotenv.config();
 
-// Connect DB (PostgreSQL + Sequelize)
-connectDB();
-
 const app = express();
 
-// Body parser
+/* =====================================================
+   🗄️ DATABASE CONNECTION
+===================================================== */
+connectDB();
+
+/* =====================================================
+   🧩 MIDDLEWARE
+===================================================== */
 app.use(express.json());
 
-// CORS
+/* =====================================================
+   🌍 CORS CONFIGURATION (RENDER + LOCAL)
+===================================================== */
 const allowedOrigins = [
-  process.env.CORS_ORIGIN || "http://localhost:5500",
+  "https://ndrwebapplicationg.onrender.com",
+  "http://localhost:5500",
   "http://127.0.0.1:5500",
 ];
 
 app.use(
   cors({
-    origin: function (origin, callback) {
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.includes(origin)) {
-        return callback(null, true);
+    origin: (origin, callback) => {
+      // allow REST tools & same-origin calls
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("CORS not allowed"));
       }
-      return callback(new Error("Not allowed by CORS"));
     },
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
   })
 );
 
-// Health check
+/* =====================================================
+   💚 HEALTH CHECK
+===================================================== */
 app.get("/", (req, res) => {
-  res.json({ message: "NDR Backend API is running 🚀" });
+  res.status(200).json({
+    status: "success",
+    message: "✅ NDR Backend API is running 🚀",
+  });
 });
 
-// Routes
-app.use("/api/auth", require("./routes/authRoutes"));
-app.use("/api/users", require("./routes/userRoutes"));
-app.use("/api/admin", require("./routes/adminRoutes"));
-app.use("/api/courses", require("./routes/courseRoutes"));
-app.use("/api/tests", require("./routes/testRoutes"));
-app.use("/api/queries", require("./routes/queryRoutes"));
-app.use("/api/announcements", require("./routes/announcementRoutes"));
+/* =====================================================
+   📦 API ROUTES
+===================================================== */
+app.use("/api/auth", authRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/admin", adminRoutes);
+app.use("/api/courses", courseRoutes);
+app.use("/api/tests", testRoutes);
+app.use("/api/queries", queryRoutes);
+app.use("/api/announcements", announcementRoutes);
+app.use("/api/dashboard", dashboardRoutes);
 
-// 404 + error handlers
+// Google Drive / Video proxy routes
+app.use("/", videoRoutes);
+
+/* =====================================================
+   ⚠️ ERROR HANDLERS
+===================================================== */
 app.use(notFound);
 app.use(errorHandler);
 
+/* =====================================================
+   🚀 START SERVER (RENDER SAFE)
+===================================================== */
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+(async function startServer() {
+  try {
+    await sequelize.sync({ alter: true });
+    console.log("✅ PostgreSQL tables synchronized");
+
+    app.listen(PORT, () => {
+      console.log(`🚀 Server running on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error("❌ Server startup failed:", error);
+    process.exit(1);
+  }
+})();
