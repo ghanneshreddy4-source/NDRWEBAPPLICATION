@@ -6,14 +6,14 @@ const User = require("../models/User");
 
 console.log("Auth routes loaded");
 
-router.post("/register", registerStudent);
+router.post("https://ndrwebapplication-1.onrender.com/register", registerStudent);
 
 // OTP endpoints
-router.post("/request-otp", requestOtp);
-router.post("/verify-otp", verifyOtp);
+router.post("https://ndrwebapplication-1.onrender.com/request-otp", requestOtp);
+router.post("https://ndrwebapplication-1.onrender.com/verify-otp", verifyOtp);
 
 // debug listing
-router.get("/debug/users", async (req, res) => {
+router.get("https://ndrwebapplication-1.onrender.com/debug/users", async (req, res) => {
   try {
     const users = await User.findAll({
       attributes: ["id", "name", "email", "role", "isApproved", "createdAt"],
