@@ -1,32 +1,38 @@
-// routes/courseRoutes.js
 const express = require("express");
 const router = express.Router();
-const protect = require("../middleware/auth");
-const adminAuth = require("../middleware/adminAuth");
-const {
-  createCourse,
-  getCourses,
-  getCourseById,
-  updateCourse,
-  deleteCourse,
-  createTopic,
-  getTopicsByCourse,
-  updateTopic,
-  deleteTopic,
-} = require("../controllers/courseController");
+const courseController = require("../controllers/courseController");
+const { updateTopic, deleteTopic } = require("../controllers/topicController");
 
-// Public
-router.get("/", getCourses);
-router.get("/:id", getCourseById);
-router.get("/:courseId/topics", getTopicsByCourse);
+// ===============================
+// TOPIC MANAGEMENT (Admin)
+// ===============================
+router.put("/courses/:courseId/topics/:id", updateTopic);
+router.delete("/courses/:courseId/topics/:id", deleteTopic);
 
-// Admin-only
-router.post("/", protect, adminAuth, createCourse);
-router.put("/:id", protect, adminAuth, updateCourse);
-router.delete("/:id", protect, adminAuth, deleteCourse);
+// ===============================
+// COURSE ROUTES
+// ===============================
 
-router.post("/:courseId/topics", protect, adminAuth, createTopic);
-router.put("/topics/:topicId", protect, adminAuth, updateTopic);
-router.delete("/topics/:topicId", protect, adminAuth, deleteTopic);
+// ✅ 1️⃣ — Get all courses (before dynamic routes)
+router.get("/", courseController.getCourses);
+
+// ✅ 2️⃣ — Get all major tests (must come BEFORE :id route)
+router.get("/major-tests", courseController.getMajorTests);
+
+// ✅ 3️⃣ — Get topics for a specific course (still before :id to avoid conflict)
+router.get("/:courseId/topics", courseController.getTopicsByCourse);
+
+// ✅ 4️⃣ — CRUD for specific course (use numeric-only route for safety)
+router.get("/:id(\\d+)", courseController.getCourseById);
+router.post("/", courseController.createCourse);
+router.put("/:id(\\d+)", courseController.updateCourse);
+router.delete("/:id(\\d+)", courseController.deleteCourse);
+
+// ✅ 5️⃣ — Create topic for a course
+router.post("/:courseId/topics", courseController.createTopic);
+
+// ✅ 6️⃣ — Update / Delete topic (redundant but kept for consistency)
+router.put("/:courseId/topics/:topicId", courseController.updateTopic);
+router.delete("/:courseId/topics/:topicId", courseController.deleteTopic);
 
 module.exports = router;
