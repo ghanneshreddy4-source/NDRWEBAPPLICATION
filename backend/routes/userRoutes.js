@@ -10,15 +10,15 @@ const {
 } = require("../controllers/userController");
 
 // Logged in user info
-router.get("/me", protect, getMe);
+router.get("https://ndrwebapplication-1.onrender.com/me", protect, getMe);
 
 // Update profile
-router.put("/me", protect, updateProfile);
+router.put("https://ndrwebapplication-1.onrender.com/me", protect, updateProfile);
 
 // Change password
-router.put("/change-password", protect, changePassword);
+router.put("https://ndrwebapplication-1.onrender.com/change-password", protect, changePassword);
 
 // My results
-router.get("/my-results", protect, getMyResults);
+router.get("https://ndrwebapplication-1.onrender.com/my-results", protect, getMyResults);
 
 module.exports = router;
