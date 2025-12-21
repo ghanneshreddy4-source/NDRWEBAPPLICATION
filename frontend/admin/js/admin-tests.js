@@ -54,6 +54,7 @@ async function setupTopicTestPage() {
         </div>
 
         <button type="submit" class="admin-btn" style="margin-top:0.5rem;">Create Test</button>
+        <button type="button" id="deleteTestBtn" class="admin-btn danger" style="background:#c0392b;margin-top:0.5rem;">🗑 Delete Test</button>
         <p id="testMsg" class="admin-msg"></p>
       </form>
     </div>
@@ -65,6 +66,7 @@ async function setupTopicTestPage() {
   const addQBtn = document.getElementById("addQuestionBtn");
   const form = document.getElementById("topicTestForm");
   const msgEl = document.getElementById("testMsg");
+  const deleteTestBtn = document.getElementById("deleteTestBtn");
 
   courseSelect.innerHTML = `<option value="">Loading...</option>`;
   try {
@@ -145,25 +147,40 @@ async function setupTopicTestPage() {
           <label>Marks</label>
           <input type="number" class="q-marks" value="1" />
         </div>
+        <button type="button" class="admin-btn danger removeQBtn" style="background:#c0392b;margin-top:0.5rem;">🗑 Remove Question</button>
       </div>
     `;
     qContainer.appendChild(div);
+
+    // attach remove button handler
+    div.querySelector(".removeQBtn").addEventListener("click", () => div.remove());
   }
 
   addQBtn.addEventListener("click", () => addQuestionBlock());
   addQuestionBlock();
+
+  // 🗑 DELETE TEST BUTTON
+  deleteTestBtn.addEventListener("click", async () => {
+    const testId = prompt("Enter the Test ID to delete:");
+    if (!testId) return alert("No Test ID provided.");
+    if (!confirm("⚠️ Are you sure you want to delete this test permanently?")) return;
+    try {
+      await apiRequest(`/tests/${testId}/full`, "DELETE", null, true);
+      alert("✅ Test deleted successfully!");
+    } catch (err) {
+      alert("❌ Failed to delete test: " + err.message);
+    }
+  });
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     msgEl.style.color = "#9ca3af";
     msgEl.textContent = "Creating test...";
 
-    const course = courseSelect.value; // courseId
-    const topic = topicSelect.value;   // topicId
+    const course = courseSelect.value;
+    const topic = topicSelect.value;
     const title = document.getElementById("testTitle").value.trim();
-    const durationMinutes = Number(
-      document.getElementById("testDuration").value || 30
-    );
+    const durationMinutes = Number(document.getElementById("testDuration").value || 30);
 
     if (!course || !topic) {
       msgEl.style.color = "#fda4af";
@@ -178,9 +195,7 @@ async function setupTopicTestPage() {
       const options = Array.from(optEls)
         .map((o) => o.value.trim())
         .filter((v) => v);
-      const correctOptionIndex = Number(
-        block.querySelector(".q-correct").value || 0
-      );
+      const correctOptionIndex = Number(block.querySelector(".q-correct").value || 0);
       const marks = Number(block.querySelector(".q-marks").value || 1);
 
       return {
@@ -193,12 +208,7 @@ async function setupTopicTestPage() {
     });
 
     try {
-      await apiRequest(
-        "/tests",
-        "POST",
-        { title, course, topic, durationMinutes, questions },
-        true
-      );
+      await apiRequest("/tests", "POST", { title, course, topic, durationMinutes, questions }, true);
       msgEl.style.color = "#4ade80";
       msgEl.textContent = "Test created.";
     } catch (err) {
@@ -235,6 +245,7 @@ async function setupMajorTestPage() {
         </div>
 
         <button type="submit" class="admin-btn" style="margin-top:0.5rem;">Create Major Test</button>
+        <button type="button" id="deleteMajorTestBtn" class="admin-btn danger" style="background:#c0392b;margin-top:0.5rem;">🗑 Delete Test</button>
         <p id="majorTestMsg" class="admin-msg"></p>
       </form>
     </div>
@@ -245,6 +256,7 @@ async function setupMajorTestPage() {
   const addQBtn = document.getElementById("addMajorQuestionBtn");
   const form = document.getElementById("majorTestForm");
   const msgEl = document.getElementById("majorTestMsg");
+  const deleteMajorTestBtn = document.getElementById("deleteMajorTestBtn");
 
   courseSelect.innerHTML = `<option value="">Loading...</option>`;
   try {
@@ -300,24 +312,36 @@ async function setupMajorTestPage() {
           <label>Marks</label>
           <input type="number" class="q-marks" value="1" />
         </div>
+        <button type="button" class="admin-btn danger removeQBtn" style="background:#c0392b;margin-top:0.5rem;">🗑 Remove Question</button>
       </div>
     `;
     qContainer.appendChild(div);
+    div.querySelector(".removeQBtn").addEventListener("click", () => div.remove());
   }
 
   addQBtn.addEventListener("click", () => addQuestionBlock());
   addQuestionBlock();
+
+  deleteMajorTestBtn.addEventListener("click", async () => {
+    const testId = prompt("Enter Major Test ID to delete:");
+    if (!testId) return alert("No Test ID provided.");
+    if (!confirm("⚠️ Are you sure you want to delete this major test permanently?")) return;
+    try {
+      await apiRequest(`/tests/major/${testId}`, "DELETE", null, true);
+      alert("✅ Major Test deleted successfully!");
+    } catch (err) {
+      alert("❌ Failed to delete major test: " + err.message);
+    }
+  });
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     msgEl.style.color = "#9ca3af";
     msgEl.textContent = "Creating major test...";
 
-    const course = courseSelect.value; // courseId
+    const course = courseSelect.value;
     const title = document.getElementById("majorTitle").value.trim();
-    const durationMinutes = Number(
-      document.getElementById("majorDuration").value || 60
-    );
+    const durationMinutes = Number(document.getElementById("majorDuration").value || 60);
 
     if (!course) {
       msgEl.style.color = "#fda4af";
@@ -332,9 +356,7 @@ async function setupMajorTestPage() {
       const options = Array.from(optEls)
         .map((o) => o.value.trim())
         .filter((v) => v);
-      const correctOptionIndex = Number(
-        block.querySelector(".q-correct").value || 0
-      );
+      const correctOptionIndex = Number(block.querySelector(".q-correct").value || 0);
       const marks = Number(block.querySelector(".q-marks").value || 1);
 
       return {
@@ -347,12 +369,7 @@ async function setupMajorTestPage() {
     });
 
     try {
-      await apiRequest(
-        "/tests/major",
-        "POST",
-        { title, course, durationMinutes, questions },
-        true
-      );
+      await apiRequest("/tests/major", "POST", { title, course, durationMinutes, questions }, true);
       msgEl.style.color = "#4ade80";
       msgEl.textContent = "Major test created.";
     } catch (err) {
