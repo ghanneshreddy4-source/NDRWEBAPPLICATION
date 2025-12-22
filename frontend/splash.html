@@ -586,6 +586,96 @@ section, .hero-slider, .corporate-section, #about {
     min-height: 100vh;
   }
 }
+/* === FIX BACKGROUND + HEIGHT ISSUES === */
+html, body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.hero-slider, .corporate-section, #about {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: auto;
+  min-height: 70vh;
+}
+
+.slide-media {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.training-wrapper {
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.training-left, .training-right {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .hero-slider {
+    height: auto;
+    min-height: 50vh;
+  }
+
+  .training-center {
+    order: -1;
+    margin-bottom: 2rem;
+  }
+
+  .feature-box, .flip-card {
+    width: 90%;
+    max-width: 340px;
+  }
+}
+  /* === RESPONSIVE NAVBAR FIX === */
+.menu-toggle {
+  display: none;
+  font-size: 1.8rem;
+  color: #fff;
+  cursor: pointer;
+}
+
+@media (max-width: 900px) {
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 0.8rem;
+    background: #2440a8;
+    border-radius: 6px;
+  }
+
+  .nav-links.show {
+    display: flex;
+  }
+
+  .nav-links a {
+    padding: 0.8rem 1rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .nav-links a:hover {
+    background: rgba(0,0,0,0.3);
+  }
+}
+
 
 
 </style>
@@ -599,7 +689,7 @@ section, .hero-slider, .corporate-section, #about {
   <img src="assets/images/ndr edtech main logo.png" alt="NDR EdTech Logo">
   <span>NDR EdTech</span>
 </div>
-
+<div class="menu-toggle" onclick="toggleMenu()">☰</div>
     <ul class="nav-links">
       <li><a href="#home" class="active" onclick="showSection('home')">Home</a></li>
       <li><a href="#courses" onclick="showSection('courses')">Courses</a></li>
@@ -1583,6 +1673,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const sectionId = location.hash.replace("#", "") || "home";
   showSection(sectionId);
 });
+function toggleMenu() {
+  document.querySelector(".nav-links").classList.toggle("show");
+}
 
 
 </script>
