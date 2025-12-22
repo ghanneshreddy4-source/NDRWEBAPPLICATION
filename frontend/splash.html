@@ -90,41 +90,48 @@ header {
   color:#fff;
 }
 
-/* === HERO SLIDER — FULLY RESPONSIVE === */
 /* === HERO SLIDER RESPONSIVE FIX === */
 .hero-slider {
   position: relative;
   width: 100%;
-  height: 70vh;                   /* visible height */
+  height: 70vh;                /* fixed visible height */
   min-height: 400px;
   overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #000;         /* fallback for videos */
+  background-color: #000;      /* fallback for blank slides */
 }
 
-.hero-slider .slide {
+/* Container for dynamically inserted slides */
+#slidesContainer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* Each slide */
+.slide {
   position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   opacity: 0;
   transition: opacity 1s ease-in-out;
 }
 
-.hero-slider .slide.active {
+.slide.active {
   opacity: 1;
   z-index: 1;
 }
 
+/* Make media responsive and always visible */
 .slide-media {
   width: 100%;
   height: 100%;
-  object-fit: cover;              /* ✅ fills the area properly */
+  object-fit: cover;           /* ✅ fills space without black */
   display: block;
 }
 
-/* Left/Right Buttons */
+/* Arrows */
 .hero-slider .prev,
 .hero-slider .next {
   position: absolute;
@@ -135,10 +142,10 @@ header {
   border: none;
   font-size: 2rem;
   border-radius: 50%;
-  padding: 0.6rem 1rem;
+  padding: 0.4rem 0.9rem;
   cursor: pointer;
-  z-index: 3;
-  transition: 0.3s;
+  z-index: 5;
+  transition: background 0.3s ease;
 }
 
 .hero-slider .prev:hover,
@@ -146,10 +153,10 @@ header {
   background: rgba(0, 0, 0, 0.85);
 }
 
-.hero-slider .prev { left: 20px; }
-.hero-slider .next { right: 20px; }
+.hero-slider .prev { left: 15px; }
+.hero-slider .next { right: 15px; }
 
-/* ✅ Responsive behavior */
+/* === MOBILE ADJUSTMENTS === */
 @media (max-width: 768px) {
   .hero-slider {
     height: 55vh;
@@ -158,8 +165,12 @@ header {
 
   .hero-slider .prev,
   .hero-slider .next {
-    font-size: 1.6rem;
-    padding: 0.4rem 0.8rem;
+    font-size: 1.5rem;
+    padding: 0.3rem 0.7rem;
+  }
+
+  .slide-media {
+    object-fit: contain;
   }
 }
 
@@ -1279,17 +1290,13 @@ html, body {
 
 // === CONFIG ===
 const SLIDER_FOLDER = "assets/slider/";
-
-// === Allowed file types ===
 const IMAGE_EXT = [".jpg", ".jpeg", ".png", ".webp"];
 const VIDEO_EXT = [".mp4", ".webm"];
-
-// GLOBALS
 let slides = [];
 let index = 0;
 let interval = null;
 
-// === FUNCTION: Load files dynamically ===
+// === LOAD FILES FROM JSON ===
 async function loadSliderFiles() {
   try {
     const response = await fetch(SLIDER_FOLDER + "files.json");
@@ -1300,17 +1307,12 @@ async function loadSliderFiles() {
 
     files.forEach((file, i) => {
       const ext = file.toLowerCase();
-
       let slideHTML = `<div class="slide ${i === 0 ? "active" : ""}">`;
 
-      // ---- IMAGE ----
       if (IMAGE_EXT.some(e => ext.endsWith(e))) {
-        slideHTML += `<img src="${SLIDER_FOLDER + file}" class="slide-media" />`;
-      }
-
-      // ---- VIDEO (NO LOOP) ----
-      else if (VIDEO_EXT.some(e => ext.endsWith(e))) {
-        slideHTML += `<video src="${SLIDER_FOLDER + file}" class="slide-media" autoplay muted></video>`;
+        slideHTML += `<img src="${SLIDER_FOLDER + file}" class="slide-media" alt="slide ${i + 1}" />`;
+      } else if (VIDEO_EXT.some(e => ext.endsWith(e))) {
+        slideHTML += `<video src="${SLIDER_FOLDER + file}" class="slide-media" autoplay muted playsinline></video>`;
       }
 
       slideHTML += `</div>`;
@@ -1319,10 +1321,8 @@ async function loadSliderFiles() {
 
     slides = document.querySelectorAll(".slide");
 
-    // Add video end event listeners
     addVideoListeners();
-
-    // Start auto slide
+    addButtonListeners();
     startAutoSlide();
 
   } catch (err) {
@@ -1330,34 +1330,24 @@ async function loadSliderFiles() {
   }
 }
 
+// Load everything
 loadSliderFiles();
 
-
-// =======================================
-// 🔄 VIDEO AUTO-NEXT LOGIC
-// =======================================
+// === VIDEO ENDED → NEXT SLIDE ===
 function addVideoListeners() {
   slides.forEach(slide => {
     const video = slide.querySelector("video");
     if (video) {
-      video.onended = () => {
-        nextSlide();
-      };
+      video.onended = nextSlide;
     }
   });
 }
 
-
-// =======================================
-// 🔄 SLIDER CORE FUNCTIONS
-// =======================================
+// === SLIDER CORE ===
 function showSlide(n) {
   slides.forEach((slide, i) => {
     slide.classList.toggle("active", i === n);
-
     const video = slide.querySelector("video");
-
-    // Restart video when slide becomes active
     if (video) {
       video.currentTime = 0;
       video.play();
@@ -1375,26 +1365,37 @@ function prevSlide() {
   showSlide(index);
 }
 
-
-// =======================================
-// ▶ Auto Slide Timer
-// =======================================
+// === AUTO SCROLL ===
 function startAutoSlide() {
   interval = setInterval(nextSlide, 5000);
 }
-
 function stopAutoSlide() {
   clearInterval(interval);
 }
 
+// === BUTTON EVENTS ===
+function addButtonListeners() {
+  const prevBtn = document.querySelector(".prev");
+  const nextBtn = document.querySelector(".next");
 
-// =======================================
-// 🖱️ Pause on Hover
-// =======================================
-const slider = document.querySelector(".hero-slider");
+  if (prevBtn && nextBtn) {
+    prevBtn.addEventListener("click", () => {
+      prevSlide();
+      stopAutoSlide();
+      startAutoSlide();
+    });
 
-slider.addEventListener("mouseover", stopAutoSlide);
-slider.addEventListener("mouseout", startAutoSlide);
+    nextBtn.addEventListener("click", () => {
+      nextSlide();
+      stopAutoSlide();
+      startAutoSlide();
+    });
+  }
+
+  const slider = document.querySelector(".hero-slider");
+  slider.addEventListener("mouseover", stopAutoSlide);
+  slider.addEventListener("mouseout", startAutoSlide);
+}
 
 
 /* === COURSES === */
