@@ -90,22 +90,23 @@ header {
   color:#fff;
 }
 
-/* === HERO SLIDER STYLES === */
+/* === HERO SLIDER — FULLY RESPONSIVE === */
 .hero-slider {
   position: relative;
   width: 100%;
-  height: 75vh; /* Large visible banner */
+  height: auto;
+  min-height: 60vh;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
+/* each slide */
 .hero-slider .slide {
-  position: absolute;
-  top: 0;
-  left: 0;
+  position: relative;
   width: 100%;
-  height: 100%;
-  background-size: cover;
-  background-position: center;
+  height: auto;
   opacity: 0;
   transition: opacity 1s ease-in-out;
 }
@@ -115,24 +116,33 @@ header {
   z-index: 1;
 }
 
-/* === Centered Button at Bottom === */
+/* make image/video responsive */
+.slide-media {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain; /* ✅ no cropping */
+}
+
+/* Centered call-to-action button */
 .hero-btn-container {
   position: absolute;
-  bottom: 10%; /* Moves button up a bit from bottom */
+  bottom: 8%;
   left: 50%;
   transform: translateX(-50%);
+  z-index: 2;
   text-align: center;
 }
 
 .hero-btn-container .btn {
   background: linear-gradient(90deg, #d91d42, #3245ff);
   color: #fff;
-  font-size: 1.1rem;
-  padding: 0.9rem 2rem;
+  font-size: 1rem;
+  padding: 0.8rem 1.6rem;
   border-radius: 6px;
   text-decoration: none;
   font-weight: 600;
-  transition: transform 0.3s, opacity 0.3s;
+  transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
 .hero-btn-container .btn:hover {
@@ -140,35 +150,48 @@ header {
   opacity: 0.9;
 }
 
-/* === Navigation Arrows === */
+/* Arrows */
 .hero-slider .prev,
 .hero-slider .next {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(0,0,0,0.6);
-  color: white;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
   border: none;
   font-size: 2rem;
-  padding: 0.5rem 1rem;
   border-radius: 50%;
+  padding: 0.5rem 1rem;
   cursor: pointer;
-  transition: background 0.3s;
-  z-index: 2;
+  z-index: 3;
 }
 
 .hero-slider .prev:hover,
 .hero-slider .next:hover {
-  background: rgba(0,0,0,0.8);
+  background: rgba(0, 0, 0, 0.7);
 }
 
-.hero-slider .prev { left: 20px; }
-.hero-slider .next { right: 20px; }
+.hero-slider .prev { left: 10px; }
+.hero-slider .next { right: 10px; }
 
-.slide-media {
-  width: 100%;
-  height: 100%;
-  object-fit: cover; /* ensures perfect fit without distortion */
+/* ✅ mobile-friendly */
+@media (max-width: 768px) {
+  .hero-slider {
+    min-height: 45vh;
+  }
+
+  .slide-media {
+    object-fit: contain;
+  }
+
+  .hero-btn-container {
+    bottom: 5%;
+  }
+
+  .hero-btn-container .btn {
+    font-size: 0.9rem;
+    padding: 0.7rem 1.3rem;
+  }
 }
 
 
