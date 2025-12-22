@@ -558,13 +558,6 @@ section, .hero-slider, .corporate-section, #about {
   height: auto;
 }
 
-/* ✅ Ensure inner images (like hero videos or chipset) fit small screens */
-.slide-media, .circle-bg img, .logo-center, .training-center img {
-  width: 100%;
-  height: auto;
-  object-fit: contain;
-}
-
 /* ✅ Improve mobile spacing */
 @media (max-width: 768px) {
   header .navbar {
@@ -576,13 +569,13 @@ section, .hero-slider, .corporate-section, #about {
     height: 55vh; /* smaller banner for mobile */
   }
 
-  .training-wrapper, .features-row, .course-container, .feedback-container {
+   .features-row, .course-container, .feedback-container {
     flex-direction: column !important;
     align-items: center;
     gap: 1.5rem;
   }
 
-  .flip-card, .feature-box, .course-card, .feedback-card {
+   .feature-box, .course-card, .feedback-card {
     width: 90% !important;
     max-width: 340px;
   }
