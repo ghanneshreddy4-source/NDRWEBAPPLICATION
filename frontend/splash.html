@@ -91,34 +91,45 @@ header {
 }
 
 /* === HERO SLIDER (SCROLL VERSION) === */
+/* === HERO SLIDER FIXED HEIGHT (NO STRETCH, NO CROP) === */
 .hero-slider {
   position: relative;
   width: 100%;
   overflow: hidden;
-  height: 70vh;
   background: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: auto;            /* auto height based on content */
+  min-height: 60vh;        /* maintain banner presence */
 }
 
 #slidesContainer {
   display: flex;
-  width: max-content;
   transition: transform 0.8s ease-in-out;
+  width: 100%;
 }
 
 .slide {
   flex: 0 0 100%;
-  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .slide-media {
   width: 100%;
-  height: 70vh;
-  object-fit: cover;
+  height: auto;             /* ✅ let it scale naturally */
+  object-fit: contain;      /* ✅ no crop */
   display: block;
+  background: #000;
+  max-height: 80vh;         /* ✅ keep from taking full screen */
+  margin: 0 auto;
 }
 
 /* Buttons */
-.hero-slider .prev, .hero-slider .next {
+.hero-slider .prev,
+.hero-slider .next {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -133,19 +144,21 @@ header {
   transition: background 0.3s ease;
 }
 
-.hero-slider .prev:hover, .hero-slider .next:hover {
+.hero-slider .prev:hover,
+.hero-slider .next:hover {
   background: rgba(0, 0, 0, 0.85);
 }
 
 .hero-slider .prev { left: 15px; }
 .hero-slider .next { right: 15px; }
 
-/* Mobile adjustments */
+/* ✅ Mobile-friendly height */
 @media (max-width: 768px) {
-  .hero-slider { height: 55vh; }
-  .slide-media { height: 55vh; object-fit: contain; }
+  .slide-media {
+    object-fit: contain;
+    max-height: 55vh;
+  }
 }
-
 
 
   /* =====================================================
