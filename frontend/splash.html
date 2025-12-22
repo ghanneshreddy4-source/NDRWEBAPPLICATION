@@ -538,6 +538,63 @@ header {
 .feedback-text { color: #ddd; font-size: .95rem; margin-bottom: 1rem; }
 .feedback-user { color: #3ec7eb; font-weight: 600; }
 
+  /* === RESPONSIVE FIXES === */
+html, body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* ✅ Make all background images cover & scale properly */
+section, .hero-slider, .corporate-section, #about {
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+/* ✅ Allow auto height instead of fixed vh when needed */
+.hero-slider, .corporate-section, #about {
+  min-height: auto;
+  height: auto;
+}
+
+/* ✅ Ensure inner images (like hero videos or chipset) fit small screens */
+.slide-media, .circle-bg img, .logo-center, .training-center img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* ✅ Improve mobile spacing */
+@media (max-width: 768px) {
+  header .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .hero-slider {
+    height: 55vh; /* smaller banner for mobile */
+  }
+
+  .training-wrapper, .features-row, .course-container, .feedback-container {
+    flex-direction: column !important;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .flip-card, .feature-box, .course-card, .feedback-card {
+    width: 90% !important;
+    max-width: 340px;
+  }
+
+  /* ensure about background fills full height on small screens */
+  #about {
+    background-attachment: scroll;
+    min-height: 100vh;
+  }
+}
+
+
 </style>
 </head>
 
@@ -1527,6 +1584,13 @@ const canvas = document.getElementById("footer-bg");
     requestAnimationFrame(draw);
   }
   draw();
+
+  // === INITIAL SECTION LOAD ON REFRESH ===
+document.addEventListener("DOMContentLoaded", () => {
+  const sectionId = location.hash.replace("#", "") || "home";
+  showSection(sectionId);
+});
+
 
 </script>
 
