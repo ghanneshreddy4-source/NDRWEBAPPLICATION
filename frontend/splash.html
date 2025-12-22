@@ -96,7 +96,7 @@ header {
   width: 100%;
   overflow: hidden;
   background: #000; /* fallback color */
-  height: auto; /* consistent visible height */
+  height: 65dvh; /* consistent visible height */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -125,7 +125,7 @@ header {
 /* ✅ Key part — fit behavior */
 .slide-media {
   width: 100%;
-  height: auto;
+  height: 65dvh;
   object-fit: cover; /* fills entire area, no black space */
   display: block;
   background-color: #000;
@@ -157,7 +157,7 @@ header {
 /* ✅ Responsive behavior fix */
 @media (max-width: 992px) {
   .hero-slider {
-    height: 50vh; /* shorter so mobile viewport not stretched */
+    height: 50dvh; /* shorter so mobile viewport not stretched */
   }
 
   .slide-media {
