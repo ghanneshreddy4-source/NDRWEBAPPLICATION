@@ -91,22 +91,23 @@ header {
 }
 
 /* === HERO SLIDER — FULLY RESPONSIVE === */
+/* === HERO SLIDER RESPONSIVE FIX === */
 .hero-slider {
   position: relative;
   width: 100%;
-  height: auto;
-  min-height: 60vh;
+  height: 70vh;                   /* visible height */
+  min-height: 400px;
   overflow: hidden;
   display: flex;
-  flex-direction: column;
   justify-content: center;
+  align-items: center;
+  background-color: #000;         /* fallback for videos */
 }
 
-/* each slide */
 .hero-slider .slide {
-  position: relative;
+  position: absolute;
   width: 100%;
-  height: auto;
+  height: 100%;
   opacity: 0;
   transition: opacity 1s ease-in-out;
 }
@@ -116,84 +117,51 @@ header {
   z-index: 1;
 }
 
-/* make image/video responsive */
 .slide-media {
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover;              /* ✅ fills the area properly */
   display: block;
-  object-fit: contain; /* ✅ no cropping */
 }
 
-/* Centered call-to-action button */
-.hero-btn-container {
-  position: absolute;
-  bottom: 8%;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 2;
-  text-align: center;
-}
-
-.hero-btn-container .btn {
-  background: linear-gradient(90deg, #d91d42, #3245ff);
-  color: #fff;
-  font-size: 1rem;
-  padding: 0.8rem 1.6rem;
-  border-radius: 6px;
-  text-decoration: none;
-  font-weight: 600;
-  transition: transform 0.3s ease, opacity 0.3s ease;
-}
-
-.hero-btn-container .btn:hover {
-  transform: translateY(-3px);
-  opacity: 0.9;
-}
-
-/* Arrows */
+/* Left/Right Buttons */
 .hero-slider .prev,
 .hero-slider .next {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.6);
   color: #fff;
   border: none;
   font-size: 2rem;
   border-radius: 50%;
-  padding: 0.5rem 1rem;
+  padding: 0.6rem 1rem;
   cursor: pointer;
   z-index: 3;
+  transition: 0.3s;
 }
 
 .hero-slider .prev:hover,
 .hero-slider .next:hover {
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.85);
 }
 
-.hero-slider .prev { left: 10px; }
-.hero-slider .next { right: 10px; }
+.hero-slider .prev { left: 20px; }
+.hero-slider .next { right: 20px; }
 
-/* ✅ mobile-friendly */
+/* ✅ Responsive behavior */
 @media (max-width: 768px) {
   .hero-slider {
-    min-height: 45vh;
+    height: 55vh;
+    min-height: 320px;
   }
 
-  .slide-media {
-    object-fit: contain;
-  }
-
-  .hero-btn-container {
-    bottom: 5%;
-  }
-
-  .hero-btn-container .btn {
-    font-size: 0.9rem;
-    padding: 0.7rem 1.3rem;
+  .hero-slider .prev,
+  .hero-slider .next {
+    font-size: 1.6rem;
+    padding: 0.4rem 0.8rem;
   }
 }
-
 
 
   /* =====================================================
