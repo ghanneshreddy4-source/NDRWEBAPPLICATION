@@ -1309,11 +1309,11 @@ async function loadSliderFiles() {
 }
 
 function showSlide(index) {
-  const container = document.getElementById("slidesContainer");
-  const slideCount = files.length;
-  if (!slideCount) return;
-  currentIndex = (index + slideCount) % slideCount;
-  container.style.transform = `translateX(-${currentIndex * 100}%)`;
+  const slides = document.querySelectorAll(".slide");
+  if (!slides.length) return;
+  slides.forEach(slide => slide.classList.remove("active"));
+  currentIndex = (index + slides.length) % slides.length;
+  slides[currentIndex].classList.add("active");
 }
 
 function nextSlide() {
