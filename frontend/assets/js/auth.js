@@ -5,15 +5,7 @@
 
 // ================== LOGIN WITH OTP ==================
 
-const loginForm = document.getElementById("loginForm");
-const emailInput = document.getElementById("loginEmail");
-const sendOtpBtn = document.getElementById("sendOtpBtn");
-const loginOtpRow = document.getElementById("loginOtpRow");
-const loginOtpInput = document.getElementById("loginOtp");
-const verifyOtpBtn = document.getElementById("verifyOtpBtn");
-const resendOtpBtn = document.getElementById("resendOtpBtn");
-const loginError = document.getElementById("loginError");
-const otpError = document.getElementById("otpError");
+
 const pwForm = document.getElementById("passwordLoginForm");
 const pwEmail = document.getElementById("pwEmail");
 const pwPassword = document.getElementById("pwPassword");
