@@ -2,30 +2,22 @@
 const express = require("express");
 const router = express.Router();
 
-const {
-  registerStudent,
-  requestOtp,
-  verifyOtp,
-} = require("../controllers/authController");
-
+// ✅ Include loginWithPassword in imports
+const { registerStudent, requestOtp, verifyOtp, loginWithPassword } = require("../controllers/authController");
 const User = require("../models/User");
 
 console.log("Auth routes loaded");
 
-/* =====================================================
-   AUTH ROUTES
-===================================================== */
-
-// Register student
 router.post("/register", registerStudent);
 
-// OTP routes
+// OTP endpoints
 router.post("/request-otp", requestOtp);
 router.post("/verify-otp", verifyOtp);
 
-/* =====================================================
-   DEBUG ROUTE (OPTIONAL)
-===================================================== */
+// ✅ Password login route
+router.post("/login", loginWithPassword);
+
+// debug listing
 router.get("/debug/users", async (req, res) => {
   try {
     const users = await User.findAll({
