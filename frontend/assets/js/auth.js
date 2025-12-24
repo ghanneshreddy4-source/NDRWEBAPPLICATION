@@ -14,6 +14,67 @@ const verifyOtpBtn = document.getElementById("verifyOtpBtn");
 const resendOtpBtn = document.getElementById("resendOtpBtn");
 const loginError = document.getElementById("loginError");
 const otpError = document.getElementById("otpError");
+const pwForm = document.getElementById("passwordLoginForm");
+const pwEmail = document.getElementById("pwEmail");
+const pwPassword = document.getElementById("pwPassword");
+const pwError = document.getElementById("pwError");
+
+if (pwForm) {
+  pwForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    pwError.textContent = "";
+
+    const email = pwEmail.value.trim();
+    const password = pwPassword.value.trim();
+    if (!email || !password) {
+      pwError.textContent = "Email and password are required.";
+      return;
+    }
+
+    try {
+      const res = await apiRequest("/auth/login", "POST", { email, password });
+      const user = res.user || {};
+      saveUserAndToken(user, res.token);
+      if (user.role === "admin") {
+        window.location.href = "admin/admin-dashboard.html";
+      } else {
+        window.location.href = "home.html";
+      }
+    } catch (err) {
+      pwError.textContent = err.message || "Login failed.";
+    }
+  });
+}
+
+// ================== TOGGLE BETWEEN LOGIN METHODS (ADDED) ==================
+const togglePasswordLogin = document.getElementById("togglePasswordLogin");
+const toggleOtpLogin = document.getElementById("toggleOtpLogin");
+const passwordLoginForm = document.getElementById("passwordLoginForm");
+const otpLoginForm = document.getElementById("loginForm");
+
+if (togglePasswordLogin && toggleOtpLogin) {
+  togglePasswordLogin.addEventListener("click", () => {
+    passwordLoginForm.style.display = "block";
+    otpLoginForm.style.display = "none";
+  });
+
+  toggleOtpLogin.addEventListener("click", () => {
+    passwordLoginForm.style.display = "none";
+    otpLoginForm.style.display = "block";
+  });
+}
+
+// ================== LOGIN WITH OTP ==================
+
+const loginForm = document.getElementById("loginForm");
+const emailInput = document.getElementById("loginEmail");
+const sendOtpBtn = document.getElementById("sendOtpBtn");
+const loginOtpRow = document.getElementById("loginOtpRow");
+const loginOtpInput = document.getElementById("loginOtp");
+const verifyOtpBtn = document.getElementById("verifyOtpBtn");
+const resendOtpBtn = document.getElementById("resendOtpBtn");
+const loginError = document.getElementById("loginError");
+const otpError = document.getElementById("otpError");
 
 let currentEmailForOtp = null;
 
@@ -177,7 +238,6 @@ if (verifyOtpBtn) {
   });
 }
 
-
 // ================== COURSE ACCESS CONTROL ==================
 function getLoggedUser() {
   try {
@@ -233,4 +293,3 @@ if (registerForm) {
     }
   });
 }
-
