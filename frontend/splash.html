@@ -15,8 +15,6 @@
 
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  
-
 
 <style>
 :root {
@@ -1194,8 +1192,11 @@ header {
   if (activeLink) activeLink.classList.add("active");
 
   // Update browser URL hash
-  history.pushState(null, "", `#${id}`);
+ // ✅ push state only when not triggered by back/forward
+if (!event || event.type !== "popstate") {
+  history.pushState({ section: id }, "", `#${id}`);
 }
+  }
 
 // === CONFIG ===
 const SLIDER_FOLDER = "assets/slider/";
@@ -1315,6 +1316,48 @@ const slider = document.querySelector(".hero-slider");
 
 slider.addEventListener("mouseover", stopAutoSlide);
 slider.addEventListener("mouseout", startAutoSlide);
+
+function filterCourses(category) {
+  const grid = document.getElementById("courseGrid");
+  const items = document.querySelectorAll(".sidebar li");
+  items.forEach(li => li.classList.remove("active"));
+
+  // mark selected
+  const clicked = Array.from(items).find(li =>
+    li.textContent.trim().toLowerCase().includes(category.replace("-", " "))
+  );
+  if (clicked) clicked.classList.add("active");
+
+  let filtered = [];
+  if (category === "all") {
+    filtered = courses;
+  } else {
+    filtered = courses.filter(c => c.category === category);
+  }
+  renderCourses(filtered);
+  showSection("courses");
+  document.getElementById("courses").scrollIntoView({ behavior: "smooth" });
+}
+
+// ✅ FIXED BROWSER BACK BUTTON HANDLER
+window.addEventListener("popstate", (event) => {
+  // Get section id from history state or hash
+  const sectionId = (event.state && event.state.section) 
+    ? event.state.section 
+    : (location.hash.replace("#", "") || "home");
+
+  // Prevent double push by skipping history.pushState() inside showSection
+  document.querySelectorAll("section").forEach(sec => sec.classList.remove("active"));
+  const target = document.getElementById(sectionId) || document.getElementById("home");
+  target.classList.add("active");
+
+  // Update nav highlight manually
+  document.querySelectorAll(".nav-links a").forEach(a => a.classList.remove("active"));
+  const activeLink = document.querySelector(`.nav-links a[href="#${sectionId}"]`);
+  if (activeLink) activeLink.classList.add("active");
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
 
 
 /* === COURSES === */
