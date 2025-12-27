@@ -15,6 +15,7 @@
 
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  
 
 
 <style>
@@ -90,118 +91,178 @@ header {
   color:#fff;
 }
 
-/* === HERO SLIDER (SCROLL VERSION) === */
+/* === HERO SLIDER STYLES === */
 .hero-slider {
   position: relative;
   width: 100%;
+  height: 75vh; /* Large visible banner */
   overflow: hidden;
-  background: #000; /* fallback color */
-  height: 65dvh; /* consistent visible height */
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
-.slides {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-
-.slide {
+.hero-slider .slide {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
+  background-size: cover;
+  background-position: center;
   opacity: 0;
   transition: opacity 1s ease-in-out;
 }
 
-.slide.active {
+.hero-slider .slide.active {
   opacity: 1;
-  z-index: 2;
+  z-index: 1;
 }
 
-/* ✅ Key part — fit behavior */
-.slide-media {
-  width: 100%;
-  height: 65dvh;
-  object-fit: cover; /* fills entire area, no black space */
-  display: block;
-  background-color: #000;
+/* === Centered Button at Bottom === */
+.hero-btn-container {
+  position: absolute;
+  bottom: 10%; /* Moves button up a bit from bottom */
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
 }
 
-/* Navigation arrows */
-.prev, .next {
+.hero-btn-container .btn {
+  background: linear-gradient(90deg, #d91d42, #3245ff);
+  color: #fff;
+  font-size: 1.1rem;
+  padding: 0.9rem 2rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: transform 0.3s, opacity 0.3s;
+}
+
+.hero-btn-container .btn:hover {
+  transform: translateY(-3px);
+  opacity: 0.9;
+}
+
+/* === Navigation Arrows === */
+.hero-slider .prev,
+.hero-slider .next {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(0, 0, 0, 0.5);
-  color: #fff;
+  background: rgba(0,0,0,0.6);
+  color: white;
   border: none;
   font-size: 2rem;
+  padding: 0.5rem 1rem;
   border-radius: 50%;
-  padding: 0.3rem 0.8rem;
   cursor: pointer;
-  z-index: 5;
   transition: background 0.3s;
+  z-index: 2;
 }
 
-.prev:hover, .next:hover {
-  background: rgba(0, 0, 0, 0.8);
+.hero-slider .prev:hover,
+.hero-slider .next:hover {
+  background: rgba(0,0,0,0.8);
 }
 
-.prev { left: 15px; }
-.next { right: 15px; }
+.hero-slider .prev { left: 20px; }
+.hero-slider .next { right: 20px; }
 
-/* ✅ Responsive behavior fix */
-@media (max-width: 992px) {
-  .hero-slider {
-    height: 50dvh; /* shorter so mobile viewport not stretched */
-  }
-
-  .slide-media {
-    object-fit: cover; /* fill mobile completely */
-  }
-
-  .prev, .next {
-    font-size: 1.5rem;
-    padding: 0.2rem 0.6rem;
-  }
-}
-
-@media (max-width: 576px) {
-  .hero-slider {
-    height: 45vh;
-  }
-}
-
-
-
-  /* =====================================================
-   FIX DESKTOP IMAGE CUTTING (SAFE & TARGETED)
-===================================================== */
-
-/* Default: DESKTOP & LARGE SCREENS */
 .slide-media {
-  object-fit: cover;
-  object-position: center right; /* keeps face visible */
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* ensures perfect fit without distortion */
 }
 
-/* Tablets */
-@media (max-width: 1024px) {
-  .slide-media {
-    object-position: center;
-  }
-}
 
-/* Mobile only – prevent cropping */
+/* === Responsive Design === */
 @media (max-width: 768px) {
-  .slide-media {
-    object-fit: contain;
-    background: #000; /* fill empty space cleanly */
+  .hero-slider {
+    height: 60vh;
+  }
+  .hero-btn-container .btn {
+    font-size: 1rem;
+    padding: 0.8rem 1.5rem;
   }
 }
+
+/* Ensure parent hero section doesn't fade children */
+#home, .hero-slider, .hero-stats {
+  opacity: 1 !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+}
+
+/* === HERO STATS SECTION (FINAL FIXED COLORS) === */
+.hero-stats {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  background: #ffffff;
+  padding: 1.8rem 2rem;
+  margin-top: -60px;
+  position: relative;
+  z-index: 100;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: #0046ff;
+  border-radius: 14px;
+  padding: 1rem 1.5rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  min-width: 220px;
+  transition: all 0.3s ease;
+}
+
+.stat-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* ICON COLOR */
+.stat-icon {
+  font-size: 2rem;
+  color: #0046ff; /* bright blue */
+}
+
+/* TEXT COLORS (FIXED) */
+.stat-text h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #111827; /* deep black-gray */
+}
+
+.stat-text p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #374151; /* medium gray for subtext */
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .hero-stats {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .stat-item {
+    min-width: 45%;
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 600px) {
+  .stat-item {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
 
 
 .alumni-slider {
@@ -359,17 +420,6 @@ header {
   width: 160px;
   z-index: 1;
 }
-@media (max-width: 900px) {
-  .training-wrapper {
-    flex-direction: column;
-    gap: 40px;
-  }
-
-  .training-left,
-  .training-right {
-    align-items: center;
-  }
-}
 
 
 /* === INLINE FEATURE BOXES === */
@@ -488,7 +538,7 @@ header {
   font-size: 1.8rem;
   font-weight: 700;
   margin-bottom: 2rem;
-  background: #0e0e0e;
+  background: #fbf9f9;
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -512,7 +562,7 @@ header {
   font-size: 1.8rem;
   font-weight: 700;
   margin-bottom: 2rem;
-  background: #0e0e0e;
+  background: #fffdfd;
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -537,176 +587,11 @@ header {
 
 .feedback-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 0 25px rgba(217,29,66,.5), 0 0 25px rgba(50,69,255,.5);
+  box-shadow: 0 0 25px rgba(251, 248, 249, 0.5), 0 0 25px rgba(50,69,255,.5);
 }
 
-.feedback-text { color: #ddd; font-size: .95rem; margin-bottom: 1rem; }
+.feedback-text { color: #fff; font-size: .95rem; margin-bottom: 1rem; }
 .feedback-user { color: #3ec7eb; font-weight: 600; }
-
-  /* === RESPONSIVE FIXES === */
-html, body {
-  width: 100%;
-  max-width: 100%;
-  overflow-x: hidden;
-}
-
-/* ✅ Make all background images cover & scale properly */
-section, .hero-slider, .corporate-section, #about {
-  background-size: cover;
-  background-position: center center;
-  background-repeat: no-repeat;
-}
-
-/* ✅ Allow auto height instead of fixed vh when needed */
-.hero-slider, .corporate-section, #about {
-  min-height: auto;
-  height: auto;
-}
-
-/* ✅ Improve mobile spacing */
-@media (max-width: 768px) {
-  header .navbar {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .hero-slider {
-    height: 55vh; /* smaller banner for mobile */
-  }
-
-   .features-row, .course-container, .feedback-container {
-    flex-direction: column !important;
-    align-items: center;
-    gap: 1.5rem;
-  }
-
-   .feature-box, .course-card, .feedback-card {
-    width: 90% !important;
-    max-width: 340px;
-  }
-
-  /* ensure about background fills full height on small screens */
-  #about {
-    background-attachment: scroll;
-    min-height: 100vh;
-  }
-}
-/* === FIX BACKGROUND + HEIGHT ISSUES === */
-html, body {
-  width: 100%;
-  max-width: 100%;
-  overflow-x: hidden;
-}
-
-.hero-slider, .corporate-section, #about {
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  height: auto;
-  min-height: 70vh;
-}
-
-.slide-media {
-  width: 100%;
-  height: auto;
-  object-fit: cover;
-}
-
-.training-wrapper {
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.training-left, .training-right {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-}
-
-@media (max-width: 768px) {
-  .hero-slider {
-    height: auto;
-    min-height: 50vh;
-  }
-
-  .training-center {
-    order: -1;
-    margin-bottom: 2rem;
-  }
-
-  .feature-box, .flip-card {
-    width: 90%;
-    max-width: 340px;
-  }
-}
-  /* === RESPONSIVE NAVBAR FIX === */
-.menu-toggle {
-  display: none;
-  font-size: 1.8rem;
-  color: #fff;
-  cursor: pointer;
-}
-
-@media (max-width: 900px) {
-  .navbar {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .menu-toggle {
-    display: block;
-  }
-
-  .nav-links {
-    display: none;
-    flex-direction: column;
-    width: 100%;
-    margin-top: 0.8rem;
-    background: #2440a8;
-    border-radius: 6px;
-  }
-
-  .nav-links.show {
-    display: flex;
-  }
-
-  .nav-links a {
-    padding: 0.8rem 1rem;
-    border-top: 1px solid rgba(255,255,255,0.1);
-  }
-
-  .nav-links a:hover {
-    background: rgba(0,0,0,0.3);
-  }
-}
-
-.training-wrapper {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;  /* left | center | right */
-  align-items: center;
-  gap: 40px;
-  justify-content: center;
-}
-
-/* keep columns side-by-side on medium screens too */
-@media (max-width: 992px) {
-  .training-wrapper {
-    grid-template-columns: 1fr;
-    text-align: center;
-  }
-
-  .training-left, .training-right {
-    align-items: center;
-  }
-
-  .training-center {
-    order: -1; /* logo comes first */
-    margin-bottom: 2rem;
-  }
-}
-
-
 
 </style>
 </head>
@@ -719,7 +604,7 @@ html, body {
   <img src="assets/images/ndr edtech main logo.png" alt="NDR EdTech Logo">
   <span>NDR EdTech</span>
 </div>
-<div class="menu-toggle" onclick="toggleMenu()">☰</div>
+
     <ul class="nav-links">
       <li><a href="#home" class="active" onclick="showSection('home')">Home</a></li>
       <li><a href="#courses" onclick="showSection('courses')">Courses</a></li>
@@ -732,16 +617,52 @@ html, body {
 </header>
 
 
-<!-- === HOME PAGE SECTION (CORRECTED) === -->
+<!-- === HOME PAGE SECTION === -->
 <section id="home" class="active">
 
   <div class="hero-slider" id="dynamicSlider">
     <div id="slidesContainer"></div>
 
     <!-- Navigation Arrows -->
-    <button class="prev">❮</button>
-    <button class="next">❯</button>
+    <button class="prev" onclick="prevSlide()">&#10094;</button>
+    <button class="next" onclick="nextSlide()">&#10095;</button>
   </div>
+
+  <!-- === Hero Stats Section === -->
+  <div class="hero-stats">
+    <div class="stat-item">
+      <div>
+        <h3>20+ Years</h3>
+        <p>of Experience</p>
+      </div>
+    </div>
+
+    <div class="stat-item">
+      <img src="assets/icons/briefcase.svg" alt="Students" />
+      <div>
+        <h3>50,000+</h3>
+        <p>Students Placed</p>
+      </div>
+    </div>
+
+    <div class="stat-item">
+      <img src="assets/icons/star.svg" alt="Rating" />
+      <div>
+        <h3>4.8/5</h3>
+        <p>(5000+ Reviews)</p>
+      </div>
+    </div>
+
+    <div class="stat-item">
+      <img src="assets/icons/class.svg" alt="Classes" />
+      <div>
+        <h3>Classes</h3>
+        <p>Offline & Online</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- === OUR Institute THRIVING AT SECTION === -->
 <div class="alumni-slider">
   <h2 class="alumni-title">Our Institute Thriving as a Hub of Skills, Talent, and Success.</h2>
@@ -752,6 +673,7 @@ html, body {
       <img src="assets/images/SAP GRC.png" alt="Microsoft" class="no-filter">
       <img src="assets/images/SAPABAP.png" alt="Infosys" class="no-filter">
       <img src="assets/images/salesforce.png" alt="Accenture" class="no-filter">
+      <img src="assets/images/DBT.png" alt="DBT" class="no-filter">
       
       <!-- duplicate for seamless looping -->
       <img src="assets/images/snowflake.png" alt="Snowflake" class="no-filter">
@@ -759,6 +681,7 @@ html, body {
       <img src="assets/images/SAP GRC.png" alt="Microsoft" class="no-filter">
       <img src="assets/images/SAPABAP.png" alt="Infosys" class="no-filter">
       <img src="assets/images/salesforce.png" alt="Accenture" class="no-filter">
+      <img src="assets/images/DBT.png" alt="DBT" class="no-filter">
 
     </div>
   </div>
@@ -1053,20 +976,23 @@ html, body {
 <!-- ABOUT -->
 <section id="about" style="
   position: relative;
-  background: url('assets/images/about us.jpeg') no-repeat center center / cover;
+  background: url('assets/images/logo.png') no-repeat center center / cover;
   color: #000000; /* 👈 Changed text to black */
   min-height: 100vh;
   overflow: hidden;
   font-family: 'Poppins', sans-serif;
 ">
 
-  <!-- Light transparent overlay for readability -->
-  <div style="
-    position: absolute;
-    inset: 0;
-    background: rgba(232, 232, 233, 0.2);
-    z-index: 0;
-  "></div>
+<div style="
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    rgba(255,255,255,0.08),
+    rgba(255,255,255,0.18)
+  );
+  z-index: 0;
+"></div>
+
 
   <div style="position: relative; z-index: 1;">
     <div class="page-header" style="text-align: center; padding: 4rem 1rem; background: transparent;">
@@ -1150,7 +1076,7 @@ html, body {
       <p id="contactMsg" style="text-align:center;margin-top:1rem;color:#3ec7eb;"></p>
     </form>
     <p style="text-align:center;margin-top:1rem;color:#aaa;font-size:.9rem;">
-      📞 +91 8722355666 &nbsp; | &nbsp; 📧 ndredtech@gmail.com
+      📞 +91 98765 43210 &nbsp; | &nbsp; 📧 info@ndrinfotech.com
     </p>
   </div>
 </section>
@@ -1220,7 +1146,7 @@ html, body {
   <p style="text-align:center; color:#090909; font-size:.9rem; position:relative; z-index:1;">© 2025 <strong>NDR EdTech</strong>. All Rights Reserved.</p>
 
   <!-- === WhatsApp Floating Button === -->
-<a href="https://wa.me/919705002066" target="_blank"
+<a href="https://wa.me/919876543210" target="_blank"
    style="
       position:fixed;
       bottom:20px;
@@ -1272,75 +1198,125 @@ html, body {
   history.pushState(null, "", `#${id}`);
 }
 
+// === CONFIG ===
 const SLIDER_FOLDER = "assets/slider/";
+
+// === Allowed file types ===
 const IMAGE_EXT = [".jpg", ".jpeg", ".png", ".webp"];
 const VIDEO_EXT = [".mp4", ".webm"];
-let files = [];
-let currentIndex = 0;
+
+// GLOBALS
+let slides = [];
+let index = 0;
 let interval = null;
 
+// === FUNCTION: Load files dynamically ===
 async function loadSliderFiles() {
   try {
     const response = await fetch(SLIDER_FOLDER + "files.json");
-    files = await response.json();
+    const files = await response.json();
+
     const container = document.getElementById("slidesContainer");
     container.innerHTML = "";
 
-    files.forEach((file) => {
+    files.forEach((file, i) => {
       const ext = file.toLowerCase();
-      const slide = document.createElement("div");
-      slide.classList.add("slide");
 
+      let slideHTML = `<div class="slide ${i === 0 ? "active" : ""}">`;
+
+      // ---- IMAGE ----
       if (IMAGE_EXT.some(e => ext.endsWith(e))) {
-        slide.innerHTML = `<img src="${SLIDER_FOLDER + file}" class="slide-media" alt="Slide">`;
-      } else if (VIDEO_EXT.some(e => ext.endsWith(e))) {
-        slide.innerHTML = `<video src="${SLIDER_FOLDER + file}" class="slide-media" autoplay muted loop playsinline></video>`;
+        slideHTML += `<img src="${SLIDER_FOLDER + file}" class="slide-media" />`;
       }
 
-      container.appendChild(slide);
+      // ---- VIDEO (NO LOOP) ----
+      else if (VIDEO_EXT.some(e => ext.endsWith(e))) {
+        slideHTML += `<video src="${SLIDER_FOLDER + file}" class="slide-media" autoplay muted></video>`;
+      }
+
+      slideHTML += `</div>`;
+      container.insertAdjacentHTML("beforeend", slideHTML);
     });
 
+    slides = document.querySelectorAll(".slide");
+
+    // Add video end event listeners
+    addVideoListeners();
+
+    // Start auto slide
     startAutoSlide();
-    addButtonListeners();
 
   } catch (err) {
     console.error("Slider load error:", err);
   }
 }
 
-function showSlide(index) {
-  const slides = document.querySelectorAll(".slide");
-  if (!slides.length) return;
-  slides.forEach(slide => slide.classList.remove("active"));
-  currentIndex = (index + slides.length) % slides.length;
-  slides[currentIndex].classList.add("active");
+loadSliderFiles();
+
+
+// =======================================
+// 🔄 VIDEO AUTO-NEXT LOGIC
+// =======================================
+function addVideoListeners() {
+  slides.forEach(slide => {
+    const video = slide.querySelector("video");
+    if (video) {
+      video.onended = () => {
+        nextSlide();
+      };
+    }
+  });
+}
+
+
+// =======================================
+// 🔄 SLIDER CORE FUNCTIONS
+// =======================================
+function showSlide(n) {
+  slides.forEach((slide, i) => {
+    slide.classList.toggle("active", i === n);
+
+    const video = slide.querySelector("video");
+
+    // Restart video when slide becomes active
+    if (video) {
+      video.currentTime = 0;
+      video.play();
+    }
+  });
 }
 
 function nextSlide() {
-  showSlide(currentIndex + 1);
+  index = (index + 1) % slides.length;
+  showSlide(index);
 }
 
 function prevSlide() {
-  showSlide(currentIndex - 1);
+  index = (index - 1 + slides.length) % slides.length;
+  showSlide(index);
 }
 
+
+// =======================================
+// ▶ Auto Slide Timer
+// =======================================
 function startAutoSlide() {
-  clearInterval(interval);
   interval = setInterval(nextSlide, 5000);
 }
 
-function addButtonListeners() {
-  document.querySelector(".next").onclick = () => {
-    nextSlide();
-    startAutoSlide();
-  };
-  document.querySelector(".prev").onclick = () => {
-    prevSlide();
-    startAutoSlide();
-  };
+function stopAutoSlide() {
+  clearInterval(interval);
 }
 
-loadSliderFiles();
+
+// =======================================
+// 🖱️ Pause on Hover
+// =======================================
+const slider = document.querySelector(".hero-slider");
+
+slider.addEventListener("mouseover", stopAutoSlide);
+slider.addEventListener("mouseout", startAutoSlide);
+
 
 /* === COURSES === */
 const courses = [
@@ -1350,7 +1326,18 @@ const courses = [
     category: "software",
     desc: "Snowflake is a top trending cloud data warehouse technology for scalable data storage and analytics.",
     img: "assets/images/snowflake.png",
-    contents: ["Core Java", "Spring Boot", "SQL", "HTML & CSS", "React", "Deployment"]
+    contents: ["1. Snowflake Architecture and Overview", "Spring Boot", "SQL", "HTML & CSS", "React", "Deployment"],
+    details: {
+      trainer: "Mr. Dinesh Reddyvari (Certified Trainer)",
+      experience: "15+ Years",
+      nextBatch: "18-12-2024 (8:00 PM IST)",
+      mode: "Classroom Training, Online Training (Instructor Led)",
+      duration: "45 Days",
+      phone: "+91 87223 55666",
+      email: "info@ndredtech.com",
+      demoText: "ENROLL FOR FREE DEMO CLASS",
+      demoLink: "https://us06web.zoom.us/meeting/register/tZloc-GprjwsGdOlGGj8lGc7BGlbH-jHUTu-"
+    }
   },
   {
     id: "python-full-stack",
@@ -1358,7 +1345,18 @@ const courses = [
     category: "software",
     desc: "Full Stack Web Development with Python (Django) and React.",
     img: "assets/images/snowflake.png",
-    contents: ["Python", "Django", "React", "MySQL", "REST APIs"]
+    contents: ["Python", "Django", "React", "MySQL", "REST APIs"],
+    details: {
+      trainer: "Ms. Anjali Sharma (Full Stack Trainer)",
+      experience: "10+ Years",
+      nextBatch: "20-12-2024 (7:00 PM IST)",
+      mode: "Online Training (Instructor Led)",
+      duration: "60 Days",
+      phone: "+91 87223 55666",
+      email: "info@ndredtech.com",
+      demoText: "Join Free Python Demo",
+      demoLink: "#"
+    }
   },
   {
     id: "software-testing",
@@ -1366,7 +1364,18 @@ const courses = [
     category: "testing",
     desc: "Manual and Automation Testing with Selenium & API Testing.",
     img: "assets/images/snowflake.png",
-    contents: ["Manual", "Selenium", "API", "JMeter"]
+    contents: ["Manual", "Selenium", "API", "JMeter"],
+    details: {
+      trainer: "Mr. Rajesh Kumar (QA Specialist)",
+      experience: "12+ Years",
+      nextBatch: "25-12-2024 (6:30 PM IST)",
+      mode: "Online Training",
+      duration: "40 Days",
+      phone: "+91 87223 55666",
+      email: "info@ndredtech.com",
+      demoText: "Attend Free QA Demo",
+      demoLink: "#"
+    }
   },
   {
     id: "data-science",
@@ -1374,7 +1383,18 @@ const courses = [
     category: "data",
     desc: "Learn Python, Machine Learning & Data Analytics.",
     img: "assets/images/snowflake.png",
-    contents: ["Python", "ML", "Visualization", "Project"]
+    contents: ["Python", "ML", "Visualization", "Project"],
+    details: {
+      trainer: "Dr. Meena Rao (PhD, Data Science)",
+      experience: "14+ Years",
+      nextBatch: "22-12-2024 (8:30 PM IST)",
+      mode: "Online Training",
+      duration: "75 Days",
+      phone: "+91 87223 55666",
+      email: "info@ndredtech.com",
+      demoText: "Free Data Science Demo",
+      demoLink: "#"
+    }
   },
   {
     id: "ai-ml",
@@ -1382,7 +1402,18 @@ const courses = [
     category: "ai",
     desc: "AI & Deep Learning with TensorFlow and Python.",
     img: "assets/images/snowflake.png",
-    contents: ["TensorFlow", "DL", "AI Projects"]
+    contents: ["TensorFlow", "DL", "AI Projects"],
+    details: {
+      trainer: "Mr. Suresh Verma (AI Expert)",
+      experience: "11+ Years",
+      nextBatch: "28-12-2024 (7:30 PM IST)",
+      mode: "Online Training",
+      duration: "65 Days",
+      phone: "+91 87223 55666",
+      email: "info@ndredtech.com",
+      demoText: "AI Free Session Registration",
+      demoLink: "#"
+    }
   },
   {
     id: "devops",
@@ -1390,13 +1421,28 @@ const courses = [
     category: "devops",
     desc: "Docker, Kubernetes, CI/CD and AWS Integration.",
     img: "assets/images/AzureDevops.png",
-    contents: ["CI/CD", "Docker", "Kubernetes", "AWS"]
+    contents: ["CI/CD", "Docker", "Kubernetes", "AWS"],
+    details: {
+      trainer: "Mr. Ravi Naidu (DevOps Architect)",
+      experience: "13+ Years",
+      nextBatch: "30-12-2024 (8:00 PM IST)",
+      mode: "Classroom & Online Training",
+      duration: "50 Days",
+      phone: "+91 87223 55666",
+      email: "info@ndredtech.com",
+      demoText: "DevOps Free Workshop",
+      demoLink: "#"
+    }
   }
 ];
 
 /* === TOPIC DESCRIPTIONS === */
 const topicDescriptions = {
-  "Core Java": "Master OOPs, collections, multithreading, and exception handling for enterprise Java applications.",
+  "1. Snowflake Architecture and Overview": [
+    "Snowflake Overview",
+    "Architecture",
+    "How to use the Snowflake UI & Ecosystem"
+  ],
   "Spring Boot": "Learn to create REST APIs, integrate Hibernate, and deploy scalable microservices.",
   "SQL": "Understand relational databases, queries, joins, and optimization techniques.",
   "HTML & CSS": "Design responsive user interfaces with HTML5 and modern CSS3 styling.",
@@ -1446,26 +1492,53 @@ function renderCourses(list) {
 }
 document.addEventListener("DOMContentLoaded", () => renderCourses(courses));
 
-/* === FILTER COURSES === */
-function filterCourses(cat) {
-  document.querySelectorAll(".sidebar li").forEach(li => li.classList.remove("active"));
-  event.target.closest("li").classList.add("active");
-  renderCourses(cat === "all" ? courses : courses.filter(c => c.category === cat));
-}
-
-/* === VIEW COURSE DETAILS (with expandable topic descriptions) === */
+/* === VIEW COURSE DETAILS (adds dynamic info table + topics) === */
 function viewCourse(id) {
   const course = courses.find(c => c.id === id);
   if (!course) return;
 
-  // Update the title and description
   document.getElementById("courseTitle").textContent = course.title;
   document.getElementById("courseDesc").textContent = course.desc;
 
-  const ul = document.getElementById("contentList");
-  ul.innerHTML = "";
+  const container = document.querySelector("#course-detail > div");
+  const existingTable = document.getElementById("dynamicCourseTable");
+  if (existingTable) existingTable.remove(); // remove old table
 
-  // Build collapsible topics
+  // ✅ Create dynamic info table before topic list
+  const table = document.createElement("table");
+  table.id = "dynamicCourseTable";
+  table.style.width = "100%";
+  table.style.marginTop = "1.5rem";
+  table.style.borderCollapse = "collapse";
+  table.style.fontSize = "1rem";
+
+  const d = course.details;
+  const rows = [
+    ["Trainer Name", d.trainer],
+    ["Trainer Experience", d.experience],
+    ["Next Batch Date", d.nextBatch],
+    ["Training Modes", d.mode],
+    ["Course Duration", d.duration],
+    ["Call us at", `<a href="tel:${d.phone}" style="color:#007bff;">${d.phone}</a>`],
+    ["Email Us at", `<a href="mailto:${d.email}" style="color:#007bff;">${d.email}</a>`],
+    ["Demo Class Details", `<a href="${d.demoLink}" target="_blank" style="color:#007bff;">${d.demoText}</a>`],
+    ["Demo Class Link", `<a href="${d.demoLink}" target="_blank" style="color:#007bff;">Join via Zoom</a>`]
+  ];
+
+  rows.forEach(([label, value]) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td style="font-weight:600;padding:10px;border:1px solid #ddd;">${label}</td>
+      <td style="padding:10px;border:1px solid #ddd;">${value}</td>`;
+    table.appendChild(tr);
+  });
+
+  // Insert table before topic list
+  const topicList = document.getElementById("contentList");
+  container.insertBefore(table, topicList);
+
+  // === Render topics ===
+  topicList.innerHTML = "";
   course.contents.forEach(topic => {
     const li = document.createElement("li");
     li.style.listStyle = "none";
@@ -1474,7 +1547,6 @@ function viewCourse(id) {
     li.style.borderRadius = "6px";
     li.style.overflow = "hidden";
 
-    // Topic button
     const header = document.createElement("div");
     header.textContent = topic;
     header.style.cursor = "pointer";
@@ -1484,45 +1556,44 @@ function viewCourse(id) {
     header.addEventListener("mouseover", () => (header.style.background = "#1a2139"));
     header.addEventListener("mouseout", () => (header.style.background = "transparent"));
 
-    // Description container (hidden by default)
     const descBox = document.createElement("div");
-    descBox.textContent = topicDescriptions[topic] || "Description coming soon.";
     descBox.style.padding = "0.7rem 1rem";
     descBox.style.background = "#121826";
     descBox.style.color = "#d1d5db";
     descBox.style.display = "none";
     descBox.style.borderTop = "1px solid #2e3b63";
 
-    // Toggle on click
+    // ✅ Handle arrays as bullet lists
+    if (Array.isArray(topicDescriptions[topic])) {
+      const ulList = document.createElement("ul");
+      ulList.style.listStyle = "disc";
+      ulList.style.paddingLeft = "1.5rem";
+      ulList.style.marginTop = "0.5rem";
+      topicDescriptions[topic].forEach(sub => {
+        const liSub = document.createElement("li");
+        liSub.textContent = sub;
+        ulList.appendChild(liSub);
+      });
+      descBox.appendChild(ulList);
+    } else {
+      descBox.textContent = topicDescriptions[topic] || "Description coming soon.";
+    }
+
     header.addEventListener("click", () => {
       const isVisible = descBox.style.display === "block";
-      // Hide all open ones before opening new (optional)
-      ul.querySelectorAll("div[data-desc]").forEach(div => (div.style.display = "none"));
+      topicList.querySelectorAll("div[data-desc]").forEach(div => (div.style.display = "none"));
       descBox.style.display = isVisible ? "none" : "block";
     });
 
-    descBox.setAttribute("data-desc", topic); // marker for easy lookup
+    descBox.setAttribute("data-desc", topic);
     li.appendChild(header);
     li.appendChild(descBox);
-    ul.appendChild(li);
+    topicList.appendChild(li);
   });
 
-  // Show the section smoothly
   showSection("course-detail");
   document.getElementById("course-detail").scrollIntoView({ behavior: "smooth" });
-
-  // Update the URL hash
   history.pushState(null, "", "#course-detail");
-}
-
-/* === SHOW TOPIC DETAIL BOX === */
-function showTopicDetail(topic) {
-  const box = document.getElementById("topicDescBox");
-  const title = document.getElementById("topicTitle");
-  const desc = document.getElementById("topicDesc");
-  title.textContent = topic;
-  desc.textContent = topicDescriptions[topic] || "Description coming soon.";
-  box.style.display = "block";
 }
 
 
@@ -1648,17 +1719,9 @@ const canvas = document.getElementById("footer-bg");
   }
   draw();
 
-  // === INITIAL SECTION LOAD ON REFRESH ===
-document.addEventListener("DOMContentLoaded", () => {
-  const sectionId = location.hash.replace("#", "") || "home";
-  showSection(sectionId);
-});
-function toggleMenu() {
-  document.querySelector(".nav-links").classList.toggle("show");
-}
-
-
 </script>
+
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
 </body>
 </html>
