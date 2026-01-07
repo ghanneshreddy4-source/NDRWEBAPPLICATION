@@ -12,7 +12,33 @@
       <h1 class="auth-title">Admin Login</h1>
       <p class="auth-subtitle">Access NDR admin control panel</p>
 
-      <form id="adminLoginForm" class="auth-form" autocomplete="on">
+      <!-- Toggle Buttons -->
+      <div style="display:flex;justify-content:center;gap:1rem;margin-bottom:1rem;">
+        <button id="toggleAdminPasswordLogin" class="auth-button auth-outline">Password Login</button>
+        <button id="toggleAdminOtpLogin" class="auth-button auth-outline">OTP Login</button>
+      </div>
+
+      <!-- PASSWORD LOGIN FORM -->
+      <form id="adminPasswordLoginForm" class="auth-form" autocomplete="on" style="display:block;">
+        <div class="auth-field">
+          <label for="adminLoginEmailPw">Email</label>
+          <input type="email" id="adminLoginEmailPw" name="email" required placeholder="admin@ndr.com" autocomplete="username" />
+        </div>
+
+        <div class="auth-field">
+          <label for="adminLoginPassword">Password</label>
+          <input type="password" id="adminLoginPassword" name="password" required placeholder="Enter password" autocomplete="current-password" />
+        </div>
+
+        <p class="auth-error" id="adminPwError"></p>
+
+        <div style="display:flex;gap:.6rem;justify-content:center;margin-top:10px;">
+          <button id="adminPwLoginBtn" type="submit" class="auth-button">Login</button>
+        </div>
+      </form>
+
+      <!-- OTP LOGIN FORM -->
+      <form id="adminLoginForm" class="auth-form" autocomplete="on" style="display:none;">
         <div class="auth-field">
           <label for="adminLoginEmail">Email</label>
           <input type="email" id="adminLoginEmail" name="email" required placeholder="admin@ndr.com" autocomplete="username" />
