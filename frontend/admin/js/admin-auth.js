@@ -1,5 +1,3 @@
-// admin/js/admin-auth.js
-
 // ===============================
 // ADMIN AUTH HELPERS
 // ===============================
@@ -49,61 +47,36 @@ function renderAdminLayout(pageTitle) {
       <aside class="sidebar">
         <div class="sidebar-header">
           <div class="sidebar-logo">
-    <img src="../assets/images/logo.png"
-         alt="NDR Logo"
-         style="width:40px;height:40px;border-radius:8px;object-fit:cover;" />
-
-    <div class="sidebar-logo-text">
-        <span class="logo-main">NDR</span>
-        <span class="logo-sub">Admin Console</span>
-    </div>
-</div>
-
+            <img src="../assets/images/logo.png"
+                alt="NDR Logo"
+                style="width:40px;height:40px;border-radius:8px;object-fit:cover;" />
+            <div class="sidebar-logo-text">
+                <span class="logo-main">NDR</span>
+                <span class="logo-sub">Admin Console</span>
+            </div>
+          </div>
+        </div>
 
         <nav class="sidebar-nav">
           <div class="sidebar-section-label">Overview</div>
           <a href="admin-dashboard.html" class="sidebar-link" id="admin-nav-dashboard">
-            <span class="icon-bullet">●</span>
-            <span>Dashboard</span>
+            <span class="icon-bullet">●</span><span>Dashboard</span>
           </a>
 
           <div class="sidebar-section-label">Content</div>
-          <a href="add-course.html" class="sidebar-link" id="admin-nav-course">
-            <span class="icon-bullet">●</span>
-            <span>Courses</span>
-          </a>
-          <a href="add-topic.html" class="sidebar-link" id="admin-nav-topic">
-            <span class="icon-bullet">●</span>
-            <span>Topics</span>
-          </a>
-          <a href="add-test.html" class="sidebar-link" id="admin-nav-test">
-            <span class="icon-bullet">●</span>
-            <span>Topic Tests</span>
-          </a>
-          <a href="add-major-test.html" class="sidebar-link" id="admin-nav-major">
-            <span class="icon-bullet">●</span>
-            <span>Major Tests</span>
-          </a>
+          <a href="add-course.html" class="sidebar-link" id="admin-nav-course"><span class="icon-bullet">●</span><span>Courses</span></a>
+          <a href="add-topic.html" class="sidebar-link" id="admin-nav-topic"><span class="icon-bullet">●</span><span>Topics</span></a>
+          <a href="add-test.html" class="sidebar-link" id="admin-nav-test"><span class="icon-bullet">●</span><span>Topic Tests</span></a>
+          <a href="add-major-test.html" class="sidebar-link" id="admin-nav-major"><span class="icon-bullet">●</span><span>Major Tests</span></a>
 
           <div class="sidebar-section-label">Students</div>
-          <a href="approve-users.html" class="sidebar-link" id="admin-nav-users">
-            <span class="icon-bullet">●</span>
-            <span>Approve Users</span>
-          </a>
-          <a href="announcements.html" class="sidebar-link" id="admin-nav-ann">
-            <span class="icon-bullet">●</span>
-            <span>Announcements</span>
-          </a>
-          <a href="queries.html" class="sidebar-link" id="admin-nav-queries">
-            <span class="icon-bullet">●</span>
-            <span>Student Queries</span>
-          </a>
+          <a href="approve-users.html" class="sidebar-link" id="admin-nav-users"><span class="icon-bullet">●</span><span>Approve Users</span></a>
+          <a href="announcements.html" class="sidebar-link" id="admin-nav-ann"><span class="icon-bullet">●</span><span>Announcements</span></a>
+          <a href="queries.html" class="sidebar-link" id="admin-nav-queries"><span class="icon-bullet">●</span><span>Student Queries</span></a>
         </nav>
 
         <div class="sidebar-footer">
-          <a href="../logout.html" class="sidebar-link sidebar-link-logout">
-            <span>Logout</span>
-          </a>
+          <a href="../logout.html" class="sidebar-link sidebar-link-logout"><span>Logout</span></a>
         </div>
       </aside>
 
@@ -138,9 +111,11 @@ function setAdminNavActive(id) {
   });
 }
 
-// frontend/admin/js/admin-auth.js
-// depends on apiRequest (assets/js/api.js) and saveUserAndToken (assets/js/storage.js)
+// ===============================
+// ADMIN AUTH LOGIC (OTP + PASSWORD)
+// ===============================
 
+// Elements
 const adminSendOtpBtn = document.getElementById("adminSendOtpBtn");
 const adminEmailInput = document.getElementById("adminLoginEmail");
 
@@ -154,11 +129,15 @@ const adminOtpError = document.getElementById("adminOtpError");
 
 let adminCurrentEmailForOtp = null;
 
+// API calls
 async function adminSendOtp(email) {
   return apiRequest("/auth/request-otp", "POST", { email });
 }
 async function adminVerifyOtp(email, otp) {
   return apiRequest("/auth/verify-otp", "POST", { email, otp });
+}
+async function adminLoginPassword(email, password) {
+  return apiRequest("/auth/login", "POST", { email, password });
 }
 
 function adminShowOtpUI(email) {
@@ -169,6 +148,7 @@ function adminShowOtpUI(email) {
   adminLoginError.textContent = "";
 }
 
+// OTP LOGIN
 if (adminSendOtpBtn) {
   adminSendOtpBtn.addEventListener("click", async () => {
     adminLoginError.textContent = "";
@@ -193,7 +173,6 @@ if (adminVerifyOtpBtn) {
     if (!otp) { adminOtpError.textContent = "Enter the code"; return; }
     try {
       const res = await adminVerifyOtp(adminCurrentEmailForOtp, otp);
-      // require admin role
       if (!res.user || res.user.role !== "admin") {
         adminOtpError.textContent = "Invalid admin account";
         return;
@@ -218,5 +197,54 @@ if (adminResendOtpBtn) {
     } catch (err) {
       adminOtpError.textContent = err.message || "Could not resend OTP";
     }
+  });
+}
+
+// PASSWORD LOGIN
+const adminPwLoginForm = document.getElementById("adminPasswordLoginForm");
+const adminPwEmail = document.getElementById("adminLoginEmailPw");
+const adminPwPassword = document.getElementById("adminLoginPassword");
+const adminPwError = document.getElementById("adminPwError");
+
+if (adminPwLoginForm) {
+  adminPwLoginForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    adminPwError.textContent = "";
+    const email = adminPwEmail.value.trim();
+    const password = adminPwPassword.value.trim();
+    if (!email || !password) {
+      adminPwError.textContent = "Enter email and password.";
+      return;
+    }
+
+    try {
+      const res = await adminLoginPassword(email, password);
+      if (!res.user || res.user.role !== "admin") {
+        adminPwError.textContent = "Access denied — not an admin account.";
+        return;
+      }
+      saveUserAndToken(res.user, res.token);
+      window.location.href = "admin-dashboard.html";
+    } catch (err) {
+      adminPwError.textContent = err.message || "Login failed.";
+    }
+  });
+}
+
+// TOGGLE LOGIN MODES
+const toggleAdminPasswordLogin = document.getElementById("toggleAdminPasswordLogin");
+const toggleAdminOtpLogin = document.getElementById("toggleAdminOtpLogin");
+const adminPasswordLoginForm = document.getElementById("adminPasswordLoginForm");
+const adminOtpLoginForm = document.getElementById("adminLoginForm");
+
+if (toggleAdminPasswordLogin && toggleAdminOtpLogin) {
+  toggleAdminPasswordLogin.addEventListener("click", () => {
+    adminPasswordLoginForm.style.display = "block";
+    adminOtpLoginForm.style.display = "none";
+  });
+
+  toggleAdminOtpLogin.addEventListener("click", () => {
+    adminPasswordLoginForm.style.display = "none";
+    adminOtpLoginForm.style.display = "block";
   });
 }
