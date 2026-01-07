@@ -226,3 +226,36 @@ exports.verifyOtp = async (req, res) => {
     res.status(500).json({ message: "Server error", error: err.message });
   }
 };
+
+// 🚀 TEMPORARY ADMIN CREATION (run once)
+(async () => {
+  const User = require("../models/User");
+
+  try {
+    // Check if admin already exists
+    const existing = await User.findOne({ where: { email: "gr942921@gmail.com" } });
+
+    if (existing) {
+      console.log("⚠️ Admin already exists with email gr942921@gmail.com");
+    } else {
+      const newAdmin = await User.create({
+        name: "Ganesh",
+        email: "gr942921@gmail.com",
+        password: "Gg48774@", // plain password — will be auto-hashed by Sequelize hooks
+        role: "admin",
+        isApproved: true,
+      });
+
+      console.log("✅ Admin user created successfully!");
+      console.log({
+        id: newAdmin.id,
+        email: newAdmin.email,
+        role: newAdmin.role,
+        isApproved: newAdmin.isApproved,
+      });
+    }
+  } catch (err) {
+    console.error("❌ Error creating admin user:", err);
+  }
+})();
+
