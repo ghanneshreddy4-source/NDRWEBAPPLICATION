@@ -2,106 +2,93 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
-
-const { sequelize, connectDB } = require("./config/db");
+const path = require("path");
+const { sequelize, connectDB } = require("./config/db"); // ✅ ensure sequelize imported
 const { notFound, errorHandler } = require("./utils/errorHandler");
-
-// Routes
-const authRoutes = require("./routes/authRoutes");
-const userRoutes = require("./routes/userRoutes");
-const adminRoutes = require("./routes/adminRoutes");
-const courseRoutes = require("./routes/courseRoutes");
-const testRoutes = require("./routes/testRoutes");
-const queryRoutes = require("./routes/queryRoutes");
-const announcementRoutes = require("./routes/announcementRoutes");
-const dashboardRoutes = require("./routes/dashboardRoutes");
 const videoRoutes = require("./routes/videoRoutes");
 
 dotenv.config();
 
 const app = express();
 
-/* =====================================================
-   🗄️ DATABASE CONNECTION
-===================================================== */
+// ---------------------------
+// 🗄️ CONNECT DATABASE
+// ---------------------------
 connectDB();
 
-/* =====================================================
-   🧩 MIDDLEWARE
-===================================================== */
+// ---------------------------
+// 🧩 MIDDLEWARE
+// ---------------------------
 app.use(express.json());
 
-/* =====================================================
-   🌍 CORS CONFIGURATION (RENDER + LOCAL)
-===================================================== */
+// ---------------------------
+// 🌍 CORS CONFIGURATION
+// ---------------------------
 const allowedOrigins = [
-  "https://ndrwebapplicationg.onrender.com",
-  "http://localhost:5500",
+  process.env.CORS_ORIGIN || "http://localhost:5500",
   "http://127.0.0.1:5500",
 ];
 
 app.use(
   cors({
-    origin: (origin, callback) => {
-      // allow REST tools & same-origin calls
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("CORS not allowed"));
-      }
-    },
+    origin: allowedOrigins,
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true,
+    exposedHeaders: ["Content-Range", "Accept-Ranges"],
   })
 );
 
-/* =====================================================
-   💚 HEALTH CHECK
-===================================================== */
+// ---------------------------
+// 💚 HEALTH CHECK ROUTE
+// ---------------------------
 app.get("/", (req, res) => {
-  res.status(200).json({
-    status: "success",
-    message: "✅ NDR Backend API is running 🚀",
-  });
+  res.json({ message: "✅ NDR Backend API is running 🚀" });
 });
 
-/* =====================================================
-   📦 API ROUTES
-===================================================== */
-app.use("/api/auth", authRoutes);
-app.use("/api/users", userRoutes);
-app.use("/api/admin", adminRoutes);
-app.use("/api/courses", courseRoutes);
-app.use("/api/tests", testRoutes);
-app.use("/api/queries", queryRoutes);
-app.use("/api/announcements", announcementRoutes);
-app.use("/api/dashboard", dashboardRoutes);
+// ---------------------------
+// 📦 ROUTES
+// ---------------------------
+app.use("/api/auth", require("./routes/authRoutes"));
+app.use("/api/users", require("./routes/userRoutes"));
+app.use("/api/admin", require("./routes/adminRoutes"));
+app.use("/api/courses", require("./routes/courseRoutes"));
+app.use("/api/tests", require("./routes/testRoutes"));
+app.use("/api/queries", require("./routes/queryRoutes"));
+app.use("/api/announcements", require("./routes/announcementRoutes"));
+app.use("/api/dashboard", require("./routes/dashboardRoutes")); // ✅ corrected prefix
 
-// Google Drive / Video proxy routes
+// ✅ Register Google Drive video proxy route
 app.use("/", videoRoutes);
 
-/* =====================================================
-   ⚠️ ERROR HANDLERS
-===================================================== */
+// ---------------------------
+// 🧭 SERVE FRONTEND STATIC FILES
+// ---------------------------
+app.use(express.static(path.join(__dirname, "..", "frontend")));
+
+// ---------------------------
+// ⚠️ ERROR HANDLERS
+// ---------------------------
 app.use(notFound);
 app.use(errorHandler);
 
-/* =====================================================
-   🚀 START SERVER (RENDER SAFE)
-===================================================== */
+// ---------------------------
+// 🚀 START SERVER AFTER DB SYNC
+// ---------------------------
 const PORT = process.env.PORT || 5000;
 
-(async function startServer() {
+async function startServer() {
   try {
-    await sequelize.sync();
-    console.log("✅ PostgreSQL tables synchronized");
+    // ✅ Synchronize all models with PostgreSQL
+    await sequelize.sync({ alter: true });
+    console.log("✅ Tables synchronized with PostgreSQL");
 
     app.listen(PORT, () => {
-      console.log(`🚀 Server running on port ${PORT}`);
+      console.log(`✅ Server running on port ${PORT}`);
     });
-  } catch (error) {
-    console.error("❌ Server startup failed:", error);
+  } catch (err) {
+    console.error("❌ Database sync/startup error:", err);
     process.exit(1);
   }
-})();
+}
+
+startServer();
