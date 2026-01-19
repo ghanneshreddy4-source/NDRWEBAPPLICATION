@@ -3,459 +3,229 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-<head>
-  <meta charset="UTF-8" />
-  <title>NDR EdTech | Home</title>
+<title>NDR EdTech | Home</title>
 
-  <!-- ✅ Add favicon (logo icon in browser tab) -->
-  <link rel="icon" type="image/png" href="assets/images/logo.png" />
-
-  <!-- Optional: Apple/Windows icon support -->
-  <link rel="apple-touch-icon" href="assets/images/logo.png" />
-
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="assets/images/logo.png" />
+<link rel="apple-touch-icon" href="assets/images/logo.png" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
+/* ----------------------------- ROOT & GLOBAL ----------------------------- */
 :root {
-  --bg: #0b0e19;
-  --card: #2440a8;
-  --text: #e4e6ef;
-  --accent-start: #0e0e0e;
-  --accent-end: #3245ff;
-  --accent: linear-gradient(90deg, var(--accent-start), var(--accent-end));
+  --bg:#0b0e19;
+  --card:#2440a8;
+  --text:#e4e6ef;
+  --accent-start:#0e0e0e;
+  --accent-end:#3245ff;
+  --accent:linear-gradient(90deg,var(--accent-start),var(--accent-end));
+}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
+body{background:var(--bg);color:var(--text);overflow-x:hidden;scroll-behavior:smooth;}
+h1,h2,h3,h4{font-weight:700;line-height:1.3;}
+p{line-height:1.7;}
+img{max-width:100%;height:auto;display:block;}
+a{text-decoration:none;color:inherit;}
+section{display:none;opacity:0;transition:opacity .4s ease-in-out;}
+section.active{display:block;opacity:1;}
+
+/* ✅ Always show Top Courses when Home is active */
+#home.active + #top-courses {
+  display: block !important;
+  opacity: 1 !important;
+  margin-top: 0;
 }
 
-/* === RESET === */
-* {margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
-body {background:var(--bg);color:var(--text);overflow-x:hidden;scroll-behavior:smooth;}
-section {display:block;opacity:1;transition:opacity .5s ease;} /* ✅ show all sections */
-/* === MULTI-PAGE SECTION BEHAVIOR === */
-section {display:none;opacity:0;transition:opacity .4s ease-in-out;}
-section.active {display:block;opacity:1;}
-
-/* === NAVBAR === */
-header {
-  background: var(--card);
-  padding: 1rem 2rem;
-  box-shadow: 0 2px 5px rgba(0,0,0,.4);
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 1000;
+/* ----------------------------- HEADER / NAV ------------------------------ */
+header{
+  background:var(--card);
+  padding:1rem 2rem;
+  position:fixed;top:0;left:0;width:100%;z-index:1000;
+  box-shadow:0 2px 5px rgba(0,0,0,.4);
+}
+.navbar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;}
+.logo{display:flex;align-items:center;gap:10px;font-size:2.5rem;font-weight:700;color:#fff;}
+.logo img{width:90px;height:90px;border-radius:10px;}
+.nav-links{list-style:none;display:flex;gap:1rem;flex-wrap:wrap;}
+.nav-links a{color:var(--text);padding:.5rem 1rem;border-radius:6px;transition:.3s;}
+.nav-links a:hover,.nav-links a.active{background:#0e0e0e;color:#fff;}
+/* responsive nav */
+@media(max-width:768px){
+  .nav-links{width:100%;justify-content:center;}
+  .navbar{flex-direction:column;gap:0.5rem;}
 }
 
-.navbar {
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  flex-wrap:wrap;
-}
-
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 10px; /* space between image and text */
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #fff;
-}
-
-.logo img {
-  width: 40px; /* adjust as needed */
-  height: 40px;
-  border-radius: 8px; /* optional, makes it rounded */
-}
-
-.nav-links {
-  list-style:none;
-  display:flex;
-  gap:1rem;
-  flex-wrap:wrap;
-}
-
-.nav-links a {
-  text-decoration:none;
-  color:var(--text);
-  padding:.5rem 1rem;
-  border-radius:6px;
-  transition:.3s;
-}
-
-.nav-links a:hover,
-.nav-links a.active {
-  background:#0e0e0e;
-  color:#fff;
-}
-
-/* === HERO SLIDER STYLES === */
+/* ================= HERO SLIDER ================= */
 .hero-slider {
   position: relative;
   width: 100%;
-  height: 75vh; /* Large visible banner */
   overflow: hidden;
+  background: #000;           /* just a loading fallback, won’t show */
+  height: 60vh;               /* good mobile height; adjust if needed */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 0;
 }
 
+/* make slides fill full height */
 .hero-slider .slide {
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0;                   /* shorthand for top/left/right/bottom:0 */
   width: 100%;
   height: 100%;
-  background-size: cover;
-  background-position: center;
+  display: none;
+  justify-content: center;
+  align-items: center;
   opacity: 0;
-  transition: opacity 1s ease-in-out;
+  transition: opacity .8s ease-in-out;
 }
-
 .hero-slider .slide.active {
+  display: flex;
   opacity: 1;
   z-index: 1;
 }
 
-/* === Centered Button at Bottom === */
-.hero-btn-container {
-  position: absolute;
-  bottom: 10%; /* Moves button up a bit from bottom */
-  left: 50%;
-  transform: translateX(-50%);
-  text-align: center;
+/* image fully covers the area */
+.slide-media {
+  width: 100%;
+  height: 100%;               /* fills container vertically */
+  object-fit: cover;          /* crops a little, no black bars */
+  object-position: center;
+  display: block;
 }
 
-.hero-btn-container .btn {
-  background: linear-gradient(90deg, #d91d42, #3245ff);
-  color: #fff;
-  font-size: 1.1rem;
-  padding: 0.9rem 2rem;
-  border-radius: 6px;
-  text-decoration: none;
-  font-weight: 600;
-  transition: transform 0.3s, opacity 0.3s;
-}
-
-.hero-btn-container .btn:hover {
-  transform: translateY(-3px);
-  opacity: 0.9;
-}
-
-/* === Navigation Arrows === */
+/* Arrows */
 .hero-slider .prev,
 .hero-slider .next {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   background: rgba(0,0,0,0.6);
-  color: white;
+  color: #fff;
   border: none;
   font-size: 2rem;
-  padding: 0.5rem 1rem;
+  padding: 0.4rem 0.8rem;
   border-radius: 50%;
   cursor: pointer;
+  z-index: 5;
   transition: background 0.3s;
-  z-index: 2;
 }
-
 .hero-slider .prev:hover,
 .hero-slider .next:hover {
   background: rgba(0,0,0,0.8);
 }
+.hero-slider .prev { left: 15px; }
+.hero-slider .next { right: 15px; }
 
-.hero-slider .prev { left: 20px; }
-.hero-slider .next { right: 20px; }
-
-.slide-media {
-  width: 100%;
-  height: 100%;
-  object-fit: cover; /* ensures perfect fit without distortion */
-}
-
-
-/* === Responsive Design === */
-@media (max-width: 768px) {
-  .hero-slider {
-    height: 60vh;
-  }
-  .hero-btn-container .btn {
-    font-size: 1rem;
-    padding: 0.8rem 1.5rem;
-  }
-}
-
-/* Ensure parent hero section doesn't fade children */
-#home, .hero-slider, .hero-stats {
-  opacity: 1 !important;
-  filter: none !important;
-  mix-blend-mode: normal !important;
-}
-
-/* === HERO STATS SECTION (FINAL FIXED COLORS) === */
-.hero-stats {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 1.5rem;
-  background: #ffffff;
-  padding: 1.8rem 2rem;
-  margin-top: -60px;
-  position: relative;
-  z-index: 100;
-}
-
-.stat-item {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  background: #0046ff;
-  border-radius: 14px;
-  padding: 1rem 1.5rem;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-  min-width: 220px;
-  transition: all 0.3s ease;
-}
-
-.stat-item:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-}
-
-/* ICON COLOR */
-.stat-icon {
-  font-size: 2rem;
-  color: #0046ff; /* bright blue */
-}
-
-/* TEXT COLORS (FIXED) */
-.stat-text h3 {
-  margin: 0;
-  font-size: 1.2rem;
-  font-weight: 700;
-  color: #111827; /* deep black-gray */
-}
-
-.stat-text p {
-  margin: 0;
-  font-size: 0.95rem;
-  color: #374151; /* medium gray for subtext */
-}
-
-/* RESPONSIVE */
-@media (max-width: 900px) {
-  .hero-stats {
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 1rem;
-  }
-
-  .stat-item {
-    min-width: 45%;
-    justify-content: flex-start;
-  }
-}
-
-@media (max-width: 600px) {
-  .stat-item {
-    width: 100%;
-    justify-content: center;
-  }
-}
-
-
-
-.alumni-slider {
-  background: #f5f6f8;
-  padding: 2rem 0;
-  text-align: center;
-  overflow: hidden;
-}
-
-.alumni-title {
-  color: #090909;
-  font-size: 1.8rem;
-  margin-bottom: 2rem;
-  font-weight: 600;
-  letter-spacing: 1px;
-}
-
-.logo-scroller {
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-}
-
-.logo-track {
-  display: flex;
-  gap: 60px;
-  width: calc(250px * 14);
-  animation: scroll-logos 25s linear infinite;
-}
-
-.logo-track img {
-  height: 70px;
-  width: auto;
-  filter: brightness(0) invert(1);
-  opacity: 0.9;
-  transition: transform 0.3s, opacity 0.3s;
-  mix-blend-mode: lighten; /* Helps bright logos blend better on dark bg */
-}
-
-.logo-track img:hover {
-  transform: scale(1.1);
-  opacity: 1;
-}
-
-/* ✅ Show original color for Snowflake or light-colored logos */
-.logo-track img.no-filter {
-  filter: none;
-  mix-blend-mode: normal;
-}
-
-/* ✅ Smooth auto scroll */
-@keyframes scroll-logos {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
-}
-
-.corporate-section {
-  padding: 50px 0;
-  background: #0b0f1a;
-  color: #fff;
-  text-align: center;
-}
-
-.corporate-title {
-  font-size: 2rem;
-  font-weight: 700;
-  color: #5fd8ff;
-  margin-bottom: 50px;
-}
-
-.training-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 50px;
-}
-
-.training-left, .training-right {
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-}
-
-.flip-card {
-  background: transparent;
-  width: 260px;
-  height: 180px;
-  perspective: 1000px;
-}
-
-.flip-inner {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  text-align: center;
-  transition: transform 0.8s;
-  transform-style: preserve-3d;
-}
-
-.flip-card:hover .flip-inner {
-  transform: rotateY(180deg);
-}
-
-.flip-front, .flip-back {
+/* CTA button */
+.hero-btn-container {
   position: absolute;
-  width: 100%;
-  height: 100%;
-  border-radius: 10px;
-  backface-visibility: hidden;
-  background: #121826;
-  box-shadow: 0 0 20px rgba(0,0,0,0.5);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 1rem;
-}
-
-.flip-front {
-  color: #5fd8ff;
-  font-size: 1.2rem;
-  font-weight: 600;
-}
-
-.flip-back {
-  background: linear-gradient(135deg, #d91d42, #3245ff);
-  color: #fff;
-  transform: rotateY(180deg);
-  font-size: 0.95rem;
-  line-height: 1.5;
-}
-
-.training-center {
-  position: relative;
-}
-
-.circle-bg {
-  position: absolute;
-  top: 50%;
+  bottom: 8%;
   left: 50%;
-  transform: translate(-50%, -50%);
-  width: 220px;
-  height: 220px;
-  border-radius: 50%;
-  background: radial-gradient(circle, #f5f5f7 0%, #0b0f1a 80%);
-  box-shadow: 0 0 40px rgba(93, 153, 255, 0.3);
-}
-
-.logo-center {
-  position: relative;
-  width: 160px;
-  z-index: 1;
-}
-
-
-/* === INLINE FEATURE BOXES === */
-.features-row {
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-  flex-wrap: wrap;
-  margin-top: 3rem;
-}
-
-.feature-box {
-  flex: 1 1 30%;
-  max-width: 340px;
-  background: #141827;
-  color: #fff;
-  padding: 1.8rem;
-  border-radius: 12px;
+  transform: translateX(-50%);
   text-align: center;
-  box-shadow: 0 4px 15px rgba(238, 234, 234, 0.3);
-  transition: transform 0.3s ease;
 }
 
-.feature-box:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 0 25px rgba(91,56,245,0.6);
+/* Responsive */
+@media (max-width:768px) {
+  .hero-slider { height: 60vh; }
+  .slide-media { object-fit: contain; }
 }
 
-.feature-box h2 {
-  background: #f8f9fc;
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin-bottom: .5rem;
-  font-weight: 700;
+/* prevent hero from hiding behind header */
+/* ✅ Prevent sections from being hidden under the fixed header */
+body { scroll-padding-top: 100px; }
+section { padding-top: 100px; } /* gives all sections consistent spacing */
+@media (max-width:768px) {
+  section { padding-top: 120px; }
 }
 
-.feature-box p { color: #cfd2e0; font-size: .95rem; }
+@media (max-width:768px) {
+  section:first-of-type { padding-top: 120px; }
+}
+#home { padding-top: var(--header-offset, 0px); }
+
+
+/* ----------------------------- HERO STATS -------------------------------- */
+.hero-stats{
+  display:flex;justify-content:center;align-items:center;flex-wrap:wrap;
+  gap:1.5rem;background:#ffffff;padding:1.8rem 2rem;margin-top:-60px;
+  position:relative;z-index:100;
+}
+.stat-item{
+  display:flex;align-items:center;gap:1rem;
+  background:#0046ff;border-radius:14px;padding:1rem 1.5rem;
+  box-shadow:0 4px 10px rgba(0,0,0,.08);
+  min-width:220px;transition:.3s;
+}
+.stat-item:hover{transform:translateY(-4px);box-shadow:0 8px 20px rgba(0,0,0,.15);}
+.stat-text h3{font-size:1.2rem;color:#111827;}
+.stat-text p{font-size:.95rem;color:#374151;}
+@media(max-width:900px){
+  .stat-item{min-width:45%;}
+}
+@media(max-width:600px){
+  .stat-item{width:100%;justify-content:center;}
+}
+/* ----------------------------- ALUMNI SLIDER ----------------------------- */
+.alumni-slider{
+  background:#f5f6f8;padding:2rem 0;text-align:center;overflow:hidden;
+}
+.alumni-title{color:#090909;font-size:1.8rem;margin-bottom:2rem;font-weight:600;letter-spacing:1px;}
+.logo-scroller{position:relative;width:100%;overflow:hidden;}
+.logo-track{display:flex;gap:60px;width:max-content;animation:scroll-logos 25s linear infinite;}
+.logo-track img{height:70px;width:auto;filter:brightness(0) invert(1);opacity:.9;transition:.3s;mix-blend-mode:lighten;}
+.logo-track img:hover{transform:scale(1.1);opacity:1;}
+.logo-track img.no-filter{filter:none;mix-blend-mode:normal;}
+@keyframes scroll-logos{
+  0%{transform:translateX(0);}
+  100%{transform:translateX(-50%);}
+}
+/* ----------------------------- CORPORATE TRAINING ------------------------ */
+.corporate-section{
+  padding:50px 0;background:#0b0f1a;color:#fff;text-align:center;
+}
+.corporate-title{font-size:2rem;font-weight:700;color:#5fd8ff;margin-bottom:50px;}
+.training-wrapper{
+  display:flex;justify-content:center;align-items:center;gap:50px;flex-wrap:wrap;
+}
+.flip-card{background:transparent;width:260px;height:180px;perspective:1000px;}
+.flip-inner{position:relative;width:100%;height:100%;text-align:center;transition:transform .8s;transform-style:preserve-3d;}
+.flip-card:hover .flip-inner{transform:rotateY(180deg);}
+.flip-front,.flip-back{
+  position:absolute;width:100%;height:100%;border-radius:10px;backface-visibility:hidden;
+  display:flex;flex-direction:column;justify-content:center;align-items:center;padding:1rem;
+}
+.flip-front{background:#121826;color:#5fd8ff;font-size:1.2rem;font-weight:600;}
+.flip-back{
+  background:linear-gradient(135deg,#d91d42,#3245ff);color:#fff;transform:rotateY(180deg);
+  font-size:.95rem;line-height:1.5;
+}
+.training-center{position:relative;}
+.circle-bg{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:220px;height:220px;border-radius:50%;
+  background:radial-gradient(circle,#f5f5f7 0%,#0b0f1a 80%);
+  box-shadow:0 0 40px rgba(93,153,255,0.3);
+}
+.logo-center{position:relative;width:160px;z-index:1;}
+/* responsive alignment */
+@media(max-width:900px){
+  .training-wrapper{gap:30px;}
+  .training-left,.training-right{display:flex;flex-direction:column;align-items:center;}
+}
+.features-row{
+  display:flex;justify-content:center;gap:2rem;flex-wrap:wrap;margin-top:3rem;
+}
+.feature-box{
+  flex:1 1 300px;max-width:340px;background:#141827;color:#fff;
+  padding:1.8rem;border-radius:12px;text-align:center;
+  box-shadow:0 4px 15px rgba(238,234,234,0.3);transition:.3s;
+}
+.feature-box:hover{transform:translateY(-6px);box-shadow:0 0 25px rgba(91,56,245,0.6);}
+.feature-box h2{margin-bottom:.5rem;background:#f8f9fc;
+  background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.feature-box p{color:#cfd2e0;font-size:.95rem;}
 
 /* === TOP COURSES SECTION === */
 .courses-section {
@@ -523,86 +293,17 @@ header {
 }
 
 .view-all { margin-top: 3rem; }
-
-/* === FAQ SECTION === */
-.faq-section {
-  background: #0b0e19;
-  color: #e4e6ef;
-  padding: 4rem 2rem;
-  text-align: center;
-}
-
-.faq-title {
-  font-size: 1.8rem;
-  font-weight: 700;
-  margin-bottom: 2rem;
-  background: #fbf9f9;
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.faq-container { max-width: 800px; margin: auto; text-align: left; }
-.faq-item { margin-bottom: 1rem; border-radius: 8px; background: #141827; box-shadow: 0 0 10px rgba(0,0,0,.3); }
-.faq-question { width: 100%; background: none; border: none; color: #fff; font-weight: 600; text-align: left; padding: 1rem; cursor: pointer; }
-.faq-answer { display: none; padding: 1rem; background: #1a1e2f; border-top: 1px solid rgba(255,255,255,.1); color: #ccc; }
-.faq-item.active .faq-answer { display: block; }
-
-/* === FEEDBACK SECTION === */
-.feedback-section {
-  background: #11152a;
-  color: #fff;
-  text-align: center;
-  padding: 4rem 2rem;
-}
-
-.feedback-title {
-  font-size: 1.8rem;
-  font-weight: 700;
-  margin-bottom: 2rem;
-  background: #fffdfd;
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.feedback-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 1.5rem;
-}
-
-.feedback-card {
-  background: #141827;
-  border-radius: 10px;
-  box-shadow: 0 0 15px rgba(0,0,0,.4);
-  width: 300px;
-  padding: 1.5rem;
-  text-align: left;
-  transition: .3s;
-}
-
-.feedback-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 0 25px rgba(251, 248, 249, 0.5), 0 0 25px rgba(50,69,255,.5);
-}
-
-.feedback-text { color: #fff; font-size: .95rem; margin-bottom: 1rem; }
-.feedback-user { color: #3ec7eb; font-weight: 600; }
-
+/* ----------------------------- TOP COURSES (next in Part 2) -------------- */
 </style>
 </head>
 
 <body>
-<!-- === HEADER === -->
 <header>
   <nav class="navbar">
     <div class="logo">
-  <img src="assets/images/ndr edtech main logo.png" alt="NDR EdTech Logo">
-  <span>NDR EdTech</span>
-</div>
-
+      <img src="assets/images/ndr edtech main logo.png" alt="NDR EdTech Logo">
+      <span>NDR EdTech</span>
+    </div>
     <ul class="nav-links">
       <li><a href="#home" class="active" onclick="showSection('home')">Home</a></li>
       <li><a href="#courses" onclick="showSection('courses')">Courses</a></li>
@@ -614,161 +315,79 @@ header {
   </nav>
 </header>
 
-
-<!-- === HOME PAGE SECTION === -->
+<!-- ============================== HOME SECTION ============================== -->
 <section id="home" class="active">
-
   <div class="hero-slider" id="dynamicSlider">
     <div id="slidesContainer"></div>
-
-    <!-- Navigation Arrows -->
     <button class="prev" onclick="prevSlide()">&#10094;</button>
     <button class="next" onclick="nextSlide()">&#10095;</button>
   </div>
 
-  <!-- === Hero Stats Section === -->
   <div class="hero-stats">
-    <div class="stat-item">
-      <div>
-        <h3>20+ Years</h3>
-        <p>of Experience</p>
-      </div>
-    </div>
+    <div class="stat-item"><div><h3>20+ Years</h3><p>of Experience</p></div></div>
+    <div class="stat-item"><img src="assets/icons/briefcase.svg" alt="Students"/><div><h3>50,000+</h3><p>Students Placed</p></div></div>
+    <div class="stat-item"><img src="assets/icons/star.svg" alt="Rating"/><div><h3>4.8/5</h3><p>(5000+ Reviews)</p></div></div>
+    <div class="stat-item"><img src="assets/icons/class.svg" alt="Classes"/><div><h3>Classes</h3><p>Offline & Online</p></div></div>
+  </div>
 
-    <div class="stat-item">
-      <img src="assets/icons/briefcase.svg" alt="Students" />
-      <div>
-        <h3>50,000+</h3>
-        <p>Students Placed</p>
-      </div>
-    </div>
-
-    <div class="stat-item">
-      <img src="assets/icons/star.svg" alt="Rating" />
-      <div>
-        <h3>4.8/5</h3>
-        <p>(5000+ Reviews)</p>
-      </div>
-    </div>
-
-    <div class="stat-item">
-      <img src="assets/icons/class.svg" alt="Classes" />
-      <div>
-        <h3>Classes</h3>
-        <p>Offline & Online</p>
+  <div class="alumni-slider">
+    <h2 class="alumni-title">Our Institute Thriving as a Hub of Skills, Talent, and Success.</h2>
+    <div class="logo-scroller">
+      <div class="logo-track">
+        <img src="assets/images/snowflake.png" alt="Snowflake" class="no-filter">
+        <img src="assets/images/AzureDevops.png" alt="AzureDevops" class="no-filter">
+        <img src="assets/images/SAP GRC.png" alt="SAP GRC" class="no-filter">
+        <img src="assets/images/SAPABAP.png" alt="SAPABAP" class="no-filter">
+        <img src="assets/images/salesforce.png" alt="Salesforce" class="no-filter">
+        <img src="assets/images/DBT.png" alt="DBT" class="no-filter">
+        <img src="assets/images/snowflake.png" alt="Snowflake" class="no-filter">
+        <img src="assets/images/AzureDevops.png" alt="AzureDevops" class="no-filter">
+        <img src="assets/images/SAP GRC.png" alt="SAP GRC" class="no-filter">
+        <img src="assets/images/SAPABAP.png" alt="SAPABAP" class="no-filter">
+        <img src="assets/images/salesforce.png" alt="Salesforce" class="no-filter">
+        <img src="assets/images/DBT.png" alt="DBT" class="no-filter">
       </div>
     </div>
   </div>
 
-<!-- === OUR Institute THRIVING AT SECTION === -->
-<div class="alumni-slider">
-  <h2 class="alumni-title">Our Institute Thriving as a Hub of Skills, Talent, and Success.</h2>
-  <div class="logo-scroller">
-    <div class="logo-track">
-      <img src="assets/images/snowflake.png" alt="Snowflake" class="no-filter">
-      <img src="assets/images/AzureDevops.png" alt="Amazon" class="no-filter">
-      <img src="assets/images/SAP GRC.png" alt="Microsoft" class="no-filter">
-      <img src="assets/images/SAPABAP.png" alt="Infosys" class="no-filter">
-      <img src="assets/images/salesforce.png" alt="Accenture" class="no-filter">
-      <img src="assets/images/DBT.png" alt="DBT" class="no-filter">
-      
-      <!-- duplicate for seamless looping -->
-      <img src="assets/images/snowflake.png" alt="Snowflake" class="no-filter">
-      <img src="assets/images/AzureDevops.png" alt="Amazon" class="no-filter">
-      <img src="assets/images/SAP GRC.png" alt="Microsoft" class="no-filter">
-      <img src="assets/images/SAPABAP.png" alt="Infosys" class="no-filter">
-      <img src="assets/images/salesforce.png" alt="Accenture" class="no-filter">
-      <img src="assets/images/DBT.png" alt="DBT" class="no-filter">
-
-    </div>
-  </div>
-
-
-  <!-- === CORPORATE TRAINING SECTION === -->
-<div class="corporate-section">
-  <h2 class="corporate-title">NDR EdTech Corporate Training Features</h2>
-
-  <div class="training-wrapper">
-    <!-- LEFT SIDE -->
-    <div class="training-left">
-      <div class="flip-card">
-        <div class="flip-inner">
-          <div class="flip-front">
-            <h3>Intensive Training</h3>
-          </div>
-          <div class="flip-back">
-            <p>Experience rigorous, industry-relevant learning modules designed by experts to help you master every concept deeply.</p>
-          </div>
-        </div>
+  <div class="corporate-section">
+    <h2 class="corporate-title">NDR EdTech Corporate Training Features</h2>
+    <div class="training-wrapper">
+      <div class="training-left">
+        <div class="flip-card"><div class="flip-inner">
+          <div class="flip-front"><h3>Intensive Training</h3></div>
+          <div class="flip-back"><p>Experience rigorous, industry-relevant learning modules designed by experts to help you master every concept deeply.</p></div>
+        </div></div>
+        <div class="flip-card"><div class="flip-inner">
+          <div class="flip-front"><h3>Practicals</h3></div>
+          <div class="flip-back"><p>Hands-on practical sessions for every topic to build strong technical foundations and real-world confidence.</p></div>
+        </div></div>
+        <div class="flip-card"><div class="flip-inner">
+          <div class="flip-front"><h3>Live Projects</h3></div>
+          <div class="flip-back"><p>Work on real-time projects under expert guidance to enhance your portfolio and boost job readiness.</p></div>
+        </div></div>
       </div>
 
-      <div class="flip-card">
-        <div class="flip-inner">
-          <div class="flip-front">
-            <h3>Practicals</h3>
-          </div>
-          <div class="flip-back">
-            <p>Hands-on practical sessions for every topic to build strong technical foundations and real-world confidence.</p>
-          </div>
-        </div>
+      <div class="training-center">
+        <div class="circle-bg"></div>
+        <img src="assets/images/ndr edtech main logo.png" alt="NDR Logo" class="logo-center">
       </div>
 
-      <div class="flip-card">
-        <div class="flip-inner">
-          <div class="flip-front">
-            <h3>Live Projects</h3>
-          </div>
-          <div class="flip-back">
-            <p>Work on real-time projects under expert guidance to enhance your portfolio and boost job readiness.</p>
-          </div>
-        </div>
+      <div class="training-right">
+        <div class="flip-card"><div class="flip-inner">
+          <div class="flip-front"><h3>Internship Certificates</h3></div>
+          <div class="flip-back"><p>Earn official internship certificates recognized by industry leaders for every hands-on project you complete.</p></div>
+        </div></div>
+        <div class="flip-card"><div class="flip-inner">
+          <div class="flip-front"><h3>Course Certifications</h3></div>
+          <div class="flip-back"><p>Get globally recognized certificates on successful course completion to boost your professional credibility.</p></div>
+        </div></div>
+        <div class="flip-card"><div class="flip-inner">
+          <div class="flip-front"><h3>Live Assessments</h3></div>
+          <div class="flip-back"><p>Evaluate your skills in real-time with interactive quizzes and live tests designed to track your progress effectively.</p></div>
+        </div></div>
       </div>
     </div>
-
-    <!-- CENTER LOGO -->
-    <div class="training-center">
-      <div class="circle-bg"></div>
-      <img src="assets/images/ndr edtech main logo.png" alt="NDR Logo" class="logo-center">
-    </div>
-
-    <!-- RIGHT SIDE -->
-    <div class="training-right">
-      <div class="flip-card">
-        <div class="flip-inner">
-          <div class="flip-front">
-            <h3>Internship Certificates</h3>
-          </div>
-          <div class="flip-back">
-            <p>Earn official internship certificates recognized by industry leaders for every hands-on project you complete.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="flip-card">
-        <div class="flip-inner">
-          <div class="flip-front">
-            <h3>Course Certifications</h3>
-          </div>
-          <div class="flip-back">
-            <p>Get globally recognized certificates on successful course completion to boost your professional credibility.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="flip-card">
-        <div class="flip-inner">
-          <div class="flip-front">
-            <h3>Live Assessments</h3>
-          </div>
-          <div class="flip-back">
-            <p>Evaluate your skills in real-time with interactive quizzes and live tests designed to track your progress effectively.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
 
     <div class="features-row">
       <div class="feature-box"><h2>Mentorship Program</h2><p>Guided by expert mentors through real-world projects.</p></div>
@@ -776,9 +395,9 @@ header {
       <div class="feature-box"><h2>Placement Support</h2><p>Dedicated career support to land your dream job.</p></div>
     </div>
   </div>
-
+</section>
  <!-- === TOP COURSES SECTION === -->
-<div id="top-courses" class="courses-section">
+<section id="top-courses" class="courses-section" style="display:block;">
   <h2 class="section-title">Top Courses to Transform Your Career</h2>
 
   <div class="course-container">
@@ -854,44 +473,21 @@ header {
   <div class="view-all">
     <a href="#courses" class="btn-viewall" onclick="showSection('courses'); history.pushState(null,'','#courses');">View All Courses</a>
   </div>
-</div>
-
-  <!-- === FAQ SECTION === -->
-  <div class="faq-section">
-    <h2 class="faq-title">Frequently Asked Questions</h2>
-    <div class="faq-container">
-      <div class="faq-item"><button class="faq-question">Do you provide placement support?</button><div class="faq-answer">Yes, we provide 100% placement assistance including mock interviews.</div></div>
-      <div class="faq-item"><button class="faq-question">Are classes live or recorded?</button><div class="faq-answer">All sessions are live and recorded for lifetime access.</div></div>
-      <div class="faq-item"><button class="faq-question">Can I schedule 1:1 doubt sessions?</button><div class="faq-answer">Absolutely, we provide one-on-one mentorship support.</div></div>
-      <div class="faq-item"><button class="faq-question">Do you offer flexible schedules?</button><div class="faq-answer">Yes, you can choose from online, offline, or hybrid modes.</div></div>
-    </div>
-  </div>
-
-
-  <!-- === FEEDBACK SECTION === -->
-  <div class="feedback-section">
-    <h2 class="feedback-title">What Our Learners Say</h2>
-    <div class="feedback-container">
-      <div class="feedback-card"><p class="feedback-text">“NDR EdTech helped me transition from a fresher to a professional developer.”</p><p class="feedback-user">– Priya Sharma, Java Developer</p></div>
-      <div class="feedback-card"><p class="feedback-text">“The trainers are top-notch and interactive. Got placed within 2 months!”</p><p class="feedback-user">– Rahul Verma, QA Engineer</p></div>
-      <div class="feedback-card"><p class="feedback-text">“I loved the lifetime access feature — I can revisit any topic anytime.”</p><p class="feedback-user">– Sneha Iyer, Data Analyst</p></div>
-    </div>
-  </div>
-
 </section>
-<!-- ✅ HOME PAGE SECTION ENDS -->
 
-<!-- === COURSES SECTION === -->
-<section id="courses" style="padding-top:50px;">
+<!-- ============================== COURSES SECTION ============================== -->
+<section id="courses" style="padding-top:70px;">
   <style>
-  .courses-container{display:flex;min-height:100vh;}
-  .sidebar{width:260px;background:#141827;padding:2rem 1rem;border-right:2px solid #1f2335;}
+  /* ----------------------------- COURSES STYLES ----------------------------- */
+  .courses-container{display:flex;flex-wrap:wrap;min-height:100vh;}
+  .sidebar{width:260px;background:#141827;padding:2rem 1rem;border-right:2px solid #1f2335;flex-shrink:0;}
   .sidebar h2{margin-bottom:1rem;font-size:1.2rem;color:#3ec7eb;}
   .sidebar ul{list-style:none;padding:0;}
   .sidebar li{padding:.6rem 1rem;border-radius:6px;cursor:pointer;margin-bottom:.3rem;}
-  .sidebar li:hover,.sidebar li.active{background:linear-gradient(90deg,#0e0e0e, #3245ff);}
+  .sidebar li:hover,.sidebar li.active{background:linear-gradient(90deg,#0e0e0e,#3245ff);}
   .sidebar li span{color:#e4e6ef;}
   .main{flex:1;padding:2rem;}
+  .main h1{margin-bottom:1.5rem;color:#fff;}
   .course-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.5rem;}
   .course-card{background:#141827;border-radius:10px;box-shadow:0 0 10px rgba(0,0,0,.3);overflow:hidden;display:flex;flex-direction:column;}
   .course-card img{width:100%;height:150px;object-fit:cover;}
@@ -902,8 +498,10 @@ header {
   .course-buttons button{flex:1;padding:.6rem;border:none;border-radius:6px;cursor:pointer;font-weight:600;}
   .know-btn{background:#1a1e2f;color:#fff;}
   .enquire-btn{background:#3245ff;color:#fff;}
-  #overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);display:none;justify-content:center;align-items:center;z-index:1000;}
-  .form-box{background:#141827;padding:2rem;border-radius:8px;width:400px;color:#fff;box-shadow:0 0 15px rgba(0,0,0,.4);}
+  @media(max-width:900px){.sidebar{width:100%;border:none;border-bottom:2px solid #1f2335;text-align:center;}}
+  /* enquiry popup */
+  #overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;justify-content:center;align-items:center;z-index:1000;}
+  .form-box{background:#141827;padding:2rem;border-radius:8px;width:90%;max-width:400px;color:#fff;box-shadow:0 0 15px rgba(0,0,0,.4);}
   input,textarea,select{width:100%;margin-bottom:1rem;padding:.7rem;border:none;border-radius:6px;background:#1a1e2f;color:#fff;}
   button[type=submit]{width:100%;background:#3245ff;border:none;color:#fff;padding:.8rem;border-radius:6px;font-weight:600;cursor:pointer;}
   #msg{text-align:center;margin-top:.5rem;}
@@ -922,13 +520,14 @@ header {
       </ul>
     </aside>
 
+
     <main class="main">
       <h1>Explore Our Courses</h1>
       <div class="course-grid" id="courseGrid"></div>
     </main>
   </div>
 
-  <!-- === Popup Enquiry Form === -->
+  <!-- enquiry popup -->
   <div id="overlay">
     <div class="form-box">
       <h2 style="text-align:center;">Enquire Now</h2>
@@ -969,353 +568,199 @@ header {
   </div>
 </section>
 
-
-<!-- ABOUT -->
-<section id="about" style="
-  position: relative;
-  background: url('assets/images/logo.png') no-repeat center center / cover;
-  color: #000000; /* 👈 Changed text to black */
-  min-height: 100vh;
-  overflow: hidden;
-  font-family: 'Poppins', sans-serif;
-">
-
-<div style="
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    rgba(255,255,255,0.08),
-    rgba(255,255,255,0.18)
-  );
-  z-index: 0;
-"></div>
-
-
-  <div style="position: relative; z-index: 1;">
-    <div class="page-header" style="text-align: center; padding: 4rem 1rem; background: transparent;">
-      <h1 style="color: #000000; font-size: 2.5rem; letter-spacing: 1px;">About NDR Infotech</h1>
-      <p style="max-width: 700px; margin: auto; color: #000000; font-size: 1.1rem;">
-        NDR Infotech excels in Wealth Management, Product Development, Software Services, and Technology Consulting.
-        Since our inception in Bangalore, we’ve partnered with numerous clients worldwide to strategize, implement,
-        and support comprehensive end-to-end solutions tailored to diverse industries.
-      </p>
-    </div>
+<!-- ============================== ABOUT SECTION ============================== -->
+<section id="about" style="background:#fff;color:#000;min-height:100vh;padding-top:80px;">
+  <div style="text-align:center;padding:4rem 1rem;">
+    <h1 style="font-size:2.5rem;">About NDR Infotech</h1>
+    <p style="max-width:700px;margin:auto;font-size:1.1rem;">
+      NDR Infotech excels in Wealth Management, Product Development, Software Services, and Technology Consulting.
+      Since our inception in Bangalore, we’ve partnered with clients worldwide to strategize, implement,
+      and support comprehensive end-to-end solutions tailored to diverse industries.
+    </p>
   </div>
-
-  <div style="max-width:1000px;margin:auto;padding:3rem 2rem;line-height:1.8;">
-    <h2 style="color:#000000;">Who We Are</h2>
-    <p style="color:#000000;">
-      At <strong>NDR Infotech</strong>, we are committed to providing innovative and sustainable technology solutions
-      that adapt to the evolving needs of our customers. Our focus on quality, ethics, and customer satisfaction has
-      enabled us to build a strong global presence and long-term partnerships.
-    </p>
-
-    <h2 style="margin-top:2rem;color:#000000;">Our Values</h2>
-    <p style="color:#000000;">
-      We believe our success is directly linked to the success of our stakeholders. Our culture encourages continuous
-      learning, collaboration, and personal growth, empowering our employees to deliver excellence at every stage of
-      a project.
-    </p>
-
-    <h2 style="margin-top:2rem;color:#000000;">Our Expertise</h2>
-    <p style="color:#000000;">
-      With a team of highly skilled professionals, we provide clients with tailored solutions in
-      <strong style="color:#000000;">Software Development, IT Consulting, Product Engineering, and Wealth Management</strong>.
-      Our innovative approach, combined with years of experience, ensures measurable results and lasting impact.
-    </p>
-
-    <h2 style="margin-top:2rem;color:#000000;">Our Commitment</h2>
-    <p style="color:#000000;">
-      We are dedicated to fostering a culture of innovation and continuous improvement while upholding integrity,
-      accountability, and excellence in every engagement.
-    </p>
-
-    <div style="margin-top:3rem; text-align:center;">
-      <h2 style="color:#000000;">Contact Us</h2>
-      <p style="color:#000000;">
-        📍 #415, 8th Cross, 8th Main, Sunshine Layout, BTM 2nd Stage, Bangalore, Karnataka - 560076<br>
+  <div style="max-width:1000px;margin:auto;padding:2rem;line-height:1.8;">
+    <h2>Who We Are</h2>
+    <p>At <strong>NDR Infotech</strong>, we are committed to providing innovative and sustainable technology solutions that adapt to the evolving needs of our customers.</p>
+    <h2 style="margin-top:2rem;">Our Values</h2>
+    <p>We believe success is directly linked to the success of our stakeholders. Our culture encourages continuous learning and collaboration.</p>
+    <h2 style="margin-top:2rem;">Our Expertise</h2>
+    <p>We provide tailored solutions in <strong>Software Development, IT Consulting, Product Engineering, and Wealth Management</strong>.</p>
+    <h2 style="margin-top:2rem;">Our Commitment</h2>
+    <p>We foster a culture of innovation and continuous improvement while upholding integrity and excellence.</p>
+    <div style="margin-top:3rem;text-align:center;">
+      <h2>Contact Us</h2>
+      <p>
+        📍 #415, 8th Cross, 8th Main, Sunshine Layout, BTM 2nd Stage, Bangalore – 560076<br>
         📞 +91 8722355999 | ✉️ hr@ndrinfotech.com | 🌐 www.ndrinfotech.com
       </p>
     </div>
   </div>
 </section>
 
-
-<section id="contact" style="background:#e3e6ef;color:#e4e6ef;padding:4rem 2rem;">
-  <div class="hero" style="text-align:center;margin-bottom:2rem;">
-    <h1 style="font-size:2rem;font-weight:700;background:linear-gradient(90deg,#d91d42,#3245ff);
-               background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;">
-      Get in Touch with NDR EdTech
-    </h1>
-    <p style="max-width:700px;margin:auto;color:#0b0b0b;">
-      Have questions about our courses, training programs, or career support? 
-      We’re here to help you choose the best path to achieve your professional goals.
-    </p>
-  </div>
-
-  <div style="max-width:500px;margin:auto;background:#edeef1;padding:2rem;border-radius:10px;box-shadow:0 0 15px rgba(0,0,0,.4);">
-    <p style="text-align:center;color:#0b0b0b;margin-bottom:1rem;">
-      Fill out the form below and our team will contact you within 24 hours.
-    </p>
+<!-- ============================== CONTACT SECTION ============================== -->
+<section id="contact" style="background:#e3e6ef;padding:4rem 2rem;text-align:center;">
+  <h1 style="font-size:2rem;font-weight:700;background:linear-gradient(90deg,#d91d42,#3245ff);
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;">Get in Touch with NDR EdTech</h1>
+  <p style="max-width:700px;margin:auto;color:#000;">Have questions about our courses, training programs, or career support? We’re here to help.</p>
+  <div style="max-width:500px;margin:2rem auto;background:#edeef1;padding:2rem;border-radius:10px;box-shadow:0 0 15px rgba(0,0,0,.3);">
     <form id="contactForm" action="https://formspree.io/f/meoyvpwl" method="POST">
       <input type="text" name="name" placeholder="Your Full Name" required style="width:100%;margin-bottom:1rem;padding:.7rem;border:none;border-radius:6px;background:#1a1e2f;color:#fff;">
-      <input type="email" name="_replyto" placeholder="Your Email Address" required style="width:100%;margin-bottom:1rem;padding:.7rem;border:none;border-radius:6px;background:#1a1e2f;color:#fff;">
-      <input type="text" name="phone" placeholder="Your Phone Number (optional)" style="width:100%;margin-bottom:1rem;padding:.7rem;border:none;border-radius:6px;background:#1a1e2f;color:#fff;">
-      <select name="course" style="width:100%;margin-bottom:1rem;padding:.7rem;border:none;border-radius:6px;background:#1a1e2f;color:#0b0b0b;">
-        <option value="">Select Course</option>
-        <option>Snowflake</option>
-        <option>dbt</option>
-        <option>SAP</option>
-        <option>Corporate Training</option>
+      <input type="email" name="_replyto" placeholder="Your Email" required style="width:100%;margin-bottom:1rem;padding:.7rem;border:none;border-radius:6px;background:#1a1e2f;color:#fff;">
+      <input type="text" name="phone" placeholder="Phone (optional)" style="width:100%;margin-bottom:1rem;padding:.7rem;border:none;border-radius:6px;background:#1a1e2f;color:#fff;">
+      <select name="course" style="width:100%;margin-bottom:1rem;padding:.7rem;border:none;border-radius:6px;background:#1a1e2f;color:#000;">
+        <option value="">Select Course</option><option>Snowflake</option><option>dbt</option><option>SAP</option><option>Corporate Training</option>
       </select>
       <textarea name="message" rows="4" placeholder="Your Message" required style="width:100%;margin-bottom:1rem;padding:.7rem;border:none;border-radius:6px;background:#1a1e2f;color:#fff;"></textarea>
-      <button type="submit" class="btn" style="width:100%;">Send Message</button>
+      <button type="submit" class="btn" style="width:100%;background:linear-gradient(90deg,#d91d42,#3245ff);border:none;color:#fff;padding:.8rem;border-radius:6px;font-weight:600;">Send Message</button>
       <p id="contactMsg" style="text-align:center;margin-top:1rem;color:#3ec7eb;"></p>
     </form>
-    <p style="text-align:center;margin-top:1rem;color:#aaa;font-size:.9rem;">
-      📞 +91 98765 43210 &nbsp; | &nbsp; 📧 info@ndrinfotech.com
-    </p>
+    <p style="color:#555;font-size:.9rem;margin-top:1rem;">📞 +91 98765 43210 | 📧 info@ndrinfotech.com</p>
   </div>
 </section>
 
-<!-- === FOOTER SECTION === -->
-<footer style="position: relative; background: #efefef; color: #e4e6ef; padding: 4rem 2rem 2rem; overflow:hidden;">
-
-  <!-- === Cyberpunk Animated Canvas Background === -->
-  <canvas id="footer-bg" style="position:absolute; inset:0; width:100%; height:100%; z-index:0;"></canvas>
-
-  <div style="max-width:1200px; margin:auto; display:grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap:2rem; position:relative; z-index:1;">
-
-    <!-- === LEFT COLUMN: LOGO + ABOUT === -->
+<!-- ============================== FOOTER ============================== -->
+<footer style="position:relative;background:#efefef;color:#090909;padding:4rem 2rem 2rem;overflow:hidden;">
+  <canvas id="footer-bg" style="position:absolute;inset:0;width:100%;height:100%;z-index:0;"></canvas>
+  <div style="max-width:1200px;margin:auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:2rem;position:relative;z-index:1;">
     <div>
-      <img src="assets/images/ndr edtech main logo.png" alt="NDR EdTech" style="width:160px; margin-bottom:1rem;">
-      <p style="color:#090909; line-height:1.6;">
-        NDR EdTech is a leading training institute empowering learners through advanced IT and corporate training. 
-        We specialize in <strong>Snowflake, dbt, SAP, and Cloud Technologies</strong> with hands-on, placement-focused learning.
-      </p>
-      <div style="margin-top:1rem; display:flex; gap:0.8rem; flex-wrap:wrap;">
-        <a href="#" target="_blank" style="color:#fff; font-size:1.3rem;"><i class="fab fa-facebook-f"></i></a>
-        <a href="#" target="_blank" style="color:#fff; font-size:1.3rem;"><i class="fab fa-instagram"></i></a>
-        <a href="#" target="_blank" style="color:#fff; font-size:1.3rem;"><i class="fab fa-linkedin-in"></i></a>
-        <a href="#" target="_blank" style="color:#fff; font-size:1.3rem;"><i class="fab fa-youtube"></i></a>
+      <img src="assets/images/ndr edtech main logo.png" alt="NDR EdTech" style="width:160px;margin-bottom:1rem;">
+      <p>NDR EdTech is a leading training institute empowering learners through advanced IT and corporate training.</p>
+      <div style="margin-top:1rem;display:flex;gap:.8rem;flex-wrap:wrap;">
+        <a href="#" style="color:#000;font-size:1.3rem;"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" style="color:#000;font-size:1.3rem;"><i class="fab fa-instagram"></i></a>
+        <a href="#" style="color:#000;font-size:1.3rem;"><i class="fab fa-linkedin-in"></i></a>
+        <a href="#" style="color:#000;font-size:1.3rem;"><i class="fab fa-youtube"></i></a>
       </div>
     </div>
-
-    <!-- === USEFUL LINKS === -->
     <div>
-      <h3 style="color:#3ec7eb; margin-bottom:1rem;">Useful Links</h3>
-      <ul style="list-style:none; padding:0; line-height:2;">
-        <li><a href="#home" onclick="showSection('home')" style="color:#090909; text-decoration:none;">› Home</a></li>
-        <li><a href="#about" onclick="showSection('about')" style="color:#090909; text-decoration:none;">› About Us</a></li>
-        <li><a href="#courses" onclick="showSection('courses')" style="color:#090909; text-decoration:none;">› Courses</a></li>
-        <li><a href="#contact" onclick="showSection('contact')" style="color:#090909; text-decoration:none;">› Contact</a></li>
-        <li><a href="register.html" style="color:#090909; text-decoration:none;">› Register</a></li>
+      <h3 style="color:#3ec7eb;margin-bottom:1rem;">Useful Links</h3>
+      <ul style="list-style:none;padding:0;line-height:2;">
+        <li><a href="#home" onclick="showSection('home')">› Home</a></li>
+        <li><a href="#about" onclick="showSection('about')">› About Us</a></li>
+        <li><a href="#courses" onclick="showSection('courses')">› Courses</a></li>
+        <li><a href="#contact" onclick="showSection('contact')">› Contact</a></li>
+        <li><a href="register.html">› Register</a></li>
       </ul>
     </div>
-
-    <!-- === COURSES / CATEGORIES === -->
     <div>
-      <h3 style="color:#3ec7eb; margin-bottom:1rem;">Courses</h3>
-      <ul style="list-style:none; padding:0; line-height:2;">
-        <li><a href="#courses" onclick="showSection('courses'); filterCourses('data')" style="color:#090909; text-decoration:none;">› Data Science</a></li>
-        <li><a href="#courses" onclick="showSection('courses'); filterCourses('software')" style="color:#090909; text-decoration:none;">› Full Stack Development</a></li>
-        <li><a href="#courses" onclick="showSection('courses'); filterCourses('ai')" style="color:#090909; text-decoration:none;">› AI / Machine Learning</a></li>
-        <li><a href="#courses" onclick="showSection('courses'); filterCourses('devops')" style="color:#090909; text-decoration:none;">› DevOps</a></li>
-        <li><a href="#courses" onclick="showSection('courses'); filterCourses('testing')" style="color:#090909; text-decoration:none;">› Software Testing</a></li>
+      <h3 style="color:#3ec7eb;margin-bottom:1rem;">Courses</h3>
+      <ul style="list-style:none;padding:0;line-height:2;">
+        <li><a href="#courses" onclick="showSection('courses');filterCourses('data')">› Data Science</a></li>
+        <li><a href="#courses" onclick="showSection('courses');filterCourses('software')">› Full Stack Development</a></li>
+        <li><a href="#courses" onclick="showSection('courses');filterCourses('ai')">› AI / ML</a></li>
+        <li><a href="#courses" onclick="showSection('courses');filterCourses('devops')">› DevOps</a></li>
+        <li><a href="#courses" onclick="showSection('courses');filterCourses('testing')">› Software Testing</a></li>
       </ul>
     </div>
-
-    <!-- === CONTACT INFO + GOOGLE MAP === -->
     <div>
-      <h3 style="color:#3ec7eb; margin-bottom:1rem;">Contact Us</h3>
-      <p style="color:#090909; line-height:1.6;">
-       #415, 8th Cross, 8th Main, Sunshine Layout, BTM 2nd Stage, Bangalore, Karnataka - 560076
-      </p>
-      <iframe 
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.912290558423!2d77.60477187484034!3d12.913358587396663!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae15682da3fe69%3A0x737fbd1a094a2ebf!2sNDR%20INFOTECH!5e0!3m2!1sen!2sin!4v1765627432101!5m2!1sen!2sin" 
-        width="100%" height="150" style="border:0; border-radius:8px;" allowfullscreen="" loading="lazy">
-      </iframe>
+      <h3 style="color:#3ec7eb;margin-bottom:1rem;">Contact Us</h3>
+      <p>#415, 8th Cross, 8th Main, Sunshine Layout, BTM 2nd Stage, Bangalore – 560076</p>
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.912290558423!2d77.60477187484034!3d12.913358587396663!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae15682da3fe69%3A0x737fbd1a094a2ebf!2sNDR%20INFOTECH!5e0!3m2!1sen!2sin!4v1765627432101!5m2!1sen!2sin"
+        width="100%" height="150" style="border:0;border-radius:8px;" allowfullscreen="" loading="lazy"></iframe>
     </div>
-
   </div>
+  <hr style="margin:2rem 0;border-color:rgba(0,0,0,0.2);">
+  <p style="text-align:center;font-size:.9rem;">© 2025 <strong>NDR EdTech</strong>. All Rights Reserved.</p>
 
-  <hr style="margin:2rem 0; border-color:rgba(255,255,255,0.2); position:relative; z-index:1;">
-  <p style="text-align:center; color:#090909; font-size:.9rem; position:relative; z-index:1;">© 2025 <strong>NDR EdTech</strong>. All Rights Reserved.</p>
-
-  <!-- === WhatsApp Floating Button === -->
-<a href="https://wa.me/919876543210" target="_blank"
-   style="
-      position:fixed;
-      bottom:20px;
-      right:20px;
-      background:#25D366;
-      border-radius:50%;
-      width:60px;
-      height:60px;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      box-shadow:0 4px 10px rgba(0,0,0,0.3);
-      z-index:9999;
-      text-decoration:none;
-      overflow:hidden; /* IMPORTANT - removes white padding */
-   ">
-   <img src="assets/images/whatsapp.jpeg"
-        alt="WhatsApp"
-        style="
-          width:70%;
-          height:70%;
-          object-fit:contain;
-          display:block;
-        " />
-</a>
-
+  <!-- WhatsApp Floating -->
+  <a href="https://wa.me/919876543210" target="_blank"
+    style="position:fixed;bottom:20px;right:20px;background:#25D366;border-radius:50%;width:60px;height:60px;
+      display:flex;justify-content:center;align-items:center;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:9999;">
+    <img src="assets/images/whatsapp.jpeg" alt="WhatsApp" style="width:70%;height:70%;object-fit:contain;">
+  </a>
 </footer>
 
-<!-- === JAVASCRIPT === -->
-<script>
+<!-- ============================== JAVASCRIPT ============================== -->
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  crossorigin="anonymous"
+/>
 
-  function showSection(id) {
-  // Hide all sections
+
+<script>
+function showSection(id) {
+  // Hide all main sections
   document.querySelectorAll("section").forEach(sec => sec.classList.remove("active"));
 
-  // Show selected
-  const target = document.getElementById(id);
-  if (target) {
-    target.classList.add("active");
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }
+  // Show the selected one
+  const t = document.getElementById(id);
+  if (t) t.classList.add("active");
 
-  // Update nav active state
+  // Update nav highlight
   document.querySelectorAll(".nav-links a").forEach(a => a.classList.remove("active"));
-  const activeLink = document.querySelector(`.nav-links a[href="#${id}"]`);
-  if (activeLink) activeLink.classList.add("active");
+  const link = document.querySelector('.nav-links a[href="#' + id + '"]');
+  if (link) link.classList.add("active");
+// ✅ Handle Top Courses visibility (always visible under Home)
+const topCourses = document.getElementById("top-courses");
+if (topCourses) {
+  // Hide it first for all sections
+  topCourses.style.display = "none";
 
-  // Update browser URL hash
- // ✅ push state only when not triggered by back/forward
-if (!event || event.type !== "popstate") {
-  history.pushState({ section: id }, "", `#${id}`);
-}
+  // When Home is active, show it just below hero
+  if (id === "home") {
+    setTimeout(() => {
+      topCourses.style.display = "block";
+      topCourses.style.opacity = "1";
+      topCourses.style.marginTop = "0";
+    }, 200);
   }
+}
 
-// === CONFIG ===
-const SLIDER_FOLDER = "assets/slider/";
 
-// === Allowed file types ===
-const IMAGE_EXT = [".jpg", ".jpeg", ".png", ".webp"];
-const VIDEO_EXT = [".mp4", ".webm"];
-
-// GLOBALS
-let slides = [];
-let index = 0;
-let interval = null;
-
-// === FUNCTION: Load files dynamically ===
-async function loadSliderFiles() {
-  try {
-    const response = await fetch(SLIDER_FOLDER + "files.json");
-    const files = await response.json();
-
-    const container = document.getElementById("slidesContainer");
-    container.innerHTML = "";
-
-    files.forEach((file, i) => {
-      const ext = file.toLowerCase();
-
-      let slideHTML = `<div class="slide ${i === 0 ? "active" : ""}">`;
-
-      // ---- IMAGE ----
-      if (IMAGE_EXT.some(e => ext.endsWith(e))) {
-        slideHTML += `<img src="${SLIDER_FOLDER + file}" class="slide-media" />`;
-      }
-
-      // ---- VIDEO (NO LOOP) ----
-      else if (VIDEO_EXT.some(e => ext.endsWith(e))) {
-        slideHTML += `<video src="${SLIDER_FOLDER + file}" class="slide-media" autoplay muted></video>`;
-      }
-
-      slideHTML += `</div>`;
-      container.insertAdjacentHTML("beforeend", slideHTML);
+  // ✅ Adjust scroll offset dynamically so header never hides content
+  const header = document.querySelector("header");
+  if (header) {
+    const offset = header.offsetHeight;
+    document.querySelectorAll("section").forEach(sec => {
+      sec.style.scrollMarginTop = offset + "px";
+      sec.style.paddingTop = offset + "px";
     });
+  }
 
-    slides = document.querySelectorAll(".slide");
-
-    // Add video end event listeners
-    addVideoListeners();
-
-    // Start auto slide
-    startAutoSlide();
-
-  } catch (err) {
-    console.error("Slider load error:", err);
+  // Update URL (preserve browser history)
+  if (!event || event.type !== "popstate") {
+    history.pushState({ section: id }, "", "#" + id);
   }
 }
 
+
+let slides=[],index=0,interval=null;
+function showSlide(n){slides.forEach((s,i)=>{s.classList.toggle("active",i===n);
+const v=s.querySelector("video");if(v){v.currentTime=0;v.play();}});}
+function nextSlide(){index=(index+1)%slides.length;showSlide(index);}
+function prevSlide(){index=(index-1+slides.length)%slides.length;showSlide(index);}
+function startAutoSlide(){interval=setInterval(nextSlide,5000);}function stopAutoSlide(){clearInterval(interval);}
+async function loadSliderFiles(){
+  try{
+    const response=await fetch("assets/slider/files.json");
+    const files=await response.json();
+    const container=document.getElementById("slidesContainer");
+    container.innerHTML="";
+    files.forEach((file,i)=>{
+      const ext=file.toLowerCase();
+      let slideHTML=`<div class="slide ${i===0?"active":""}">`;
+      if(/\.(jpg|jpeg|png|webp)$/i.test(ext)){
+        slideHTML+=`<img src="assets/slider/${file}" class="slide-media" />`;
+      }else if(/\.(mp4|webm)$/i.test(ext)){
+        slideHTML+=`<video src="assets/slider/${file}" class="slide-media" autoplay muted></video>`;
+      }
+      slideHTML+=`</div>`;
+      container.insertAdjacentHTML("beforeend",slideHTML);
+    });
+    slides=document.querySelectorAll(".slide");
+    slides.forEach(slide=>{
+      const v=slide.querySelector("video");
+      if(v){v.onended=()=>nextSlide();}
+    });
+    startAutoSlide();
+  }catch(err){console.error("Slider load error:",err);}
+}
 loadSliderFiles();
 
 
-// =======================================
-// 🔄 VIDEO AUTO-NEXT LOGIC
-// =======================================
-function addVideoListeners() {
-  slides.forEach(slide => {
-    const video = slide.querySelector("video");
-    if (video) {
-      video.onended = () => {
-        nextSlide();
-      };
-    }
-  });
-}
-
-
-// =======================================
-// 🔄 SLIDER CORE FUNCTIONS
-// =======================================
-function showSlide(n) {
-  slides.forEach((slide, i) => {
-    slide.classList.toggle("active", i === n);
-
-    const video = slide.querySelector("video");
-
-    // Restart video when slide becomes active
-    if (video) {
-      video.currentTime = 0;
-      video.play();
-    }
-  });
-}
-
-function nextSlide() {
-  index = (index + 1) % slides.length;
-  showSlide(index);
-}
-
-function prevSlide() {
-  index = (index - 1 + slides.length) % slides.length;
-  showSlide(index);
-}
-
-
-// =======================================
-// ▶ Auto Slide Timer
-// =======================================
-function startAutoSlide() {
-  interval = setInterval(nextSlide, 5000);
-}
-
-function stopAutoSlide() {
-  clearInterval(interval);
-}
-
-
-// =======================================
-// 🖱️ Pause on Hover
-// =======================================
-const slider = document.querySelector(".hero-slider");
-
-slider.addEventListener("mouseover", stopAutoSlide);
-slider.addEventListener("mouseout", startAutoSlide);
+document.querySelector(".hero-slider").addEventListener("mouseover",stopAutoSlide);
+document.querySelector(".hero-slider").addEventListener("mouseout",startAutoSlide);
 
 function filterCourses(category) {
   const grid = document.getElementById("courseGrid");
@@ -1339,27 +784,8 @@ function filterCourses(category) {
   document.getElementById("courses").scrollIntoView({ behavior: "smooth" });
 }
 
-// ✅ FIXED BROWSER BACK BUTTON HANDLER
-window.addEventListener("popstate", (event) => {
-  // Get section id from history state or hash
-  const sectionId = (event.state && event.state.section) 
-    ? event.state.section 
-    : (location.hash.replace("#", "") || "home");
 
-  // Prevent double push by skipping history.pushState() inside showSection
-  document.querySelectorAll("section").forEach(sec => sec.classList.remove("active"));
-  const target = document.getElementById(sectionId) || document.getElementById("home");
-  target.classList.add("active");
-
-  // Update nav highlight manually
-  document.querySelectorAll(".nav-links a").forEach(a => a.classList.remove("active"));
-  const activeLink = document.querySelector(`.nav-links a[href="#${sectionId}"]`);
-  if (activeLink) activeLink.classList.add("active");
-
-  window.scrollTo({ top: 0, behavior: "smooth" });
-});
-
-
+/* courses filtering */
 /* === COURSES === */
 const courses = [
   {
@@ -1465,7 +891,7 @@ const courses = [
     img: "assets/images/AzureDevops.png",
     contents: ["CI/CD", "Docker", "Kubernetes", "AWS"],
     details: {
-      trainer: "Mr. Ravi Naidu (DevOps Architect)",
+      trainer: "Mr. Ravi  (DevOps Architect)",
       experience: "13+ Years",
       nextBatch: "30-12-2024 (8:00 PM IST)",
       mode: "Classroom & Online Training",
@@ -1639,131 +1065,55 @@ function viewCourse(id) {
 }
 
 
-/* === ENQUIRY FORM === */
+/* forms */
 function openForm(course){document.getElementById("overlay").style.display="flex";document.getElementById("courseName").value=course;}
 function closeForm(){document.getElementById("overlay").style.display="none";}
-document.getElementById("enrollForm").addEventListener("submit",async e=>{
-  e.preventDefault();
-  const f=e.target,m=document.getElementById("msg");
-  m.textContent="Sending...";
-  const d=new FormData(f);
-  const r=await fetch(f.action,{method:f.method,body:d,headers:{Accept:"application/json"}});
-  m.textContent=r.ok?"✅ Sent successfully!":"❌ Error sending!";
+document.getElementById("enrollForm").addEventListener("submit",async e=>{e.preventDefault();const f=e.target,m=document.getElementById("msg");
+m.textContent="Sending...";const d=new FormData(f);const r=await fetch(f.action,{method:f.method,body:d,headers:{Accept:"application/json"}});
+m.textContent=r.ok?"✅ Sent successfully!":"❌ Error sending!";});
+document.getElementById("contactForm").addEventListener("submit",async e=>{e.preventDefault();const f=e.target,m=document.getElementById("contactMsg");
+m.textContent="Sending...";const d=new FormData(f);const r=await fetch(f.action,{method:f.method,body:d,headers:{Accept:"application/json"}});
+m.textContent=r.ok?"✅ Message sent!":"❌ Failed to send.";});
+
+/* footer background animation */
+const canvas=document.getElementById("footer-bg"),ctx=canvas.getContext("2d");let w,h;
+function resize(){w=canvas.width=window.innerWidth;h=canvas.height=document.querySelector("footer").offsetHeight;}
+window.addEventListener("resize",resize);resize();
+const points=Array.from({length:80},()=>({x:Math.random()*w,y:Math.random()*h,vx:(Math.random()-.5)*1.5,vy:(Math.random()-.5)*1.5}));
+function draw(){ctx.clearRect(0,0,w,h);points.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>w)p.vx*=-1;if(p.y<0||p.y>h)p.vy*=-1;
+ctx.beginPath();ctx.arc(p.x,p.y,2,0,Math.PI*2);ctx.fillStyle="rgba(62,199,235,0.9)";ctx.fill();});
+for(let i=0;i<points.length;i++){for(let j=i+1;j<points.length;j++){const dx=points[i].x-points[j].x,dy=points[i].y-points[j].y;
+const dist=Math.sqrt(dx*dx+dy*dy);if(dist<100){ctx.beginPath();ctx.moveTo(points[i].x,points[i].y);ctx.lineTo(points[j].x,points[j].y);
+ctx.strokeStyle=`rgba(217,29,66,${1-dist/100})`;ctx.lineWidth=.6;ctx.stroke();}}}requestAnimationFrame(draw);}draw();
+
+// ✅ Preserve section when reloading or visiting with a hash
+window.addEventListener("DOMContentLoaded", () => {
+  const hash = window.location.hash.replace("#", "") || "home";
+  showSection(hash);
 });
 
-/* === CONTACT FORM === */
-document.getElementById("contactForm").addEventListener("submit",async e=>{
-  e.preventDefault();
-  const f=e.target,m=document.getElementById("contactMsg");
-  m.textContent="Sending...";
-  const d=new FormData(f);
-  const r=await fetch(f.action,{method:f.method,body:d,headers:{Accept:"application/json"}});
-  m.textContent=r.ok?"✅ Message sent!":"❌ Failed to send.";
-});
-
-// === Animate counters visibly ===
-function animateCounters() {
-  document.querySelectorAll('.counter').forEach(counter => {
-    const target = parseInt(counter.getAttribute('data-target'));
-    let count = 0;
-    const duration = 2000; // total time for one count
-    const stepTime = 15; // ms per frame (~60fps)
-    const increment = target / (duration / stepTime);
-    counter.textContent = '0';
-
-    const interval = setInterval(() => {
-      count += increment;
-      if (count < target) {
-        counter.textContent = Math.floor(count).toLocaleString();
-      } else {
-        counter.textContent = target.toLocaleString();
-        clearInterval(interval);
-      }
-    }, stepTime);
-  });
-}
-
-// === When About section is visible, start & repeat every 5s ===
-document.addEventListener('DOMContentLoaded', () => {
-  const aboutSection = document.getElementById('about');
-  if (!aboutSection) return;
-
-  const observer = new IntersectionObserver(entries => {
-    if (entries[0].isIntersecting) {
-      animateCounters(); // First run
-      setInterval(animateCounters, 5000); // Repeat every 5s
-      observer.disconnect(); // Run only once when visible
-    }
-  }, { threshold: 0.4 });
-
-  observer.observe(aboutSection);
-});
-
-/* === FAQ TOGGLE === */
-document.addEventListener("DOMContentLoaded",()=>{
-  document.querySelectorAll(".faq-question").forEach(btn=>
-    btn.addEventListener("click",()=>btn.parentElement.classList.toggle("active")));
-});
-
-// === Update URL hash for browser navigation ===
+// ✅ Update section correctly when navigating via browser back/forward
 window.addEventListener("popstate", () => {
-  const sectionId = location.hash.replace("#", "") || "home";
-  showSection(sectionId);
+  const hash = window.location.hash.replace("#", "") || "home";
+  showSection(hash);
 });
 
-const canvas = document.getElementById("footer-bg");
-  const ctx = canvas.getContext("2d");
-  let w, h;
-
-  function resize() {
-    w = canvas.width = window.innerWidth;
-    h = canvas.height = document.querySelector("footer").offsetHeight;
-  }
-  window.addEventListener("resize", resize);
-  resize();
-
-  const points = Array.from({ length: 80 }, () => ({
-    x: Math.random() * w,
-    y: Math.random() * h,
-    vx: (Math.random() - 0.5) * 1.5,
-    vy: (Math.random() - 0.5) * 1.5
-  }));
-
-  function draw() {
-    ctx.clearRect(0, 0, w, h);
-    points.forEach(p => {
-      p.x += p.vx; p.y += p.vy;
-      if (p.x < 0 || p.x > w) p.vx *= -1;
-      if (p.y < 0 || p.y > h) p.vy *= -1;
-
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
-      ctx.fillStyle = "rgba(62,199,235,0.9)";
-      ctx.fill();
-    });
-
-    for (let i = 0; i < points.length; i++) {
-      for (let j = i + 1; j < points.length; j++) {
-        const dx = points[i].x - points[j].x;
-        const dy = points[i].y - points[j].y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 100) {
-          ctx.beginPath();
-          ctx.moveTo(points[i].x, points[i].y);
-          ctx.lineTo(points[j].x, points[j].y);
-          ctx.strokeStyle = `rgba(217,29,66,${1 - dist / 100})`;
-          ctx.lineWidth = 0.6;
-          ctx.stroke();
-        }
-      }
-    }
-    requestAnimationFrame(draw);
-  }
-  draw();
 
 </script>
+<script>
+window.addEventListener("load", fixHeroOffset);
+window.addEventListener("resize", fixHeroOffset);
 
-<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+function fixHeroOffset() {
+  const header = document.querySelector("header");
+  const home = document.getElementById("home");
+  if (header && home) {
+    const h = header.offsetHeight;
+    home.style.setProperty("--header-offset", h + "px");
+  }
+}
+</script>
 
 </body>
 </html>
+
