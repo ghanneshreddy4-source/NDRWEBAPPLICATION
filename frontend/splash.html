@@ -9,6 +9,21 @@
 <link rel="apple-touch-icon" href="assets/images/logo.png" />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
+<!-- SEO Optimization -->
+<title>NDR EdTech | Bangalore’s #1 Training Institute | Best IT & Software Courses</title>
+<meta name="description" content="Join NDR EdTech — Bangalore’s #1 Training Institute for IT, Cloud, Data, DevOps, and Software Development. Learn from Experts with 100% Placement Support and Flexible Online & Offline Classes.">
+<meta name="keywords" content="Bangalore Training Institute, Best IT Courses Bangalore, NDR EdTech, Hyderabad IT Training, Cloud Training, Data Science Bangalore, Software Courses Bangalore, #1 Institute in Bangalore">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://www.ndredtech.com/">
+
+<!-- Open Graph for social sharing -->
+<meta property="og:title" content="Bangalore’s #1 IT Training Institute | NDR EdTech">
+<meta property="og:description" content="Best IT and Software Courses with 100% Placement Support in Bangalore & Hyderabad. Learn Cloud, Data, DevOps, and more from Industry Experts.">
+<meta property="og:image" content="https://www.ndredtech.com/assets/images/ndr-banner.jpg">
+<meta property="og:url" content="https://www.ndredtech.com/">
+<meta name="twitter:card" content="summary_large_image">
+
+
 <style>
 /* ----------------------------- ROOT & GLOBAL ----------------------------- */
 :root {
@@ -44,7 +59,7 @@ header{
 }
 .navbar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;}
 .logo{display:flex;align-items:center;gap:10px;font-size:2.5rem;font-weight:700;color:#fff;}
-.logo img{width:90px;height:90px;border-radius:10px;}
+.logo img{width:90px;height:90px;border-radius:10px;background-color: #fff;}
 .nav-links{list-style:none;display:flex;gap:1rem;flex-wrap:wrap;}
 .nav-links a{color:var(--text);padding:.5rem 1rem;border-radius:6px;transition:.3s;}
 .nav-links a:hover,.nav-links a.active{background:#0e0e0e;color:#fff;}
@@ -233,6 +248,40 @@ section { padding-top: 100px; } /* gives all sections consistent spacing */
   text-align: center;
   padding: 5rem 2rem;
 }
+.course-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;     /* centers fixed cards horizontally */
+  gap: 1.5rem;
+}
+
+
+.course-card {
+  background: #16213e;
+  border-radius: 12px;
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  height: 100%;             /* ensures uniform height */
+  min-height: 420px;        /* fixed enough space for text + buttons */
+  overflow: visible;        /* let buttons show */
+}
+
+.course-card:hover {
+  transform: translateY(-5px);
+}
+.course-card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+}
+.course-card-content {
+  flex: 1;
+  padding: 1rem;
+}
 
 .section-title {
   font-size: 2rem;
@@ -245,26 +294,10 @@ section { padding-top: 100px; } /* gives all sections consistent spacing */
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 2rem;
-  max-width: 1200px;
+  max-width: 1500px;
   margin: auto;
 }
 
-.course-card {
-  background: #16213e;
-  border-radius: 12px;
-  overflow: hidden;
-  color: #fff;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-  transition: transform 0.3s ease;
-}
-
-.course-card:hover { transform: translateY(-8px); }
-
-.course-card img {
-  width: 100%;
-  height: 150px;
-  object-fit: cover;
-}
 
 .course-info { padding: 1.5rem; text-align: left; }
 .course-info h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; }
@@ -273,27 +306,188 @@ section { padding-top: 100px; } /* gives all sections consistent spacing */
 .course-buttons {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
   margin-top: 1.2rem;
 }
 
-.btn-enroll, .btn-details, .btn-viewall {
+.btn-enroll, .btn-details {
+  flex: 1;
+  text-align: center;
   background: #3245ff;
   color: #fff;
-  text-decoration: none;
-  padding: 0.6rem 1.4rem;
+  padding: 0.6rem 1.2rem;
   border-radius: 6px;
   font-weight: 600;
-  transition: 0.3s;
+  text-decoration: none;
+  transition: 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-enroll {
+  background: linear-gradient(90deg, #3245ff, #5a7bff);
+}
+
+.btn-details {
+  background: linear-gradient(90deg, #d91d42, #ff4b6e);
+}
+
+.btn-enroll:hover,
+.btn-details:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
+}
+
+.btn-viewall {
+  background: linear-gradient(90deg, #3245ff, #5a7bff);
+  color: #fff;
+  text-decoration: none;
+  padding: 0.7rem 1.6rem;
+  border-radius: 6px;
+  font-weight: 600;
+  transition: 0.3s ease;
   display: inline-block;
 }
-
-.btn-enroll:hover, .btn-details:hover, .btn-viewall:hover {
+.btn-viewall:hover {
+  transform: translateY(-3px);
   opacity: 0.9;
-  transform: translateY(-2px);
 }
 
+
 .view-all { margin-top: 3rem; }
-/* ----------------------------- TOP COURSES (next in Part 2) -------------- */
+
+/* === FAQ SECTION === */
+.faq-section {
+  background: #0b0e19;
+  color: #e4e6ef;
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.faq-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  background: #fbf9f9;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.faq-container { max-width: 800px; margin: auto; text-align: left; }
+.faq-item { margin-bottom: 1rem; border-radius: 8px; background: #141827; box-shadow: 0 0 10px rgba(0,0,0,.3); }
+.faq-question { width: 100%; background: none; border: none; color: #fff; font-weight: 600; text-align: left; padding: 1rem; cursor: pointer; }
+.faq-answer { display: none; padding: 1rem; background: #1a1e2f; border-top: 1px solid rgba(255,255,255,.1); color: #ccc; }
+.faq-item.active .faq-answer { display: block; }
+
+/* === FEEDBACK SECTION === */
+.feedback-section {
+  background: #11152a;
+  color: #fff;
+  text-align: center;
+  padding: 4rem 2rem;
+}
+
+.feedback-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  background: #fffdfd;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.feedback-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.feedback-card {
+  background: #141827;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0,0,0,.4);
+  width: 300px;
+  padding: 1.5rem;
+  text-align: left;
+  transition: .3s;
+}
+
+.feedback-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 25px rgba(251, 248, 249, 0.5), 0 0 25px rgba(50,69,255,.5);
+}
+
+.feedback-text { color: #fff; font-size: .95rem; margin-bottom: 1rem; }
+.feedback-user { color: #3ec7eb; font-weight: 600; }
+
+/* === PROMO SECTION (#1 TRAINING INSTITUTE) === */
+.promo-section {
+  background: #000;
+  color: #fff;
+  text-align: center;
+  padding: 6rem 2rem;
+}
+
+.promo-content {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.promo-subtitle {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 1.5rem;
+}
+
+.promo-heading {
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+.promo-heading .yellow { color: #5e06f7; }
+.promo-heading .white  { color: #fff; }
+
+.promo-text {
+  font-size: 1.1rem;
+  color: #5e06f7;
+  margin-top: 1.5rem;
+  margin-bottom: 2rem;
+  line-height: 1.7;
+}
+
+.promo-btn {
+  background: #25d366;
+  color: #fff;
+  border: none;
+  padding: 0.9rem 2rem;
+  border-radius: 6px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: 0.3s;
+  text-decoration: none;
+}
+
+.promo-btn:hover {
+  background: #1ebd5c;
+  transform: translateY(-3px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .promo-heading { font-size: 2.2rem; }
+  .promo-text { font-size: 1rem; }
+}
+
 </style>
 </head>
 
@@ -302,15 +496,12 @@ section { padding-top: 100px; } /* gives all sections consistent spacing */
   <nav class="navbar">
     <div class="logo">
       <img src="assets/images/ndr edtech main logo.png" alt="NDR EdTech Logo">
-      <span>NDR EdTech</span>
     </div>
     <ul class="nav-links">
       <li><a href="#home" class="active" onclick="showSection('home')">Home</a></li>
       <li><a href="#courses" onclick="showSection('courses')">Courses</a></li>
       <li><a href="#about" onclick="showSection('about')">About</a></li>
       <li><a href="#contact" onclick="showSection('contact')">Contact</a></li>
-      <li><a href="login.html">Login</a></li>
-      <li><a href="register.html">Register</a></li>
     </ul>
   </nav>
 </header>
@@ -321,13 +512,6 @@ section { padding-top: 100px; } /* gives all sections consistent spacing */
     <div id="slidesContainer"></div>
     <button class="prev" onclick="prevSlide()">&#10094;</button>
     <button class="next" onclick="nextSlide()">&#10095;</button>
-  </div>
-
-  <div class="hero-stats">
-    <div class="stat-item"><div><h3>20+ Years</h3><p>of Experience</p></div></div>
-    <div class="stat-item"><img src="assets/icons/briefcase.svg" alt="Students"/><div><h3>50,000+</h3><p>Students Placed</p></div></div>
-    <div class="stat-item"><img src="assets/icons/star.svg" alt="Rating"/><div><h3>4.8/5</h3><p>(5000+ Reviews)</p></div></div>
-    <div class="stat-item"><img src="assets/icons/class.svg" alt="Classes"/><div><h3>Classes</h3><p>Offline & Online</p></div></div>
   </div>
 
   <div class="alumni-slider">
@@ -395,6 +579,26 @@ section { padding-top: 100px; } /* gives all sections consistent spacing */
       <div class="feature-box"><h2>Placement Support</h2><p>Dedicated career support to land your dream job.</p></div>
     </div>
   </div>
+
+    <!-- ============================== PROMO / SEO SECTION ============================== -->
+<div id="promo" class="promo-section">
+  <div class="promo-content">
+    <h2 class="promo-subtitle">Bangalore’s #1 IT & Training Institute</h2>
+    <h1 class="promo-heading">
+      <span class="white">Explore.</span> 
+      <span class="yellow">Execute.</span> 
+      <span class="white">Thrive.</span>
+    </h1>
+    <p class="promo-text">
+      We Provide the Best <strong>Online & Offline Courses</strong> across India — 
+      Join <strong>NDR EdTech</strong> today and build your career in <strong>IT, Cloud, Data, and Development</strong>.<br>
+      📞 +91 98765 43210 
+    </p>
+    <a href="https://wa.me/919876543210" target="_blank" class="promo-btn"> 
+      <i class="fab fa-whatsapp"></i> Whatsapp us for Details
+    </a>
+  </div>
+</div>
 </section>
  <!-- === TOP COURSES SECTION === -->
 <section id="top-courses" class="courses-section" style="display:block;">
@@ -416,7 +620,7 @@ section { padding-top: 100px; } /* gives all sections consistent spacing */
           <a href="javascript:void(0)" class="btn-enroll" onclick="showSection('courses'); setTimeout(()=>openForm('Learn Data Analysis, ML, and AI'),300)">Enroll Now</a>
 
           <!-- ✅ Opens details and updates URL -->
-          <a href="#course-detail" class="btn-details" onclick="viewCourse('data-science'); history.pushState(null,'','#course-detail');">Details</a>
+          <a href="#course-detail" class="btn-details" onclick="viewCourse('snowflake'); history.pushState(null,'','#course-detail');">Details</a>
         </div>
       </div>
     </div>
@@ -432,7 +636,7 @@ section { padding-top: 100px; } /* gives all sections consistent spacing */
            Job Prospects: Data Enginners,Analyst</p>
         <div class="course-buttons">
           <a href="javascript:void(0)" class="btn-enroll" onclick="showSection('courses'); setTimeout(()=>openForm('Build Web Apps with HTML, CSS, JS, React'),300)">Enroll Now</a>
-          <a href="#course-detail" class="btn-details" onclick="viewCourse('python-full-stack'); history.pushState(null,'','#course-detail');">Details</a>
+          <a href="#course-detail" class="btn-details" onclick="viewCourse('DBT'); history.pushState(null,'','#course-detail');">Details</a>
         </div>
       </div>
     </div>
@@ -475,6 +679,7 @@ section { padding-top: 100px; } /* gives all sections consistent spacing */
   </div>
 </section>
 
+
 <!-- ============================== COURSES SECTION ============================== -->
 <section id="courses" style="padding-top:70px;">
   <style>
@@ -488,8 +693,38 @@ section { padding-top: 100px; } /* gives all sections consistent spacing */
   .sidebar li span{color:#e4e6ef;}
   .main{flex:1;padding:2rem;}
   .main h1{margin-bottom:1.5rem;color:#fff;}
-  .course-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.5rem;}
-  .course-card{background:#141827;border-radius:10px;box-shadow:0 0 10px rgba(0,0,0,.3);overflow:hidden;display:flex;flex-direction:column;}
+  .course-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 1.5rem;
+}
+
+.course-card {
+  width: 300px;              /* fixed width */
+  height: 320px;             /* fixed height */
+  background: #141827;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,.3);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;            /* prevent resizing */
+  transition: transform 0.3s ease;
+}
+.course-card:hover {
+  transform: translateY(-5px);
+}
+.course-card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+}
+.course-card-content {
+  flex: 1;
+  padding: 1rem;
+}
+
   .course-card img{width:100%;height:150px;object-fit:cover;}
   .course-card-content{padding:1rem;flex:1;}
   .course-card h3{margin:0 0 .5rem;}
@@ -572,30 +807,126 @@ section { padding-top: 100px; } /* gives all sections consistent spacing */
 <section id="about" style="background:#fff;color:#000;min-height:100vh;padding-top:80px;">
   <div style="text-align:center;padding:4rem 1rem;">
     <h1 style="font-size:2.5rem;">About NDR Infotech</h1>
-    <p style="max-width:700px;margin:auto;font-size:1.1rem;">
-      NDR Infotech excels in Wealth Management, Product Development, Software Services, and Technology Consulting.
-      Since our inception in Bangalore, we’ve partnered with clients worldwide to strategize, implement,
-      and support comprehensive end-to-end solutions tailored to diverse industries.
-    </p>
+    <p style="max-width: 700px; margin: auto; color: #000000; font-size: 1.1rem;">
+        NDR Infotech excels in Wealth Management, Product Development, Software Services, and Technology Consulting.
+        Since our inception in Bangalore, we’ve partnered with numerous clients worldwide to strategize, implement,
+        and support comprehensive end-to-end solutions tailored to diverse industries.
+      </p>
+    </div>
   </div>
-  <div style="max-width:1000px;margin:auto;padding:2rem;line-height:1.8;">
-    <h2>Who We Are</h2>
-    <p>At <strong>NDR Infotech</strong>, we are committed to providing innovative and sustainable technology solutions that adapt to the evolving needs of our customers.</p>
-    <h2 style="margin-top:2rem;">Our Values</h2>
-    <p>We believe success is directly linked to the success of our stakeholders. Our culture encourages continuous learning and collaboration.</p>
-    <h2 style="margin-top:2rem;">Our Expertise</h2>
-    <p>We provide tailored solutions in <strong>Software Development, IT Consulting, Product Engineering, and Wealth Management</strong>.</p>
-    <h2 style="margin-top:2rem;">Our Commitment</h2>
-    <p>We foster a culture of innovation and continuous improvement while upholding integrity and excellence.</p>
-    <div style="margin-top:3rem;text-align:center;">
-      <h2>Contact Us</h2>
-      <p>
-        📍 #415, 8th Cross, 8th Main, Sunshine Layout, BTM 2nd Stage, Bangalore – 560076<br>
+
+  <div style="max-width:1000px;margin:auto;padding:3rem 2rem;line-height:1.8;">
+    <h2 style="color:#000000;">Who We Are</h2>
+    <p style="color:#000000;">
+      At <strong>NDR Infotech</strong>, we are committed to providing innovative and sustainable technology solutions
+      that adapt to the evolving needs of our customers. Our focus on quality, ethics, and customer satisfaction has
+      enabled us to build a strong global presence and long-term partnerships.
+    </p>
+
+    <h2 style="margin-top:2rem;color:#000000;">Our Values</h2>
+    <p style="color:#000000;">
+      We believe our success is directly linked to the success of our stakeholders. Our culture encourages continuous
+      learning, collaboration, and personal growth, empowering our employees to deliver excellence at every stage of
+      a project.
+    </p>
+
+    <h2 style="margin-top:2rem;color:#000000;">Our Expertise</h2>
+    <p style="color:#000000;">
+      With a team of highly skilled professionals, we provide clients with tailored solutions in
+      <strong style="color:#000000;">Software Development, IT Consulting, Product Engineering, and Wealth Management</strong>.
+      Our innovative approach, combined with years of experience, ensures measurable results and lasting impact.
+    </p>
+
+    <h2 style="margin-top:2rem;color:#000000;">Our Commitment</h2>
+    <p style="color:#000000;">
+      We are dedicated to fostering a culture of innovation and continuous improvement while upholding integrity,
+      accountability, and excellence in every engagement.
+    </p>
+
+    <div style="margin-top:3rem; text-align:center;">
+      <h2 style="color:#000000;">Contact Us</h2>
+      <p style="color:#000000;">
+        📍 #415, 8th Cross, 8th Main, Sunshine Layout, BTM 2nd Stage, Bangalore, Karnataka - 560076<br>
         📞 +91 8722355999 | ✉️ hr@ndrinfotech.com | 🌐 www.ndrinfotech.com
       </p>
     </div>
   </div>
+
+   <!-- ============================== PROMO / SEO SECTION ============================== -->
+<div id="promo" class="promo-section">
+  <div class="promo-content">
+    <h2 class="promo-subtitle">Bangalore’s #1 IT & Training Institute</h2>
+    <h1 class="promo-heading">
+      <span class="white">Explore.</span> 
+      <span class="yellow">Execute.</span> 
+      <span class="white">Thrive.</span>
+    </h1>
+    <p class="promo-text">
+      We Provide the Best <strong>Online & Offline Courses</strong> across India — 
+      Join <strong>NDR EdTech</strong> today and build your career in <strong>IT, Cloud, Data, and Development</strong>.<br>
+      📞 +91 98765 43210 
+    </p>
+    <a href="https://wa.me/919876543210" target="_blank" class="promo-btn"> 
+      <i class="fab fa-whatsapp"></i> Whatsapp us for Details
+    </a>
+  </div>
+</div>
+
+  <!-- 🎓 Added Alumni Slider Here -->
+  <div class="alumni-slider" style="background:#f5f6f8;padding:2rem 0;text-align:center;overflow:hidden;margin-top:2rem;">
+    <h2 class="alumni-title" style="color:#090909;font-size:1.8rem;margin-bottom:2rem;font-weight:600;letter-spacing:1px;">
+      Companies where Our students got placed.
+    </h2>
+    <div class="logo-scroller" style="position:relative;width:100%;overflow:hidden;">
+      <div class="logo-track" style="display:flex;gap:60px;width:max-content;animation:scroll-logos 25s linear infinite;">
+        <img src="assets/images/snowflake.png" alt="Snowflake" class="no-filter" style="height:70px;width:auto;mix-blend-mode:normal;">
+        <img src="assets/images/AzureDevops.png" alt="AzureDevops" class="no-filter" style="height:70px;width:auto;mix-blend-mode:normal;">
+        <img src="assets/images/SAP GRC.png" alt="SAP GRC" class="no-filter" style="height:70px;width:auto;mix-blend-mode:normal;">
+        <img src="assets/images/SAPABAP.png" alt="SAPABAP" class="no-filter" style="height:70px;width:auto;mix-blend-mode:normal;">
+        <img src="assets/images/salesforce.png" alt="Salesforce" class="no-filter" style="height:70px;width:auto;mix-blend-mode:normal;">
+        <img src="assets/images/DBT.png" alt="DBT" class="no-filter" style="height:70px;width:auto;mix-blend-mode:normal;">
+        <img src="assets/images/snowflake.png" alt="Snowflake" class="no-filter" style="height:70px;width:auto;mix-blend-mode:normal;">
+        <img src="assets/images/AzureDevops.png" alt="AzureDevops" class="no-filter" style="height:70px;width:auto;mix-blend-mode:normal;">
+        <img src="assets/images/SAP GRC.png" alt="SAP GRC" class="no-filter" style="height:70px;width:auto;mix-blend-mode:normal;">
+        <img src="assets/images/SAPABAP.png" alt="SAPABAP" class="no-filter" style="height:70px;width:auto;mix-blend-mode:normal;">
+        <img src="assets/images/salesforce.png" alt="Salesforce" class="no-filter" style="height:70px;width:auto;mix-blend-mode:normal;">
+        <img src="assets/images/DBT.png" alt="DBT" class="no-filter" style="height:70px;width:auto;mix-blend-mode:normal;">
+      </div>
+    </div>
+  </div>
+
+   <!-- === FAQ SECTION === -->
+  <div class="faq-section">
+    <h2 class="faq-title">Frequently Asked Questions</h2>
+    <div class="faq-container">
+      <div class="faq-item"><button class="faq-question">Do you provide placement support?</button><div class="faq-answer">Yes, we provide 100% placement assistance including mock interviews.</div></div>
+      <div class="faq-item"><button class="faq-question">Are classes live or recorded?</button><div class="faq-answer">All sessions are live and recorded for lifetime access.</div></div>
+      <div class="faq-item"><button class="faq-question">Can I schedule 1:1 doubt sessions?</button><div class="faq-answer">Absolutely, we provide one-on-one mentorship support.</div></div>
+      <div class="faq-item"><button class="faq-question">Do you offer flexible schedules?</button><div class="faq-answer">Yes, you can choose from online, offline, or hybrid modes.</div></div>
+    </div>
+  </div>
+
+
+  <!-- === FEEDBACK SECTION === -->
+  <div class="feedback-section">
+    <h2 class="feedback-title">What Our Learners Say</h2>
+    <div class="feedback-container">
+      <div class="feedback-card"><p class="feedback-text">“NDR EdTech helped me transition from a fresher to a professional developer.”</p><p class="feedback-user">– Priya Sharma, Java Developer</p></div>
+      <div class="feedback-card"><p class="feedback-text">“The trainers are top-notch and interactive. Got placed within 2 months!”</p><p class="feedback-user">– Rahul Verma, QA Engineer</p></div>
+      <div class="feedback-card"><p class="feedback-text">“I loved the lifetime access feature — I can revisit any topic anytime.”</p><p class="feedback-user">– Sneha Iyer, Data Analyst</p></div>
+    </div>
+  </div>
 </section>
+
+<!-- Add this keyframe animation if not already in CSS -->
+<style>
+@keyframes scroll-logos {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+</style>
+
+
 
 <!-- ============================== CONTACT SECTION ============================== -->
 <section id="contact" style="background:#e3e6ef;padding:4rem 2rem;text-align:center;">
@@ -604,10 +935,10 @@ section { padding-top: 100px; } /* gives all sections consistent spacing */
   <p style="max-width:700px;margin:auto;color:#000;">Have questions about our courses, training programs, or career support? We’re here to help.</p>
   <div style="max-width:500px;margin:2rem auto;background:#edeef1;padding:2rem;border-radius:10px;box-shadow:0 0 15px rgba(0,0,0,.3);">
     <form id="contactForm" action="https://formspree.io/f/meoyvpwl" method="POST">
-      <input type="text" name="name" placeholder="Your Full Name" required style="width:100%;margin-bottom:1rem;padding:.7rem;border:none;border-radius:6px;background:#1a1e2f;color:#fff;">
-      <input type="email" name="_replyto" placeholder="Your Email" required style="width:100%;margin-bottom:1rem;padding:.7rem;border:none;border-radius:6px;background:#1a1e2f;color:#fff;">
-      <input type="text" name="phone" placeholder="Phone (optional)" style="width:100%;margin-bottom:1rem;padding:.7rem;border:none;border-radius:6px;background:#1a1e2f;color:#fff;">
-      <select name="course" style="width:100%;margin-bottom:1rem;padding:.7rem;border:none;border-radius:6px;background:#1a1e2f;color:#000;">
+      <input type="text" name="name" placeholder="Your Full Name" required style="width:100%;margin-bottom:1rem;padding:.7rem;border:none;border-radius:6px;background:#1a1e2f;color:#f6f4f4;">
+      <input type="email" name="_replyto" placeholder="Your Email" required style="width:100%;margin-bottom:1rem;padding:.7rem;border:none;border-radius:6px;background:#1a1e2f;color:#f6f4f4;">
+      <input type="text" name="phone" placeholder="Phone" style="width:100%;margin-bottom:1rem;padding:.7rem;border:none;border-radius:6px;background:#1a1e2f;color:#f6f4f4;">
+      <select name="course" style="width:100%;margin-bottom:1rem;padding:.7rem;border:none;border-radius:6px;background:#1a1e2f;color:#f6f4f4;">
         <option value="">Select Course</option><option>Snowflake</option><option>dbt</option><option>SAP</option><option>Corporate Training</option>
       </select>
       <textarea name="message" rows="4" placeholder="Your Message" required style="width:100%;margin-bottom:1rem;padding:.7rem;border:none;border-radius:6px;background:#1a1e2f;color:#fff;"></textarea>
@@ -789,40 +1120,308 @@ function filterCourses(category) {
 /* === COURSES === */
 const courses = [
   {
-    id: "snowflake",
-    title: "Snowflake",
-    category: "software",
-    desc: "Snowflake is a top trending cloud data warehouse technology for scalable data storage and analytics.",
-    img: "assets/images/snowflake.png",
-    contents: ["1. Snowflake Architecture and Overview", "Spring Boot", "SQL", "HTML & CSS", "React", "Deployment"],
-    details: {
-      trainer: "Mr. Dinesh Reddyvari (Certified Trainer)",
-      experience: "15+ Years",
-      nextBatch: "18-12-2024 (8:00 PM IST)",
-      mode: "Classroom Training, Online Training (Instructor Led)",
-      duration: "45 Days",
-      phone: "+91 87223 55666",
-      email: "info@ndredtech.com",
-      demoText: "ENROLL FOR FREE DEMO CLASS",
-      demoLink: "https://us06web.zoom.us/meeting/register/tZloc-GprjwsGdOlGGj8lGc7BGlbH-jHUTu-"
+  id: "snowflake",
+  title: "Snowflake",
+  category: "software",
+  desc: "Snowflake is a top trending cloud data warehouse technology for scalable data storage and analytics.",
+  img: "assets/images/snowflake.png",
+  contents: [
+    {
+      module: "Module 1 - Snowflake Architecture and Overview",
+      topics: [
+        "Snowflake Overview Architecture",
+        "How to use the Snowflake UI & ecosystem"
+      ]
+    },
+    {
+      module: "Module 2 - Introduction to Cloud",
+      topics: [
+        "What is Cloud",
+        "Different Cloud Vendors",
+        "Advantages of Cloud over On-Premise"
+      ]
+    },
+    {
+      module: "Module 3 - Introduction to Data Warehousing Concepts",
+      topics: [
+        "What is a Data Warehouse and why do we need one",
+        "Database Vs Data Warehouse",
+        "Data Warehouse Architecture",
+        "OLTP Vs OLAP",
+        "What is ETL"
+      ]
+    },
+    {
+      module: "Module 4 - Introduction to Snowflake",
+      topics: [
+        "How different from traditional DB",
+        "Quick start to Snowflake and accessing the trial account",
+        "Creating a warehouse, DB, Schema, and tables",
+        "Accessing different roles and using them",
+        "Working with worksheets",
+        "Understanding different types of accounts"
+      ]
+    },
+    {
+      module: "Module 5 - Understand Cloud platforms",
+      topics: [
+        "AWS and understanding S3 storage",
+        "Snowflake architecture and caching",
+        "AZURE and understanding blob storage",
+        "GCP and understanding Bucket storage"
+      ]
+    },
+    {
+      module: "Module 6 - Data Loading and Unloading",
+      topics: [
+        "File formats",
+        "Internal and external storage",
+        "Internal and external stages",
+        "Copy into usage",
+        "Snowflake internal storage",
+        "Accessing Cloud storage data into Snowflake (GCP, AZURE, and AWS)",
+        "Data unloading"
+      ]
+    },
+    {
+      module: "Module 7 - SnowPipe",
+      topics: [
+        "Accessing Snowpipe",
+        "PUT and GET commands",
+        "Bulk loading from cloud storage",
+        "Continuous loading"
+      ]
+    },
+    {
+      module: "Module 8 - Partner Connect with Snowflake",
+      topics: [
+        "Snowflake Connector and use cases with Python",
+        "BI connectors use cases",
+        "Other connectors hands-on"
+      ]
+    },
+    {
+      module: "Module 9 - Handling JS and Semi-structured data",
+      topics: [
+        "Creating Tasks",
+        "Streams",
+        "Accessing procedures with tasks",
+        "Scheduling per time zone",
+        "Automate loading process daily and weekly"
+      ]
+    },
+    {
+      module: "Module 10 - Scheduling with Snowflake",
+      topics: [
+        "Variant Data Type",
+        "File format options",
+        "Creating stages",
+        "Loading JSON semi-structured data",
+        "Accessing JSON with select statements"
+      ]
+    },
+    {
+      module: "Module 11 - Secure Data Sharing",
+      topics: [
+        "Usage of sharing data",
+        "Sharing data with different accounts",
+        "Reader accounts and privileges",
+        "Challenges with cross-region sharing",
+        "Connecting shared objects with BI tools",
+        "Limitations with Data Sharing"
+      ]
+    },
+    {
+      module: "Module 12 - Cloning",
+      topics: [
+        "Access Control Privileges for Cloned Objects",
+        "Cloning and Snowflake Objects",
+        "Impact of DDL and DML on Cloning",
+        "Data Retention and Cloning behavior"
+      ]
+    },
+    {
+      module: "Module 13 - Time travel & Failsafe",
+      topics: [
+        "Introduction to Time Travel",
+        "Querying Historical Data",
+        "Enabling and Disabling Time Travel",
+        "Data Retention Period",
+        "Cloning Using Time Travel"
+      ]
+    },
+    {
+      module: "Module 14 - Query Caching, Clustering, and Performance Techniques",
+      topics: [
+        "Creating multiple users on large tables",
+        "Performance tuning techniques",
+        "Result set cache",
+        "Metadata cache",
+        "Query data cache",
+        "Best caching practices for performance and cost"
+      ]
+    },
+    {
+      module: "Module 15 - Advanced Topics",
+      topics: [
+        "Error Handling and Validations",
+        "Snowflake Pricing model",
+        "Resource Monitoring",
+        "Data Masking",
+        "Partitioning and Clustering",
+        "Materialized vs Normal Views",
+        "Integration with Python, AWS, Azure, and GCP",
+        "Best Practices"
+      ]
     }
-  },
+  ],
+  details: {
+    trainer: "Mr. Dinesh Reddyvari (Certified Trainer)",
+    experience: "15+ Years",
+    nextBatch: "18-12-2024 (8:00 PM IST)",
+    mode: "Classroom Training, Online Training (Instructor Led)",
+    duration: "45 Days",
+    phone: "+91 87223 55666",
+    email: "info@ndredtech.com",
+    demoText: "ENROLL FOR FREE DEMO CLASS",
+    demoLink: "https://us06web.zoom.us/meeting/register/tZloc-GprjwsGdOlGGj8lGc7BGlbH-jHUTu-"
+  }
+},
+
   {
-    id: "python-full-stack",
-    title: "Python Full Stack",
+    id: "DBT",
+    title: "DBT",
     category: "software",
-    desc: "Full Stack Web Development with Python (Django) and React.",
-    img: "assets/images/snowflake.png",
-    contents: ["Python", "Django", "React", "MySQL", "REST APIs"],
+    desc: "DBT Course for beginners & advanced learners.Hands-on projects on DBT, ETL pipelines, data modeling & transformations.",
+    img: "assets/images/dbt.png",
+    contents: [
+    {
+      module: "Module 1 - Introduction to DBT",
+      topics: [
+        "What DBT is and why it’s used in data projects.",
+        "How DBT helps data teams save time and reduce errors.",
+        "The difference between DBT and traditional ETL tools.",
+        "Real-Time examples of companies using DBT."
+      ]
+    },
+    {
+      module: "Module 2 - Getting Started with DBT Setup",
+      topics: [
+        "How to install and configure DBT on your system.",
+        "Setting up DBT with different databases like Data Analytics, Snowflake, BigQuery, or Redshift.",
+        "Understanding project structure in DBT.",
+        "Running your first DBT command successfully."
+      ]
+    },
+    {
+      module: "Module 3 - DBT Core Concepts",
+      topics: [
+        "Models: What they are and how they work.",
+        "Seeds: Using CSV files inside DBT.",
+        "Snapshots: Tracking data changes over time.",
+        "Sources: Connecting DBT with raw data tables."
+      ]
+    },
+    {
+      module: "Module 4 - SQL for DBT",
+      topics: [
+        "Writing simple SQL queries in DBT.",
+        "Using Jinja templates to make SQL dynamic.",
+        "Learning how DBT turns SQL into Durable models.",
+        "Best practices for clean and Accessible SQL code."
+      ]
+    },
+    {
+      module: "Module 5 - Building Data Models",
+      topics: [
+        "Step-by-step process of creating models.",
+        "Materializations (views, tables, incremental).",
+        "Organizing models into folders and layers.",
+        "Example: Building a sales model from raw data."
+      ]
+    },
+    {
+      module: "Module 6 - DBT Sources and Documentation",
+      topics: [
+        "Defining sources in DBT projects.",
+        "Creating clear project documentation with YAML.",
+        "Auto-generating docs and data lineage graphs.",
+        "How documentation improves teamwork."
+      ]
+    },
+    {
+      module: "Module 7 - DBT Testing Basics",
+      topics: [
+        "What tests in DBT are and why they matter.",
+        "Types of tests: unique, not null, accepted values.",
+        "Writing custom tests in YAML.",
+        "Debugging failed tests step by step."
+      ]
+    },
+    {
+      module: "Module 8 - DBT Macros and Jinja",
+      topics: [
+        "Introduction to Jinja templating in DBT.",
+        "Writing simple macros to avoid repetition.",
+        "Using packages and Durable functions.",
+        "Examples of macros used in real projects."
+      ]
+    },
+    {
+      module: "Module 9 - Version Control with Git & DBT",
+      topics: [
+        "Why version control is important in DBT.",
+        "Connecting DBT projects with GitHub/GitLab.",
+        "Best practices for branching and commits.",
+        "How to manage pull requests with DBT changes."
+      ]
+    },
+    {
+      module: "Module 10 - DBT Cloud vs DBT Core",
+      topics: [
+        "The difference between DBT Cloud and DBT Core.",
+        "Features of DBT Cloud (scheduler, IDE, hosting).",
+        "When to use Cloud vs Core.",
+        "Pricing and industry use cases."
+      ]
+    },
+    {
+      module: "Module 11 - Scheduling and Orchestration",
+      topics: [
+        "How to schedule DBT runs automatically.",
+        "Using Airflow or Prefect with DBT.",
+        "Monitoring pipelines for success/failure.",
+        "Real-time alerts for failed jobs."
+      ]
+    },
+    {
+      module: "Module 12 -  Deployment and Environments",
+      topics: [
+        "Setting up development, staging, and production.",
+        "Running DBT jobs in different environments.",
+        "Deploying DBT projects with best practices.",
+        "Example: Moving a DBT project to production."
+      ]
+    },
+    {
+      module: "Module 13 - Real-Time Projects and Case Studies",
+      topics: [
+        "Hands-on projects with real business data.",
+        "Building an end-to-end DBT Process.",
+        "Case study: E-commerce sales dashboard.",
+        "Case study: Customer retention analysis."
+      ]
+    }
+  ],
     details: {
-      trainer: "Ms. Anjali Sharma (Full Stack Trainer)",
-      experience: "10+ Years",
+      trainer: "Mr. Dinesh Reddy (DBT Trainer)",
+      experience: "15+ Years",
       nextBatch: "20-12-2024 (7:00 PM IST)",
       mode: "Online Training (Instructor Led)",
       duration: "60 Days",
       phone: "+91 87223 55666",
       email: "info@ndredtech.com",
-      demoText: "Join Free Python Demo",
+      demoText: "Join Free DBT Demo",
       demoLink: "#"
     }
   },
@@ -1005,59 +1604,57 @@ function viewCourse(id) {
   const topicList = document.getElementById("contentList");
   container.insertBefore(table, topicList);
 
-  // === Render topics ===
-  topicList.innerHTML = "";
-  course.contents.forEach(topic => {
-    const li = document.createElement("li");
-    li.style.listStyle = "none";
-    li.style.margin = "0.5rem 0";
-    li.style.border = "1px solid #2e3b63";
-    li.style.borderRadius = "6px";
-    li.style.overflow = "hidden";
+  // === Render topics dynamically ===
+topicList.innerHTML = "";
 
-    const header = document.createElement("div");
-    header.textContent = topic;
-    header.style.cursor = "pointer";
-    header.style.padding = "0.7rem 1rem";
-    header.style.fontWeight = "600";
-    header.style.transition = "background 0.3s";
-    header.addEventListener("mouseover", () => (header.style.background = "#1a2139"));
-    header.addEventListener("mouseout", () => (header.style.background = "transparent"));
+course.contents.forEach(section => {
+  const li = document.createElement("li");
+  li.style.listStyle = "none";
+  li.style.margin = "0.5rem 0";
+  li.style.border = "1px solid #2e3b63";
+  li.style.borderRadius = "6px";
+  li.style.overflow = "hidden";
 
-    const descBox = document.createElement("div");
-    descBox.style.padding = "0.7rem 1rem";
-    descBox.style.background = "#121826";
-    descBox.style.color = "#d1d5db";
-    descBox.style.display = "none";
-    descBox.style.borderTop = "1px solid #2e3b63";
+  const header = document.createElement("div");
+  header.textContent = section.module;
+  header.style.cursor = "pointer";
+  header.style.padding = "0.7rem 1rem";
+  header.style.fontWeight = "600";
+  header.style.transition = "background 0.3s";
+  header.addEventListener("mouseover", () => (header.style.background = "#1a2139"));
+  header.addEventListener("mouseout", () => (header.style.background = "transparent"));
 
-    // ✅ Handle arrays as bullet lists
-    if (Array.isArray(topicDescriptions[topic])) {
-      const ulList = document.createElement("ul");
-      ulList.style.listStyle = "disc";
-      ulList.style.paddingLeft = "1.5rem";
-      ulList.style.marginTop = "0.5rem";
-      topicDescriptions[topic].forEach(sub => {
-        const liSub = document.createElement("li");
-        liSub.textContent = sub;
-        ulList.appendChild(liSub);
-      });
-      descBox.appendChild(ulList);
-    } else {
-      descBox.textContent = topicDescriptions[topic] || "Description coming soon.";
-    }
+  const descBox = document.createElement("div");
+  descBox.style.padding = "0.7rem 1rem";
+  descBox.style.background = "#121826";
+  descBox.style.color = "#d1d5db";
+  descBox.style.display = "none";
+  descBox.style.borderTop = "1px solid #2e3b63";
 
-    header.addEventListener("click", () => {
-      const isVisible = descBox.style.display === "block";
-      topicList.querySelectorAll("div[data-desc]").forEach(div => (div.style.display = "none"));
-      descBox.style.display = isVisible ? "none" : "block";
-    });
+  const ulList = document.createElement("ul");
+  ulList.style.listStyle = "disc";
+  ulList.style.paddingLeft = "1.5rem";
+  ulList.style.marginTop = "0.5rem";
 
-    descBox.setAttribute("data-desc", topic);
-    li.appendChild(header);
-    li.appendChild(descBox);
-    topicList.appendChild(li);
+  section.topics.forEach(t => {
+    const liSub = document.createElement("li");
+    liSub.textContent = t;
+    ulList.appendChild(liSub);
   });
+
+  descBox.appendChild(ulList);
+
+  header.addEventListener("click", () => {
+    const isVisible = descBox.style.display === "block";
+    topicList.querySelectorAll("div[data-desc]").forEach(div => (div.style.display = "none"));
+    descBox.style.display = isVisible ? "none" : "block";
+  });
+
+  descBox.setAttribute("data-desc", section.module);
+  li.appendChild(header);
+  li.appendChild(descBox);
+  topicList.appendChild(li);
+});
 
   showSection("course-detail");
   document.getElementById("course-detail").scrollIntoView({ behavior: "smooth" });
@@ -1098,6 +1695,20 @@ window.addEventListener("popstate", () => {
   showSection(hash);
 });
 
+// === FAQ TOGGLE ===
+document.querySelectorAll(".faq-question").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const faqItem = btn.parentElement;
+
+    // Close other open FAQs
+    document.querySelectorAll(".faq-item").forEach(item => {
+      if (item !== faqItem) item.classList.remove("active");
+    });
+
+    // Toggle the clicked one
+    faqItem.classList.toggle("active");
+  });
+});
 
 </script>
 <script>
@@ -1113,6 +1724,32 @@ function fixHeroOffset() {
   }
 }
 </script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "EducationalOrganization",
+  "name": "NDR EdTech",
+  "alternateName": "NDR Infotech",
+  "url": "https://www.ndredtech.com/",
+  "logo": "https://www.ndredtech.com/assets/images/logo.png",
+  "sameAs": [
+    "https://www.facebook.com/ndredtech",
+    "https://www.instagram.com/ndredtech",
+    "https://www.linkedin.com/company/ndredtech"
+  ],
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "#415, 8th Cross, 8th Main, Sunshine Layout, BTM 2nd Stage",
+    "addressLocality": "Bangalore",
+    "addressRegion": "Karnataka",
+    "postalCode": "560076",
+    "addressCountry": "IN"
+  },
+  "telephone": "+91 98765 43210",
+  "description": "Bangalore’s #1 IT Training Institute offering Online and Offline Courses in Cloud, Data, DevOps and Software Development with Placement Support."
+}
+</script>
+
 
 </body>
 </html>
