@@ -51,23 +51,87 @@ section.active{display:block;opacity:1;}
 }
 
 /* ----------------------------- HEADER / NAV ------------------------------ */
-header{
-  background:var(--card);
-  padding:1rem 2rem;
-  position:fixed;top:0;left:0;width:100%;z-index:1000;
-  box-shadow:0 2px 5px rgba(0,0,0,.4);
+header {
+  background: var(--card);
+  padding: 1rem 2rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  box-shadow: 0 2px 5px rgba(0,0,0,.4);
 }
-.navbar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;}
-.logo{display:flex;align-items:center;gap:10px;font-size:2.5rem;font-weight:700;color:#fff;}
-.logo img{width:90px;height:90px;border-radius:10px;background-color: #fff;}
-.nav-links{list-style:none;display:flex;gap:1rem;flex-wrap:wrap;}
-.nav-links a{color:var(--text);padding:.5rem 1rem;border-radius:6px;transition:.3s;}
-.nav-links a:hover,.nav-links a.active{background:#0e0e0e;color:#fff;}
-/* responsive nav */
-@media(max-width:768px){
-  .nav-links{width:100%;justify-content:center;}
-  .navbar{flex-direction:column;gap:0.5rem;}
+
+/* --- NAVBAR LAYOUT --- */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
 }
+
+/* --- LOGO --- */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 2rem;          /* slightly smaller than before for balance */
+  font-weight: 700;
+  color: #fff;
+}
+
+.logo img {
+  width: 80px;
+  height: 80px;
+  border-radius: 10px;
+  background-color: #fff;
+}
+
+/* --- NAVIGATION LINKS --- */
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 2rem;                /* increased spacing between menu items */
+  flex-wrap: wrap;
+}
+
+.nav-links a {
+  color: var(--text);
+  padding: 0.6rem 1.3rem;
+  border-radius: 6px;
+  transition: 0.3s;
+  font-size: 1.2rem;        /* ✅ Increased font size */
+  font-weight: 600;         /* ✅ Makes text bolder */
+  letter-spacing: 0.4px;    /* subtle spacing for cleaner text */
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+  background: #0e0e0e;
+  color: #fff;
+}
+
+/* --- RESPONSIVE NAVIGATION --- */
+@media (max-width: 768px) {
+  .nav-links {
+    width: 100%;
+    justify-content: center;
+    gap: 1rem;
+  }
+  .navbar {
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .nav-links a {
+    font-size: 1rem;        /* slightly smaller for mobile screens */
+    padding: 0.5rem 1rem;
+  }
+  .logo img {
+    width: 70px;
+    height: 70px;
+  }
+}
+
 
 /* ================= HERO SLIDER ================= */
 .hero-slider {
