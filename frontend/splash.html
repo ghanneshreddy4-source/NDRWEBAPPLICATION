@@ -143,10 +143,28 @@ header{
 }
 
 /* Responsive */
-@media (max-width:768px) {
-  .hero-slider { height: 60vh; }
-  .slide-media { object-fit: contain; }
+@media (max-width: 768px) {
+  .hero-slider {
+    height: auto;                 /* Let height adapt to image */
+    aspect-ratio: 16 / 9;         /* Keeps a proportional size */
+  }
+
+  .hero-slider .slide,
+  .slide-media {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;            /* ✅ Fill full area (no black gaps) */
+    object-position: center;
+  }
+
+  /* Optional: reduce button size on small screens */
+  .hero-slider .prev,
+  .hero-slider .next {
+    font-size: 1.5rem;
+    padding: 0.3rem 0.6rem;
+  }
 }
+
 
 /* prevent hero from hiding behind header */
 /* ✅ Prevent sections from being hidden under the fixed header */
